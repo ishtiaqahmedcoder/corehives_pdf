@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { AllToolsMenu } from '@/components/AllToolsMenu'
 
 function useTheme() {
   const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -16,8 +17,8 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="border-b" style={{ borderColor: 'var(--border)' }}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+      <header className="sticky top-0 z-40 border-b backdrop-blur" style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--bg) 85%, transparent)' }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
           <Link to="/" className="flex items-center gap-2 font-semibold" style={{ color: 'var(--text-h)' }}>
             <span
               className="flex h-8 w-8 items-center justify-center rounded-lg text-white"
@@ -27,15 +28,26 @@ export function Layout({ children }: { children: ReactNode }) {
             </span>
             CoreHives PDF
           </Link>
-          <button
-            type="button"
-            onClick={toggle}
-            className="rounded-full border px-3 py-1.5 text-sm"
-            style={{ borderColor: 'var(--border)' }}
-            aria-label="Toggle theme"
-          >
-            {dark ? '☀️ Light' : '🌙 Dark'}
-          </button>
+
+          <nav className="flex items-center gap-1">
+            <Link
+              to="/merge"
+              className="rounded-full px-3 py-1.5 text-sm font-medium"
+              style={{ color: 'var(--text-h)' }}
+            >
+              Merge PDF
+            </Link>
+            <AllToolsMenu />
+            <button
+              type="button"
+              onClick={toggle}
+              className="ml-2 rounded-full border px-3 py-1.5 text-sm"
+              style={{ borderColor: 'var(--border)' }}
+              aria-label="Toggle theme"
+            >
+              {dark ? '☀️' : '🌙'}
+            </button>
+          </nav>
         </div>
       </header>
 
