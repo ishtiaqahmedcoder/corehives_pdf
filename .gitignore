@@ -1,0 +1,43 @@
+# Laravel backend
+/backend/vendor
+/backend/node_modules
+/backend/.env
+/backend/.env.backup
+/backend/.env.production
+/backend/.phpunit.result.cache
+/backend/Homestead.json
+/backend/Homestead.yaml
+/backend/auth.json
+/backend/npm-debug.log
+/backend/yarn-error.log
+/backend/storage/*.key
+/backend/storage/app/private/*
+!/backend/storage/app/private/.gitkeep
+/backend/storage/framework/cache/data/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/testing/*
+/backend/storage/framework/views/*
+/backend/storage/logs/*
+!/backend/storage/framework/cache/data/.gitignore
+!/backend/storage/framework/sessions/.gitignore
+!/backend/storage/framework/testing/.gitignore
+!/backend/storage/framework/views/.gitignore
+!/backend/storage/logs/.gitignore
+/backend/database/database.sqlite
+/backend/public/hot
+/backend/public/storage
+/backend/public/build
+
+# React frontend
+/frontend/node_modules
+/frontend/dist
+/frontend/dist-ssr
+/frontend/*.local
+/frontend/.vite
+
+# Editor / OS
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+*.log
