@@ -1,6 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, type ReactNode } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { motion } from 'framer-motion'
+import { HardDrive, Cloud } from 'lucide-react'
 
 interface FileDropzoneProps {
   files: File[]
@@ -68,6 +69,14 @@ export function FileDropzone({
         <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
           Files never leave your control — auto-deleted 1 hour after processing
         </p>
+
+        <div
+          className="mt-5 flex items-center justify-center gap-3"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <CloudImportButton label="Google Drive" icon={<HardDrive className="h-3.5 w-3.5" />} />
+          <CloudImportButton label="Dropbox" icon={<Cloud className="h-3.5 w-3.5" />} />
+        </div>
       </div>
 
       {files.length > 0 && (
@@ -109,3 +118,19 @@ export function FileDropzone({
     </div>
   )
 }
+
+function CloudImportButton({ label, icon }: { label: string; icon: ReactNode }) {
+  return (
+    <button
+      type="button"
+      disabled
+      title={`Import from ${label} — coming soon`}
+      className="flex cursor-not-allowed items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium opacity-50"
+      style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
+    >
+      {icon}
+      {label}
+    </button>
+  )
+}
+

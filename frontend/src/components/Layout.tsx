@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { AllToolsMenu } from '@/components/AllToolsMenu'
+import { Footer } from '@/components/Footer'
 
 function useTheme() {
   const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -53,9 +54,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">{children}</main>
 
-      <footer className="border-t py-6 text-center text-xs opacity-60" style={{ borderColor: 'var(--border)' }}>
-        © {new Date().getFullYear()} CoreHives — free PDF tools, no signup required.
-      </footer>
+      <Footer />
     </div>
   )
 }
