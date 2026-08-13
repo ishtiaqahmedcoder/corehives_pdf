@@ -1,6 +1,7 @@
 import { useCallback, type ReactNode } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { HardDrive, Cloud } from 'lucide-react'
 
 interface FileDropzoneProps {
@@ -16,6 +17,7 @@ export function FileDropzone({
   accept = { 'application/pdf': ['.pdf'] },
   multiple = true,
 }: FileDropzoneProps) {
+  const { t } = useTranslation()
   const onDrop = useCallback(
     (accepted: File[]) => {
       onFilesChange(multiple ? [...files, ...accepted] : accepted)
@@ -64,18 +66,18 @@ export function FileDropzone({
           </svg>
         </motion.div>
         <p className="font-medium" style={{ color: 'var(--text-h)' }}>
-          {isDragActive ? 'Drop your PDFs here' : 'Drag & drop PDFs, or click to browse'}
+          {isDragActive ? t('common.dropHere') : t('common.dragDrop')}
         </p>
         <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
-          Files never leave your control — auto-deleted 1 hour after processing
+          {t('common.privacyNote')}
         </p>
 
         <div
           className="mt-5 flex items-center justify-center gap-3"
           onClick={(e) => e.stopPropagation()}
         >
-          <CloudImportButton label="Google Drive" icon={<HardDrive className="h-3.5 w-3.5" />} />
-          <CloudImportButton label="Dropbox" icon={<Cloud className="h-3.5 w-3.5" />} />
+          <CloudImportButton label="Google Drive" icon={<HardDrive className="h-3.5 w-3.5" />} tooltip={t('common.importFrom', { provider: 'Google Drive' })} />
+          <CloudImportButton label="Dropbox" icon={<Cloud className="h-3.5 w-3.5" />} tooltip={t('common.importFrom', { provider: 'Dropbox' })} />
         </div>
       </div>
 
@@ -107,7 +109,7 @@ export function FileDropzone({
                 type="button"
                 onClick={() => removeFile(i)}
                 className="shrink-0 rounded-full px-2 py-1 text-xs opacity-60 hover:opacity-100"
-                aria-label={`Remove ${file.name}`}
+                aria-label={t('common.removeFile', { name: file.name })}
               >
                 ✕
               </button>
@@ -119,12 +121,12 @@ export function FileDropzone({
   )
 }
 
-function CloudImportButton({ label, icon }: { label: string; icon: ReactNode }) {
+function CloudImportButton({ label, icon, tooltip }: { label: string; icon: ReactNode; tooltip: string }) {
   return (
     <button
       type="button"
       disabled
-      title={`Import from ${label} — coming soon`}
+      title={tooltip}
       className="flex cursor-not-allowed items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium opacity-50"
       style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
     >

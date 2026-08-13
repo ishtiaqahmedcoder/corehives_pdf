@@ -35,7 +35,13 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(680px circle at 12% 8%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+    radial-gradient(560px circle at 92% 18%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
+    radial-gradient(760px circle at 50% 105%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 65%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

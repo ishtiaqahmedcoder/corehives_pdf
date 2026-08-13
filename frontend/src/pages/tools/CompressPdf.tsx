@@ -1,12 +1,14 @@
+import { useTranslation } from 'react-i18next'
 import { SimpleToolPage } from '@/components/SimpleToolPage'
 
 export function CompressPdf() {
+  const { t } = useTranslation()
   return (
     <SimpleToolPage
       tool="compress"
-      title="Compress PDF"
-      description="Shrink file size while keeping quality — great for scanned documents."
-      submitLabel="Compress PDF"
+      title={t('tools.compress.label')}
+      description={t('tools.compress.description')}
+      submitLabel={t('tools.compress.label')}
     />
   )
 }

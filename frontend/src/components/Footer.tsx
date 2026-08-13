@@ -1,12 +1,10 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Globe } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { TOOLS } from '@/lib/tools'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 const FOOTER_TOOLS = TOOLS.filter((t) => t.ready).slice(0, 5)
-
-const LEGAL_LINKS = ['Privacy Policy', 'Terms & Conditions', 'Cookie Policy']
-const COMPANY_LINKS = ['About CoreHives', 'Contact', 'Blog']
 
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -18,6 +16,19 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
 }
 
 export function Footer() {
+  const { t } = useTranslation()
+
+  const legalLinks = [
+    { label: t('footer.privacyPolicy'), to: '/privacy' },
+    { label: t('footer.terms'), to: '/terms' },
+    { label: t('footer.cookies'), to: '/cookies' },
+  ]
+  const companyLinks = [
+    { label: t('footer.about'), to: '/about' },
+    { label: t('footer.contact'), to: '/contact' },
+    { label: t('footer.blog'), to: '/blog' },
+  ]
+
   return (
     <footer className="border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
       <div className="mx-auto max-w-5xl px-6 py-12">
@@ -32,38 +43,40 @@ export function Footer() {
               </span>
               CoreHives PDF
             </Link>
-            <p className="mt-3 max-w-[220px] text-sm opacity-60">
-              Free PDF tools, no signup, no watermark — a CoreHives product.
-            </p>
+            <p className="mt-3 max-w-[220px] text-sm opacity-60">{t('footer.tagline')}</p>
           </div>
 
-          <FooterColumn title="Tools">
+          <FooterColumn title={t('footer.tools')}>
             {FOOTER_TOOLS.map((tool) => (
               <li key={tool.slug}>
                 <Link to={tool.to} className="text-sm opacity-70 hover:opacity-100">
-                  {tool.label}
+                  {t(`tools.${tool.slug}.label`, tool.label)}
                 </Link>
               </li>
             ))}
             <li>
               <Link to="/" className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
-                All tools →
+                {t('footer.allTools')}
               </Link>
             </li>
           </FooterColumn>
 
-          <FooterColumn title="Legal">
-            {LEGAL_LINKS.map((label) => (
-              <li key={label} className="flex items-center gap-1.5 text-sm opacity-40" title="Coming soon">
-                {label}
+          <FooterColumn title={t('footer.legal')}>
+            {legalLinks.map((link) => (
+              <li key={link.to}>
+                <Link to={link.to} className="text-sm opacity-70 hover:opacity-100">
+                  {link.label}
+                </Link>
               </li>
             ))}
           </FooterColumn>
 
-          <FooterColumn title="Company">
-            {COMPANY_LINKS.map((label) => (
-              <li key={label} className="flex items-center gap-1.5 text-sm opacity-40" title="Coming soon">
-                {label}
+          <FooterColumn title={t('footer.company')}>
+            {companyLinks.map((link) => (
+              <li key={link.to}>
+                <Link to={link.to} className="text-sm opacity-70 hover:opacity-100">
+                  {link.label}
+                </Link>
               </li>
             ))}
           </FooterColumn>
@@ -73,11 +86,8 @@ export function Footer() {
           className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs opacity-60 sm:flex-row"
           style={{ borderColor: 'var(--border)' }}
         >
-          <span>© {new Date().getFullYear()} CoreHives — free PDF tools, no signup required.</span>
-          <span className="flex items-center gap-1.5">
-            <Globe className="h-3.5 w-3.5" />
-            English
-          </span>
+          <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
+          <LanguageSwitcher />
         </div>
       </div>
     </footer>

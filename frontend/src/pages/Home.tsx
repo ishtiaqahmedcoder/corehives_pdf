@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { CATEGORIES, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
 
-const FILTERS: { key: 'all' | (typeof CATEGORIES)[number]; label: string }[] = [
-  { key: 'all', label: 'All' },
-  ...CATEGORIES.map((c) => ({ key: c, label: CATEGORY_LABELS[c] })),
-]
+const FILTER_KEYS: ('all' | (typeof CATEGORIES)[number])[] = ['all', ...CATEGORIES]
 
 export function Home() {
-  const [active, setActive] = useState<(typeof FILTERS)[number]['key']>('all')
+  const { t } = useTranslation()
+  const [active, setActive] = useState<(typeof FILTER_KEYS)[number]>('all')
   const tools = toolsByCategory(active)
 
   return (
@@ -22,21 +21,20 @@ export function Home() {
         className="mb-10 text-center"
       >
         <h1 className="text-4xl font-semibold" style={{ color: 'var(--text-h)' }}>
-          Every PDF tool you need. Free. Forever.
+          {t('home.title')}
         </h1>
-        <p className="mt-3 text-lg opacity-70">
-          No signup, no watermark, no page limits — just pick a tool and go.
-        </p>
+        <p className="mt-3 text-lg opacity-70">{t('home.subtitle')}</p>
       </motion.div>
 
       <div className="mb-8 flex flex-wrap justify-center gap-2">
-        {FILTERS.map((f) => {
-          const isActive = active === f.key
+        {FILTER_KEYS.map((key) => {
+          const isActive = active === key
+          const label = key === 'all' ? t('categories.all') : t(`categories.${key}`, CATEGORY_LABELS[key])
           return (
             <button
-              key={f.key}
+              key={key}
               type="button"
-              onClick={() => setActive(f.key)}
+              onClick={() => setActive(key)}
               className="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
               style={
                 isActive
@@ -44,7 +42,7 @@ export function Home() {
                   : { borderColor: 'var(--border)', color: 'var(--text)' }
               }
             >
-              {f.label}
+              {label}
             </button>
           )
         })}

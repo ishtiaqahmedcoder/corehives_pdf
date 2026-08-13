@@ -1,18 +1,21 @@
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import type { PdfJob } from '@/lib/api'
 
 interface ProgressTrackerProps {
   job: PdfJob
 }
 
-const STATUS_LABEL: Record<PdfJob['status'], string> = {
-  pending: 'Queued…',
-  processing: 'Merging your PDFs…',
-  completed: 'Done!',
-  failed: 'Something went wrong',
-}
-
 export function ProgressTracker({ job }: ProgressTrackerProps) {
+  const { t } = useTranslation()
+
+  const statusLabel: Record<PdfJob['status'], string> = {
+    pending: t('common.statusQueued'),
+    processing: t('common.statusProcessing'),
+    completed: t('common.statusDone'),
+    failed: t('common.statusFailed'),
+  }
+
   return (
     <div
       className="rounded-2xl border p-6"
@@ -20,7 +23,7 @@ export function ProgressTracker({ job }: ProgressTrackerProps) {
     >
       <div className="mb-3 flex items-center justify-between">
         <span className="font-medium" style={{ color: 'var(--text-h)' }}>
-          {STATUS_LABEL[job.status]}
+          {statusLabel[job.status]}
         </span>
         <span className="text-sm opacity-60">{job.progress}%</span>
       </div>
@@ -50,7 +53,7 @@ export function ProgressTracker({ job }: ProgressTrackerProps) {
           className="mt-4 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 font-medium text-white"
           style={{ background: 'var(--accent)' }}
         >
-          Download merged PDF
+          {t('common.download')}
         </motion.a>
       )}
     </div>

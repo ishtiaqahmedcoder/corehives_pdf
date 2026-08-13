@@ -16,6 +16,12 @@ import { WordToPdf } from '@/pages/tools/WordToPdf'
 import { PptToPdf } from '@/pages/tools/PptToPdf'
 import { ExcelToPdf } from '@/pages/tools/ExcelToPdf'
 import { OcrPdf } from '@/pages/tools/OcrPdf'
+import { PrivacyPolicy } from '@/pages/PrivacyPolicy'
+import { TermsAndConditions } from '@/pages/TermsAndConditions'
+import { CookiePolicy } from '@/pages/CookiePolicy'
+import { About } from '@/pages/About'
+import { Contact } from '@/pages/Contact'
+import { Blog } from '@/pages/Blog'
 
 function App() {
   return (
@@ -37,6 +43,12 @@ function App() {
         <Route path="/ppt-to-pdf" element={<PptToPdf />} />
         <Route path="/excel-to-pdf" element={<ExcelToPdf />} />
         <Route path="/ocr" element={<OcrPdf />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/cookies" element={<CookiePolicy />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/blog" element={<Blog />} />
       </Routes>
     </Layout>
   )

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { CATEGORY_STYLES, type Tool } from '@/lib/tools'
 
 interface ToolCardProps {
@@ -8,6 +9,7 @@ interface ToolCardProps {
 }
 
 export function ToolCard({ tool, index = 0 }: ToolCardProps) {
+  const { t } = useTranslation()
   const Icon = tool.icon
   const badgeClass = CATEGORY_STYLES[tool.category]
 
@@ -18,23 +20,23 @@ export function ToolCard({ tool, index = 0 }: ToolCardProps) {
       </div>
       <div className="mt-3 flex items-center gap-2">
         <h3 className="font-medium" style={{ color: 'var(--text-h)' }}>
-          {tool.label}
+          {t(`tools.${tool.slug}.label`, tool.label)}
         </h3>
         {tool.category === 'exclusive' && (
           <span
             className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
             style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
           >
-            Free forever
+            {t('common.freeForever')}
           </span>
         )}
         {!tool.ready && tool.category !== 'exclusive' && (
           <span className="rounded-full px-2 py-0.5 text-[10px] font-medium opacity-50" style={{ background: 'var(--bg-soft)' }}>
-            Soon
+            {t('common.soon')}
           </span>
         )}
       </div>
-      <p className="mt-1 text-sm opacity-70">{tool.description}</p>
+      <p className="mt-1 text-sm opacity-70">{t(`tools.${tool.slug}.description`, tool.description)}</p>
     </>
   )
 

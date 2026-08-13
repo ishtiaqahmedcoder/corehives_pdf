@@ -1,21 +1,23 @@
+import { useTranslation } from 'react-i18next'
 import { SimpleToolPage } from '@/components/SimpleToolPage'
 import { PageRangeField } from '@/components/PageRangeField'
 
 export function RemovePages() {
+  const { t } = useTranslation()
   return (
     <SimpleToolPage
       tool="remove-pages"
-      title="Remove Pages"
-      description="Delete the pages you don't need from a PDF."
-      submitLabel="Remove Pages"
+      title={t('tools.remove-pages.label')}
+      description={t('tools.remove-pages.description')}
+      submitLabel={t('tools.remove-pages.label')}
       optionsForm={(options, setOptions) => (
         <PageRangeField
-          label="Pages to remove"
+          label={t('common.pagesToRemove')}
           value={options.pages ?? ''}
           onChange={(pages) => setOptions({ ...options, pages })}
         />
       )}
-      validateOptions={(options) => (!options.pages?.trim() ? 'Enter which pages to remove.' : null)}
+      validateOptions={(options) => (!options.pages?.trim() ? t('common.enterPagesToRemove') : null)}
     />
   )
 }

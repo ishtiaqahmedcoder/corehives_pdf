@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { AllToolsMenu } from '@/components/AllToolsMenu'
 import { Footer } from '@/components/Footer'
 
@@ -15,6 +16,7 @@ function useTheme() {
 
 export function Layout({ children }: { children: ReactNode }) {
   const { dark, toggle } = useTheme()
+  const { t } = useTranslation()
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -36,7 +38,7 @@ export function Layout({ children }: { children: ReactNode }) {
               className="rounded-full px-3 py-1.5 text-sm font-medium"
               style={{ color: 'var(--text-h)' }}
             >
-              Merge PDF
+              {t('nav.mergePdf')}
             </Link>
             <AllToolsMenu />
             <button
@@ -44,7 +46,7 @@ export function Layout({ children }: { children: ReactNode }) {
               onClick={toggle}
               className="ml-2 rounded-full border px-3 py-1.5 text-sm"
               style={{ borderColor: 'var(--border)' }}
-              aria-label="Toggle theme"
+              aria-label={t('nav.toggleTheme')}
             >
               {dark ? '☀️' : '🌙'}
             </button>

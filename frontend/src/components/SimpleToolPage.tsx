@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { FileDropzone } from '@/components/FileDropzone'
 import { ProgressTracker } from '@/components/ProgressTracker'
 import { AdSlot } from '@/components/AdSlot'
@@ -31,6 +32,7 @@ export function SimpleToolPage({
   optionsForm,
   validateOptions,
 }: SimpleToolPageProps) {
+  const { t } = useTranslation()
   const [files, setFiles] = useState<File[]>([])
   const [options, setOptions] = useState<Record<string, string>>({})
   const [jobId, setJobId] = useState<string | null>(null)
@@ -41,7 +43,7 @@ export function SimpleToolPage({
 
   async function handleSubmit() {
     if (files.length < minFiles) {
-      setError(`Add at least ${minFiles} file${minFiles === 1 ? '' : 's'}.`)
+      setError(t('common.addAtLeast', { count: minFiles }))
       return
     }
     if (validateOptions) {
@@ -58,7 +60,7 @@ export function SimpleToolPage({
       const id = await uploadToolFiles(tool, files, options)
       setJobId(id)
     } catch {
-      setError('Upload failed. Please try again.')
+      setError(t('common.uploadFailed'))
     } finally {
       setSubmitting(false)
     }
@@ -99,7 +101,7 @@ export function SimpleToolPage({
             className="mt-5 w-full rounded-xl py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
             style={{ background: 'var(--accent)' }}
           >
-            {submitting ? 'Uploading…' : (submitLabel ?? title)}
+            {submitting ? t('common.uploading') : (submitLabel ?? title)}
           </button>
         </>
       )}
@@ -114,7 +116,7 @@ export function SimpleToolPage({
               className="mt-4 w-full rounded-xl border py-2.5 text-sm"
               style={{ borderColor: 'var(--border)' }}
             >
-              Start another
+              {t('common.startAnother')}
             </button>
           )}
         </div>

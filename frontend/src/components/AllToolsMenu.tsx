@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { CATEGORIES, CATEGORY_DOT, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
 
 export function AllToolsMenu() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -34,7 +36,7 @@ export function AllToolsMenu() {
         style={{ color: open ? 'var(--accent)' : 'var(--text-h)' }}
         aria-expanded={open}
       >
-        All Tools
+        {t('nav.allTools')}
         <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
@@ -54,7 +56,7 @@ export function AllToolsMenu() {
                   <div className="mb-2 flex items-center gap-2">
                     <span className={`h-1.5 w-1.5 rounded-full ${CATEGORY_DOT[category]}`} />
                     <h3 className="text-xs font-semibold uppercase tracking-wide opacity-60">
-                      {CATEGORY_LABELS[category]}
+                      {t(`categories.${category}`, CATEGORY_LABELS[category])}
                     </h3>
                   </div>
                   <ul className="space-y-0.5">
@@ -66,8 +68,10 @@ export function AllToolsMenu() {
                       const row = (
                         <span className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm ${rowClass}`}>
                           <Icon className="h-4 w-4 shrink-0" style={{ color: 'var(--accent)' }} strokeWidth={1.75} />
-                          <span style={{ color: 'var(--text-h)' }}>{tool.label}</span>
-                          {!tool.ready && <span className="ml-auto shrink-0 text-[10px] opacity-60">Soon</span>}
+                          <span style={{ color: 'var(--text-h)' }}>{t(`tools.${tool.slug}.label`, tool.label)}</span>
+                          {!tool.ready && (
+                            <span className="ml-auto shrink-0 text-[10px] opacity-60">{t('common.soon')}</span>
+                          )}
                         </span>
                       )
                       return (

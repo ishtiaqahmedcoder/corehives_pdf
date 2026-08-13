@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { FileDropzone } from '@/components/FileDropzone'
 import { ProgressTracker } from '@/components/ProgressTracker'
 import { AdSlot } from '@/components/AdSlot'
@@ -7,6 +8,7 @@ import { useJobStatus } from '@/hooks/useJobStatus'
 import { uploadMergeFiles } from '@/lib/api'
 
 export function MergePdf() {
+  const { t } = useTranslation()
   const [files, setFiles] = useState<File[]>([])
   const [jobId, setJobId] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -16,7 +18,7 @@ export function MergePdf() {
 
   async function handleMerge() {
     if (files.length < 2) {
-      setError('Add at least 2 PDFs to merge.')
+      setError(t('common.addAtLeast', { count: 2 }))
       return
     }
     setError(null)
@@ -25,7 +27,7 @@ export function MergePdf() {
       const id = await uploadMergeFiles(files)
       setJobId(id)
     } catch {
-      setError('Upload failed. Please try again.')
+      setError(t('common.uploadFailed'))
     } finally {
       setSubmitting(false)
     }
@@ -41,9 +43,9 @@ export function MergePdf() {
     <div className="mx-auto max-w-2xl">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 text-center">
         <h1 className="text-3xl font-semibold" style={{ color: 'var(--text-h)' }}>
-          Merge PDF
+          {t('tools.merge.label')}
         </h1>
-        <p className="mt-2 opacity-70">Combine PDFs in the order you add them — free, no watermark.</p>
+        <p className="mt-2 opacity-70">{t('tools.merge.description')}</p>
       </motion.div>
 
       {!jobId && (
@@ -57,7 +59,7 @@ export function MergePdf() {
             className="mt-5 w-full rounded-xl py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
             style={{ background: 'var(--accent)' }}
           >
-            {submitting ? 'Uploading…' : `Merge ${files.length || ''} PDF${files.length === 1 ? '' : 's'}`}
+            {submitting ? t('common.uploading') : t('tools.merge.label')}
           </button>
         </>
       )}
@@ -72,7 +74,7 @@ export function MergePdf() {
               className="mt-4 w-full rounded-xl border py-2.5 text-sm"
               style={{ borderColor: 'var(--border)' }}
             >
-              Merge more files
+              {t('common.startAnother')}
             </button>
           )}
         </div>

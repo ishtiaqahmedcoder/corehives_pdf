@@ -1,21 +1,23 @@
+import { useTranslation } from 'react-i18next'
 import { SimpleToolPage } from '@/components/SimpleToolPage'
 import { PasswordField } from '@/components/PasswordField'
 
 export function UnlockPdf() {
+  const { t } = useTranslation()
   return (
     <SimpleToolPage
       tool="unlock"
-      title="Unlock PDF"
-      description="Remove a password from a PDF you own the password to."
-      submitLabel="Unlock PDF"
+      title={t('tools.unlock.label')}
+      description={t('tools.unlock.description')}
+      submitLabel={t('tools.unlock.label')}
       optionsForm={(options, setOptions) => (
         <PasswordField
-          label="Current password"
+          label={t('common.currentPasswordLabel')}
           value={options.password ?? ''}
           onChange={(password) => setOptions({ ...options, password })}
         />
       )}
-      validateOptions={(options) => (!options.password ? 'Enter the current password.' : null)}
+      validateOptions={(options) => (!options.password ? t('common.enterCurrentPassword') : null)}
     />
   )
 }
