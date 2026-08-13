@@ -62,18 +62,20 @@ export const TOOLS: Tool[] = [
   { slug: 'remove-pages', label: 'Remove Pages', description: 'Delete pages you don’t need', icon: Trash2, to: '/remove-pages', category: 'organize', ready: true },
   { slug: 'extract-pages', label: 'Extract Pages', description: 'Pull specific pages into a new PDF', icon: FileOutput, to: '/extract-pages', category: 'organize', ready: true },
   { slug: 'organize', label: 'Organize PDF', description: 'Drag to reorder, rotate or delete pages', icon: ListOrdered, to: '/organize', category: 'organize', ready: false },
-  { slug: 'rotate', label: 'Rotate PDF', description: 'Fix sideways or upside-down pages', icon: RotateCw, to: '/rotate', category: 'organize', ready: false },
+  { slug: 'rotate', label: 'Rotate PDF', description: 'Fix sideways or upside-down pages', icon: RotateCw, to: '/rotate', category: 'organize', ready: true },
 
   // Optimize
-  { slug: 'compress', label: 'Compress PDF', description: 'Shrink file size, keep the quality', icon: Minimize2, to: '/compress', category: 'optimize', ready: false },
-  { slug: 'ocr', label: 'OCR PDF', description: 'Make scanned PDFs searchable', icon: ScanText, to: '/ocr', category: 'optimize', ready: false },
+  { slug: 'compress', label: 'Compress PDF', description: 'Shrink file size, keep the quality', icon: Minimize2, to: '/compress', category: 'optimize', ready: true },
+  { slug: 'ocr', label: 'OCR PDF', description: 'Make scanned PDFs searchable', icon: ScanText, to: '/ocr', category: 'optimize', ready: true },
 
   // Convert
   { slug: 'jpg-to-pdf', label: 'JPG to PDF', description: 'Turn images into a PDF', icon: FileImage, to: '/jpg-to-pdf', category: 'convert', ready: true },
   { slug: 'pdf-to-word', label: 'PDF to Word', description: 'Convert to an editable .docx', icon: FileText, to: '/pdf-to-word', category: 'convert', ready: false },
   { slug: 'pdf-to-ppt', label: 'PDF to PowerPoint', description: 'Convert to an editable .pptx', icon: Presentation, to: '/pdf-to-ppt', category: 'convert', ready: false },
   { slug: 'pdf-to-excel', label: 'PDF to Excel', description: 'Pull tables into a spreadsheet', icon: FileSpreadsheet, to: '/pdf-to-excel', category: 'convert', ready: false },
-  { slug: 'word-to-pdf', label: 'Word to PDF', description: 'Convert .docx to PDF', icon: FileType, to: '/word-to-pdf', category: 'convert', ready: false },
+  { slug: 'word-to-pdf', label: 'Word to PDF', description: 'Convert .docx to PDF', icon: FileType, to: '/word-to-pdf', category: 'convert', ready: true },
+  { slug: 'ppt-to-pdf', label: 'PowerPoint to PDF', description: 'Convert .pptx to PDF', icon: Presentation, to: '/ppt-to-pdf', category: 'convert', ready: true },
+  { slug: 'excel-to-pdf', label: 'Excel to PDF', description: 'Convert .xlsx to PDF', icon: FileSpreadsheet, to: '/excel-to-pdf', category: 'convert', ready: true },
 
   // Edit
   { slug: 'watermark', label: 'Add Watermark', description: 'Stamp text or a logo on every page', icon: Droplets, to: '/watermark', category: 'edit', ready: true },
@@ -83,8 +85,8 @@ export const TOOLS: Tool[] = [
   { slug: 'sign', label: 'Sign PDF', description: 'Draw or upload your signature', icon: PenTool, to: '/sign', category: 'edit', ready: false },
 
   // Security
-  { slug: 'protect', label: 'Protect PDF', description: 'Add a password to a PDF', icon: Lock, to: '/protect', category: 'security', ready: false },
-  { slug: 'unlock', label: 'Unlock PDF', description: 'Remove a password from a PDF', icon: Unlock, to: '/unlock', category: 'security', ready: false },
+  { slug: 'protect', label: 'Protect PDF', description: 'Add a password to a PDF', icon: Lock, to: '/protect', category: 'security', ready: true },
+  { slug: 'unlock', label: 'Unlock PDF', description: 'Remove a password from a PDF', icon: Unlock, to: '/unlock', category: 'security', ready: true },
 
   // CoreHives exclusive
   { slug: 'batch', label: 'Batch Processing', description: 'Run any tool on many files at once — free, no limit', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: false },

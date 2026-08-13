@@ -8,6 +8,14 @@ import { ExtractPages } from '@/pages/tools/ExtractPages'
 import { Watermark } from '@/pages/tools/Watermark'
 import { PageNumbers } from '@/pages/tools/PageNumbers'
 import { JpgToPdf } from '@/pages/tools/JpgToPdf'
+import { CompressPdf } from '@/pages/tools/CompressPdf'
+import { RotatePdf } from '@/pages/tools/RotatePdf'
+import { ProtectPdf } from '@/pages/tools/ProtectPdf'
+import { UnlockPdf } from '@/pages/tools/UnlockPdf'
+import { WordToPdf } from '@/pages/tools/WordToPdf'
+import { PptToPdf } from '@/pages/tools/PptToPdf'
+import { ExcelToPdf } from '@/pages/tools/ExcelToPdf'
+import { OcrPdf } from '@/pages/tools/OcrPdf'
 
 function App() {
   return (
@@ -21,6 +29,14 @@ function App() {
         <Route path="/watermark" element={<Watermark />} />
         <Route path="/page-numbers" element={<PageNumbers />} />
         <Route path="/jpg-to-pdf" element={<JpgToPdf />} />
+        <Route path="/compress" element={<CompressPdf />} />
+        <Route path="/rotate" element={<RotatePdf />} />
+        <Route path="/protect" element={<ProtectPdf />} />
+        <Route path="/unlock" element={<UnlockPdf />} />
+        <Route path="/word-to-pdf" element={<WordToPdf />} />
+        <Route path="/ppt-to-pdf" element={<PptToPdf />} />
+        <Route path="/excel-to-pdf" element={<ExcelToPdf />} />
+        <Route path="/ocr" element={<OcrPdf />} />
       </Routes>
     </Layout>
   )

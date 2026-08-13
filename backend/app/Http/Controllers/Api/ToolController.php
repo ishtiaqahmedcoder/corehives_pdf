@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CompressPdfJob;
 use App\Jobs\ExtractPagesPdfJob;
 use App\Jobs\ImageToPdfJob;
+use App\Jobs\OcrPdfJob;
+use App\Jobs\OfficeConvertJob;
 use App\Jobs\PageNumbersPdfJob;
+use App\Jobs\ProtectPdfJob;
 use App\Jobs\RemovePagesPdfJob;
+use App\Jobs\RotatePdfJob;
 use App\Jobs\SplitPdfJob;
+use App\Jobs\UnlockPdfJob;
 use App\Jobs\WatermarkPdfJob;
 use App\Models\PdfJob;
 use Illuminate\Http\JsonResponse;
@@ -20,20 +26,40 @@ class ToolController extends Controller
     /**
      * Registry of "simple" tools: one queued job, straightforward file validation.
      * Tools with bespoke upload handling (e.g. merge) keep their own controller.
+     * A method (not a class const) because some entries dispatch via closure,
+     * which PHP does not allow inside a constant expression.
      */
-    private const TOOLS = [
-        'split' => ['job' => SplitPdfJob::class, 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf'],
-        'remove-pages' => ['job' => RemovePagesPdfJob::class, 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf'],
-        'extract-pages' => ['job' => ExtractPagesPdfJob::class, 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf'],
-        'watermark' => ['job' => WatermarkPdfJob::class, 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf'],
-        'page-numbers' => ['job' => PageNumbersPdfJob::class, 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf'],
-        'jpg-to-pdf' => ['job' => ImageToPdfJob::class, 'min_files' => 1, 'max_files' => 30, 'mimes' => 'jpg,jpeg,png'],
-    ];
+    private static function tools(): array
+    {
+        return [
+        'split' => ['dispatch' => [SplitPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'remove-pages' => ['dispatch' => [RemovePagesPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'extract-pages' => ['dispatch' => [ExtractPagesPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'watermark' => ['dispatch' => [WatermarkPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'page-numbers' => ['dispatch' => [PageNumbersPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'jpg-to-pdf' => ['dispatch' => [ImageToPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 30, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'rotate' => ['dispatch' => [RotatePdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'protect' => ['dispatch' => [ProtectPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'unlock' => ['dispatch' => [UnlockPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+
+        // Heavier tools: Ghostscript / LibreOffice, routed to the 'heavy' queue.
+        // Note: only Office->PDF directions are registered. PDF->Office (docx/pptx/xlsx
+        // export) is disabled — this LibreOffice install's non-PDF export filters are
+        // broken (import + PDF export both verified working; docx/pptx/xlsx export
+        // fails with "no export filter found" regardless of profile/install state).
+        'compress' => ['dispatch' => [CompressPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+        'word-to-pdf' => ['dispatch' => fn ($id) => OfficeConvertJob::dispatch($id, 'pdf', 'converted.pdf', 'application/pdf'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'doc,docx', 'queue' => 'heavy'],
+        'ppt-to-pdf' => ['dispatch' => fn ($id) => OfficeConvertJob::dispatch($id, 'pdf', 'converted.pdf', 'application/pdf'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'ppt,pptx', 'queue' => 'heavy'],
+        'excel-to-pdf' => ['dispatch' => fn ($id) => OfficeConvertJob::dispatch($id, 'pdf', 'converted.pdf', 'application/pdf'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'xls,xlsx', 'queue' => 'heavy'],
+        'ocr' => ['dispatch' => [OcrPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+        ];
+    }
 
     public function store(Request $request, string $tool): JsonResponse
     {
-        abort_unless(isset(self::TOOLS[$tool]), 404, 'Unknown tool.');
-        $config = self::TOOLS[$tool];
+        $tools = self::tools();
+        abort_unless(isset($tools[$tool]), 404, 'Unknown tool.');
+        $config = $tools[$tool];
 
         $request->validate([
             'files' => ['required', 'array', "min:{$config['min_files']}", "max:{$config['max_files']}"],
@@ -69,7 +95,11 @@ class ToolController extends Controller
             ]);
         }
 
-        $config['job']::dispatch($job->id)->onQueue('light');
+        $pendingDispatch = is_array($config['dispatch'])
+            ? call_user_func($config['dispatch'], $job->id)
+            : ($config['dispatch'])($job->id);
+
+        $pendingDispatch->onQueue($config['queue']);
 
         return response()->json(['job_id' => $job->id], 202);
     }
