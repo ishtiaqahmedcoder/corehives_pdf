@@ -14,6 +14,7 @@ class MergeService
     public function merge(array $inputPaths, string $outputPath): void
     {
         $pdf = new Fpdi();
+        $pdf->SetAutoPageBreak(false);
 
         foreach ($inputPaths as $inputPath) {
             $pageCount = $pdf->setSourceFile($inputPath);
