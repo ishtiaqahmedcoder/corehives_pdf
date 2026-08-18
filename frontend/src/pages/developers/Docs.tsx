@@ -13,6 +13,51 @@ const GUIDE_LINKS = [
   { id: 'webhooks', label: 'Webhooks' },
 ]
 
+const ALL_NAV_IDS = [...GUIDE_LINKS.map((l) => l.id), ...API_TOOL_SCHEMAS.map((s) => s.slug)]
+
+function useScrollSpy(ids: string[]) {
+  const [activeId, setActiveId] = useState('')
+
+  useEffect(() => {
+    const elements = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el)
+    if (elements.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setActiveId((prev) => {
+          const visible = entries.filter((e) => e.isIntersecting)
+          if (visible.length === 0) return prev
+          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+          return visible[0].target.id
+        })
+      },
+      { rootMargin: '-110px 0px -70% 0px', threshold: 0 },
+    )
+
+    elements.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [ids])
+
+  return activeId
+}
+
+function SidebarLink({ id, label, active }: { id: string; label: string; active: boolean }) {
+  return (
+    <a
+      href={`#${id}`}
+      className="block rounded-lg px-2.5 py-1.5 text-[15px] transition-colors"
+      style={{
+        color: active ? 'var(--accent)' : 'var(--text-h)',
+        opacity: active ? 1 : 0.7,
+        background: active ? 'var(--accent-soft)' : 'transparent',
+        fontWeight: active ? 600 : 400,
+      }}
+    >
+      {label}
+    </a>
+  )
+}
+
 function CodeBlock({ children }: { children: string }) {
   return (
     <pre
@@ -134,6 +179,7 @@ function ToolReference({ schema, apiKey }: { schema: ApiToolSchema; apiKey: stri
 
 export function DeveloperDocs() {
   const [apiKey, setApiKey] = useState(() => localStorage.getItem(TESTER_KEY_STORAGE) ?? '')
+  const activeId = useScrollSpy(ALL_NAV_IDS)
 
   useEffect(() => {
     localStorage.setItem(TESTER_KEY_STORAGE, apiKey)
@@ -143,19 +189,15 @@ export function DeveloperDocs() {
     <div className="lg:grid lg:grid-cols-[220px_1fr] lg:items-start lg:gap-14">
       <aside className="hidden lg:sticky lg:top-24 lg:block lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pb-10">
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide opacity-50">Guides</p>
-        <nav className="space-y-1 text-sm">
+        <nav className="space-y-1">
           {GUIDE_LINKS.map((link) => (
-            <a key={link.id} href={`#${link.id}`} className="block rounded-lg px-2 py-1 opacity-70 hover:opacity-100">
-              {link.label}
-            </a>
+            <SidebarLink key={link.id} id={link.id} label={link.label} active={activeId === link.id} />
           ))}
         </nav>
         <p className="mt-6 mb-2 text-xs font-semibold uppercase tracking-wide opacity-50">Endpoints</p>
-        <nav className="space-y-1 text-sm">
+        <nav className="space-y-1">
           {API_TOOL_SCHEMAS.map((schema) => (
-            <a key={schema.slug} href={`#${schema.slug}`} className="block rounded-lg px-2 py-1 opacity-70 hover:opacity-100">
-              {schema.label}
-            </a>
+            <SidebarLink key={schema.slug} id={schema.slug} label={schema.label} active={activeId === schema.slug} />
           ))}
         </nav>
       </aside>
