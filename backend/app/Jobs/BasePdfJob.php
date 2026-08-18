@@ -8,7 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Throwable;
 
 abstract class BasePdfJob implements ShouldQueue
@@ -53,11 +55,57 @@ abstract class BasePdfJob implements ShouldQueue
                 'progress' => 100,
                 'completed_at' => now(),
             ]);
+
+            $this->fireWebhook($job);
         } catch (Throwable $e) {
             $job->update([
                 'status' => 'failed',
                 'error_message' => $this->friendlyError(),
             ]);
+            report($e);
+
+            $this->fireWebhook($job);
+        }
+    }
+
+    /**
+     * POST a completion/failure notification to the API key's registered
+     * webhook, if this job was created via the public API and a webhook is
+     * configured. Failures here never affect the job's own outcome.
+     */
+    private function fireWebhook(PdfJob $job): void
+    {
+        $job->loadMissing('apiKey');
+        $webhookUrl = $job->apiKey?->webhook_url;
+
+        if (! $webhookUrl) {
+            return;
+        }
+
+        $downloadUrl = null;
+        if ($job->status === 'completed') {
+            $output = $job->outputFileRecords()->first();
+            if ($output) {
+                $downloadUrl = URL::temporarySignedRoute(
+                    'jobs.download',
+                    now()->addHours(24),
+                    ['job' => $job->id, 'file' => $output->id]
+                );
+            }
+        }
+
+        try {
+            Http::timeout(5)->post($webhookUrl, [
+                'event' => $job->status === 'completed' ? 'task.completed' : 'task.failed',
+                'data' => [
+                    'job_id' => $job->id,
+                    'tool' => $job->tool_type,
+                    'status' => $job->status,
+                    'download_url' => $downloadUrl,
+                    'error_message' => $job->error_message,
+                ],
+            ]);
+        } catch (Throwable $e) {
             report($e);
         }
     }

@@ -1,6 +1,13 @@
 import { Suspense, lazy } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from '@/components/Layout'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { DevelopersLanding } from '@/pages/developers/DevelopersLanding'
+import { DeveloperRegister } from '@/pages/developers/Register'
+import { DeveloperLogin } from '@/pages/developers/Login'
+import { DeveloperDashboard } from '@/pages/developers/Dashboard'
+import { DeveloperDocs } from '@/pages/developers/Docs'
 import { Home } from '@/pages/Home'
 import { MergePdf } from '@/pages/tools/MergePdf'
 import { SplitPdf } from '@/pages/tools/SplitPdf'
@@ -35,8 +42,9 @@ const EditPdf = lazy(() => import('@/pages/tools/EditPdf').then((m) => ({ defaul
 
 function App() {
   return (
-    <Layout>
-      <Routes>
+    <AuthProvider>
+      <Layout>
+        <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/merge" element={<MergePdf />} />
         <Route path="/split" element={<SplitPdf />} />
@@ -81,8 +89,21 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
-      </Routes>
-    </Layout>
+        <Route path="/developers" element={<DevelopersLanding />} />
+        <Route path="/developers/register" element={<DeveloperRegister />} />
+        <Route path="/developers/login" element={<DeveloperLogin />} />
+        <Route path="/developers/docs" element={<DeveloperDocs />} />
+        <Route
+          path="/developers/dashboard"
+          element={
+            <ProtectedRoute>
+              <DeveloperDashboard />
+            </ProtectedRoute>
+          }
+        />
+        </Routes>
+      </Layout>
+    </AuthProvider>
   )
 }
 

@@ -80,11 +80,14 @@ class ToolController extends Controller
             'options.*' => ['nullable', 'string', 'max:8000'],
         ]);
 
+        $apiKey = $request->attributes->get('apiKey');
+
         $job = PdfJob::create([
             'tool_type' => $tool,
             'status' => 'pending',
             'options' => $request->input('options', []),
             'ip_hash' => hash('sha256', $request->ip().config('app.key')),
+            'api_key_id' => $apiKey?->id,
             'expires_at' => now()->addHour(),
         ]);
 

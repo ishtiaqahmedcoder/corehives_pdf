@@ -19,10 +19,13 @@ class MergeController extends Controller
             'files.*' => ['required', 'file', 'mimes:pdf', 'max:51200'],
         ]);
 
+        $apiKey = $request->attributes->get('apiKey');
+
         $job = PdfJob::create([
             'tool_type' => 'merge',
             'status' => 'pending',
             'ip_hash' => hash('sha256', $request->ip().config('app.key')),
+            'api_key_id' => $apiKey?->id,
             'expires_at' => now()->addHour(),
         ]);
 

@@ -22,11 +22,14 @@ class SignController extends Controller
             'page' => ['nullable', 'integer', 'min:0'],
         ]);
 
+        $apiKey = $request->attributes->get('apiKey');
+
         $job = PdfJob::create([
             'tool_type' => 'sign',
             'status' => 'pending',
             'options' => ['page' => (string) $request->input('page', 0)],
             'ip_hash' => hash('sha256', $request->ip().config('app.key')),
+            'api_key_id' => $apiKey?->id,
             'expires_at' => now()->addHour(),
         ]);
 

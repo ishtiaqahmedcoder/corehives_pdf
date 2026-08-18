@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PdfJob extends Model
@@ -12,6 +13,7 @@ class PdfJob extends Model
 
     protected $fillable = [
         'user_id',
+        'api_key_id',
         'tool_type',
         'status',
         'progress',
@@ -35,6 +37,11 @@ class PdfJob extends Model
     public function files(): HasMany
     {
         return $this->hasMany(UploadedFile::class);
+    }
+
+    public function apiKey(): BelongsTo
+    {
+        return $this->belongsTo(ApiKey::class);
     }
 
     public function inputFiles(): HasMany
