@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { Play, Loader2, CheckCircle2, XCircle, Download } from 'lucide-react'
-import { API_TOOL_SCHEMAS, type ApiOptionField } from '@/lib/apiToolSchemas'
-
-const TESTER_KEY_STORAGE = 'corehives-api-tester-key'
+import type { ApiOptionField, ApiToolSchema } from '@/lib/apiToolSchemas'
 
 const testerApi = axios.create({ baseURL: '/api' })
 
@@ -20,13 +18,15 @@ function fieldInputType(type: ApiOptionField['type']) {
   return 'text'
 }
 
-export function ApiTester() {
-  const [slug, setSlug] = useState(API_TOOL_SCHEMAS[0].slug)
-  const schema = API_TOOL_SCHEMAS.find((s) => s.slug === slug)!
-
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem(TESTER_KEY_STORAGE) ?? '')
+export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: string }) {
   const [files, setFiles] = useState<Record<string, FileList | null>>({})
-  const [optionValues, setOptionValues] = useState<Record<string, string>>({})
+  const [optionValues, setOptionValues] = useState<Record<string, string>>(() => {
+    const defaults: Record<string, string> = {}
+    schema.optionFields.forEach((f) => {
+      if (f.default !== undefined) defaults[f.name] = f.default
+    })
+    return defaults
+  })
 
   const [status, setStatus] = useState<PollStatus>('idle')
   const [jobId, setJobId] = useState<string | null>(null)
@@ -34,26 +34,6 @@ export function ApiTester() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
   const [requestError, setRequestError] = useState<RequestError | null>(null)
   const pollRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    localStorage.setItem(TESTER_KEY_STORAGE, apiKey)
-  }, [apiKey])
-
-  useEffect(() => {
-    // Reset the form's transient state whenever a different tool is selected.
-    setFiles({})
-    const defaults: Record<string, string> = {}
-    schema.optionFields.forEach((f) => {
-      if (f.default !== undefined) defaults[f.name] = f.default
-    })
-    setOptionValues(defaults)
-    setStatus('idle')
-    setJobId(null)
-    setDownloadUrl(null)
-    setRequestError(null)
-    if (pollRef.current) clearTimeout(pollRef.current)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug])
 
   useEffect(() => () => { if (pollRef.current) clearTimeout(pollRef.current) }, [])
 
@@ -135,42 +115,15 @@ export function ApiTester() {
   const curl = buildCurlPreview(schema, apiKey, files, optionValues)
 
   return (
-    <div className="rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="font-medium" style={{ color: 'var(--text-h)' }}>
-          Try it live
-        </h3>
-        <select
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          className="rounded-lg border px-2.5 py-1.5 text-sm outline-none"
-          style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
-        >
-          {API_TOOL_SCHEMAS.map((s) => (
-            <option key={s.slug} value={s.slug}>
-              {s.label}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="rounded-xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
+      <h4 className="text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
+        Try it
+      </h4>
 
-      <div className="mt-4 space-y-3">
-        <div>
-          <label className="mb-1 block text-xs font-medium opacity-70">API key</label>
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder="chp_live_..."
-            className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
-            style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
-          />
-          <p className="mt-1 text-xs opacity-50">Stored only in your browser. Get one from your dashboard.</p>
-        </div>
-
+      <div className="mt-3 space-y-3">
         {schema.fileFields.map((field) => (
           <div key={field.name}>
-            <label className="mb-1 block text-xs font-medium opacity-70">
+            <label className="mb-1 block text-sm font-medium opacity-80">
               {field.label} <span className="opacity-50">({field.hint})</span>
             </label>
             <input
@@ -178,15 +131,15 @@ export function ApiTester() {
               accept={field.accept}
               multiple={field.multiple}
               onChange={(e) => setFiles((prev) => ({ ...prev, [field.name]: e.target.files }))}
-              className="w-full rounded-lg border px-2.5 py-1.5 text-xs outline-none"
-              style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
+              className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
+              style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
             />
           </div>
         ))}
 
         {schema.optionFields.map((field) => (
           <div key={field.name}>
-            <label className="mb-1 block text-xs font-medium opacity-70">
+            <label className="mb-1 block text-sm font-medium opacity-80">
               {field.label} {field.required ? <span style={{ color: 'var(--accent)' }}>*</span> : <span className="opacity-50">(optional)</span>}
             </label>
             {field.type === 'select' ? (
@@ -194,7 +147,7 @@ export function ApiTester() {
                 value={optionValues[field.name] ?? ''}
                 onChange={(e) => setOptionValues((prev) => ({ ...prev, [field.name]: e.target.value }))}
                 className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
-                style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
+                style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
               >
                 <option value="">Select…</option>
                 {field.choices?.map((c) => (
@@ -209,8 +162,8 @@ export function ApiTester() {
                 onChange={(e) => setOptionValues((prev) => ({ ...prev, [field.name]: e.target.value }))}
                 placeholder={field.placeholder}
                 rows={2}
-                className="w-full rounded-lg border px-2.5 py-1.5 font-mono text-xs outline-none"
-                style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
+                className="w-full rounded-lg border px-2.5 py-1.5 font-mono text-[13px] outline-none"
+                style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
               />
             ) : (
               <input
@@ -219,19 +172,23 @@ export function ApiTester() {
                 onChange={(e) => setOptionValues((prev) => ({ ...prev, [field.name]: e.target.value }))}
                 placeholder={field.placeholder}
                 className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
-                style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
+                style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
               />
             )}
-            <p className="mt-1 text-xs opacity-50">{field.description}</p>
+            <p className="mt-1 text-xs opacity-60">{field.description}</p>
           </div>
         ))}
+
+        {schema.fileFields.length === 0 && schema.optionFields.length === 0 && (
+          <p className="text-sm opacity-60">This endpoint takes no other fields beyond the file itself.</p>
+        )}
       </div>
 
-      <details className="mt-4">
+      <details className="mt-3">
         <summary className="cursor-pointer text-xs font-medium opacity-60">Equivalent curl request</summary>
         <pre
-          className="mt-2 overflow-x-auto rounded-lg border p-3 text-xs leading-relaxed"
-          style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}
+          className="mt-2 overflow-x-auto rounded-lg border p-3 font-mono text-[13px] leading-relaxed"
+          style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
         >
           <code>{curl}</code>
         </pre>
@@ -241,7 +198,8 @@ export function ApiTester() {
         type="button"
         onClick={handleSend}
         disabled={!canSend}
-        className="mt-4 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white disabled:opacity-40"
+        title={apiKey.trim().length === 0 ? 'Enter your API key above first' : undefined}
+        className="mt-3 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white disabled:opacity-40"
         style={{ background: 'var(--accent)' }}
       >
         {status === 'sending' || status === 'polling' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
@@ -250,14 +208,14 @@ export function ApiTester() {
 
       {jobId && (status === 'polling' || status === 'sending') && (
         <p className="mt-2 text-xs opacity-60">
-          job_id: <code>{jobId}</code>
+          job_id: <code className="font-mono">{jobId}</code>
         </p>
       )}
 
       {status === 'completed' && downloadUrl && (
         <a
           href={downloadUrl}
-          className="mt-4 flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium"
+          className="mt-3 flex w-fit items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium"
           style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
         >
           <CheckCircle2 className="h-4 w-4" />
@@ -267,12 +225,12 @@ export function ApiTester() {
       )}
 
       {(status === 'failed' || status === 'error') && requestError && (
-        <div className="mt-4 rounded-xl border p-3" style={{ borderColor: '#ef4444' }}>
+        <div className="mt-3 rounded-xl border p-3" style={{ borderColor: '#ef4444' }}>
           <p className="flex items-center gap-2 text-sm font-medium text-red-500">
             <XCircle className="h-4 w-4" />
             {requestError.status ? `Request failed (${requestError.status})` : 'Job failed'}
           </p>
-          <pre className="mt-2 overflow-x-auto text-xs opacity-80">
+          <pre className="mt-2 overflow-x-auto font-mono text-xs opacity-80">
             <code>{JSON.stringify(requestError.body, null, 2)}</code>
           </pre>
         </div>
@@ -282,7 +240,7 @@ export function ApiTester() {
 }
 
 function buildCurlPreview(
-  schema: (typeof API_TOOL_SCHEMAS)[number],
+  schema: ApiToolSchema,
   apiKey: string,
   files: Record<string, FileList | null>,
   optionValues: Record<string, string>,

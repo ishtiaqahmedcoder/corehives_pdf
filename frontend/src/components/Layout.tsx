@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AllToolsMenu } from '@/components/AllToolsMenu'
 import { Footer } from '@/components/Footer'
@@ -17,6 +17,8 @@ function useTheme() {
 export function Layout({ children }: { children: ReactNode }) {
   const { dark, toggle } = useTheme()
   const { t } = useTranslation()
+  const location = useLocation()
+  const isWide = location.pathname.startsWith('/developers/docs')
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -54,7 +56,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">{children}</main>
+      <main className={`mx-auto w-full flex-1 px-6 py-10 ${isWide ? 'max-w-[1400px]' : 'max-w-5xl'}`}>{children}</main>
 
       <Footer />
     </div>
