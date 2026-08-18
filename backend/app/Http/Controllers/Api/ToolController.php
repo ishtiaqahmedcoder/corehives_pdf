@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\BatchPdfJob;
 use App\Jobs\CompressPdfJob;
 use App\Jobs\CropPdfJob;
+use App\Jobs\EditPdfJob;
 use App\Jobs\ExtractPagesPdfJob;
 use App\Jobs\ImageToPdfJob;
 use App\Jobs\OcrPdfJob;
 use App\Jobs\OfficeConvertJob;
 use App\Jobs\OrganizePdfJob;
 use App\Jobs\PageNumbersPdfJob;
+use App\Jobs\PdfToOfficeJob;
 use App\Jobs\ProtectPdfJob;
 use App\Jobs\RemovePagesPdfJob;
 use App\Jobs\RotatePdfJob;
@@ -45,16 +48,21 @@ class ToolController extends Controller
         'unlock' => ['dispatch' => [UnlockPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
         'crop' => ['dispatch' => [CropPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
         'organize' => ['dispatch' => [OrganizePdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'edit' => ['dispatch' => [EditPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'batch' => ['dispatch' => [BatchPdfJob::class, 'dispatch'], 'min_files' => 2, 'max_files' => 20, 'mimes' => 'pdf', 'queue' => 'heavy'],
 
-        // Heavier tools: Ghostscript / LibreOffice, routed to the 'heavy' queue.
-        // Note: only Office->PDF directions are registered. PDF->Office (docx/pptx/xlsx
-        // export) is disabled — this LibreOffice install's non-PDF export filters are
-        // broken (import + PDF export both verified working; docx/pptx/xlsx export
-        // fails with "no export filter found" regardless of profile/install state).
+        // Heavier tools.
         'compress' => ['dispatch' => [CompressPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+        // Office -> PDF: LibreOffice headless (verified working direction).
         'word-to-pdf' => ['dispatch' => fn ($id) => OfficeConvertJob::dispatch($id, 'pdf', 'converted.pdf', 'application/pdf'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'doc,docx', 'queue' => 'heavy'],
         'ppt-to-pdf' => ['dispatch' => fn ($id) => OfficeConvertJob::dispatch($id, 'pdf', 'converted.pdf', 'application/pdf'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'ppt,pptx', 'queue' => 'heavy'],
         'excel-to-pdf' => ['dispatch' => fn ($id) => OfficeConvertJob::dispatch($id, 'pdf', 'converted.pdf', 'application/pdf'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'xls,xlsx', 'queue' => 'heavy'],
+        // PDF -> Office: pure-PHP text extraction + rebuild (smalot/pdfparser + phpoffice/*),
+        // not LibreOffice — sidesteps this environment's broken LibreOffice export filters.
+        // Preserves text content; does not preserve original layout/tables/images.
+        'pdf-to-word' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'docx', 'converted.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+        'pdf-to-ppt' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'pptx', 'converted.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+        'pdf-to-excel' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'xlsx', 'converted.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
         'ocr' => ['dispatch' => [OcrPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
         ];
     }

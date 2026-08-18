@@ -90,7 +90,12 @@
     "drawSignatureFirst": "ارسم توقيعك أولاً.",
     "organizeHint": "اسحب لإعادة ترتيب الصفحات. انقر على صفحة لحذفها.",
     "loadingPreview": "جارٍ تحميل معاينات الصفحات…",
-    "applyOrganize": "حفظ التغييرات"
+    "applyOrganize": "حفظ التغييرات",
+    "enterTextPrompt": "أدخل النص",
+    "addTextFirst": "أضف عنصر نص واحد على الأقل.",
+    "clickToAddText": "انقر في أي مكان على الصفحة لإضافة نص",
+    "clickToRemoveText": "انقر للإزالة",
+    "selectToolLabel": "اختر أداة للتطبيق"
   },
   "footer": {
     "tagline": "أدوات PDF مجانية، بدون تسجيل، بدون علامة مائية — منتج من CoreHives.",

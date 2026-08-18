@@ -90,7 +90,12 @@
     "drawSignatureFirst": "Draw your signature first.",
     "organizeHint": "Drag to reorder pages. Click a page to remove it.",
     "loadingPreview": "Loading page previews…",
-    "applyOrganize": "Save changes"
+    "applyOrganize": "Save changes",
+    "enterTextPrompt": "Enter text",
+    "addTextFirst": "Add at least one text element.",
+    "clickToAddText": "Click anywhere on the page to add text",
+    "clickToRemoveText": "Click to remove",
+    "selectToolLabel": "Choose a tool to apply"
   },
   "footer": {
     "tagline": "Free PDF tools, no signup, no watermark — a CoreHives product.",

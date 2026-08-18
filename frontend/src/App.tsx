@@ -19,6 +19,10 @@ import { ExcelToPdf } from '@/pages/tools/ExcelToPdf'
 import { OcrPdf } from '@/pages/tools/OcrPdf'
 import { CropPdf } from '@/pages/tools/CropPdf'
 import { SignPdf } from '@/pages/tools/SignPdf'
+import { PdfToWord } from '@/pages/tools/PdfToWord'
+import { PdfToPpt } from '@/pages/tools/PdfToPpt'
+import { PdfToExcel } from '@/pages/tools/PdfToExcel'
+import { BatchProcessing } from '@/pages/tools/BatchProcessing'
 import { PrivacyPolicy } from '@/pages/PrivacyPolicy'
 import { TermsAndConditions } from '@/pages/TermsAndConditions'
 import { CookiePolicy } from '@/pages/CookiePolicy'
@@ -27,6 +31,7 @@ import { Contact } from '@/pages/Contact'
 import { Blog } from '@/pages/Blog'
 
 const OrganizePdf = lazy(() => import('@/pages/tools/OrganizePdf').then((m) => ({ default: m.OrganizePdf })))
+const EditPdf = lazy(() => import('@/pages/tools/EditPdf').then((m) => ({ default: m.EditPdf })))
 
 function App() {
   return (
@@ -50,11 +55,23 @@ function App() {
         <Route path="/ocr" element={<OcrPdf />} />
         <Route path="/crop" element={<CropPdf />} />
         <Route path="/sign" element={<SignPdf />} />
+        <Route path="/pdf-to-word" element={<PdfToWord />} />
+        <Route path="/pdf-to-ppt" element={<PdfToPpt />} />
+        <Route path="/pdf-to-excel" element={<PdfToExcel />} />
+        <Route path="/batch" element={<BatchProcessing />} />
         <Route
           path="/organize"
           element={
             <Suspense fallback={<div className="py-20 text-center opacity-60">Loading…</div>}>
               <OrganizePdf />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/edit"
+          element={
+            <Suspense fallback={<div className="py-20 text-center opacity-60">Loading…</div>}>
+              <EditPdf />
             </Suspense>
           }
         />

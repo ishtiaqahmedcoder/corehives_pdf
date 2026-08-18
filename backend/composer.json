@@ -7,10 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
-        "laravel/framework": "^13.17",
+        "laravel/framework": "^13.25",
         "laravel/tinker": "^3.0",
+        "phpoffice/phppresentation": "*",
+        "phpoffice/phpspreadsheet": "*",
+        "phpoffice/phpword": "*",
         "setasign/fpdi": "*",
-        "setasign/fpdi-fpdf": "^2.3"
+        "setasign/fpdi-fpdf": "^2.3",
+        "smalot/pdfparser": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -70,9 +70,9 @@ export const TOOLS: Tool[] = [
 
   // Convert
   { slug: 'jpg-to-pdf', label: 'JPG to PDF', description: 'Turn images into a PDF', icon: FileImage, to: '/jpg-to-pdf', category: 'convert', ready: true },
-  { slug: 'pdf-to-word', label: 'PDF to Word', description: 'Convert to an editable .docx', icon: FileText, to: '/pdf-to-word', category: 'convert', ready: false },
-  { slug: 'pdf-to-ppt', label: 'PDF to PowerPoint', description: 'Convert to an editable .pptx', icon: Presentation, to: '/pdf-to-ppt', category: 'convert', ready: false },
-  { slug: 'pdf-to-excel', label: 'PDF to Excel', description: 'Pull tables into a spreadsheet', icon: FileSpreadsheet, to: '/pdf-to-excel', category: 'convert', ready: false },
+  { slug: 'pdf-to-word', label: 'PDF to Word', description: 'Convert to an editable .docx', icon: FileText, to: '/pdf-to-word', category: 'convert', ready: true },
+  { slug: 'pdf-to-ppt', label: 'PDF to PowerPoint', description: 'Convert to an editable .pptx', icon: Presentation, to: '/pdf-to-ppt', category: 'convert', ready: true },
+  { slug: 'pdf-to-excel', label: 'PDF to Excel', description: 'Pull tables into a spreadsheet', icon: FileSpreadsheet, to: '/pdf-to-excel', category: 'convert', ready: true },
   { slug: 'word-to-pdf', label: 'Word to PDF', description: 'Convert .docx to PDF', icon: FileType, to: '/word-to-pdf', category: 'convert', ready: true },
   { slug: 'ppt-to-pdf', label: 'PowerPoint to PDF', description: 'Convert .pptx to PDF', icon: Presentation, to: '/ppt-to-pdf', category: 'convert', ready: true },
   { slug: 'excel-to-pdf', label: 'Excel to PDF', description: 'Convert .xlsx to PDF', icon: FileSpreadsheet, to: '/excel-to-pdf', category: 'convert', ready: true },
@@ -80,7 +80,7 @@ export const TOOLS: Tool[] = [
   // Edit
   { slug: 'watermark', label: 'Add Watermark', description: 'Stamp text or a logo on every page', icon: Droplets, to: '/watermark', category: 'edit', ready: true },
   { slug: 'page-numbers', label: 'Add Page Numbers', description: 'Number pages automatically', icon: Hash, to: '/page-numbers', category: 'edit', ready: true },
-  { slug: 'edit', label: 'Edit PDF', description: 'Add text, shapes and annotations', icon: PencilLine, to: '/edit', category: 'edit', ready: false },
+  { slug: 'edit', label: 'Edit PDF', description: 'Add text, shapes and annotations', icon: PencilLine, to: '/edit', category: 'edit', ready: true },
   { slug: 'crop', label: 'Crop PDF', description: 'Trim margins and page edges', icon: Crop, to: '/crop', category: 'edit', ready: true },
   { slug: 'sign', label: 'Sign PDF', description: 'Draw or upload your signature', icon: PenTool, to: '/sign', category: 'edit', ready: true },
 
@@ -89,7 +89,7 @@ export const TOOLS: Tool[] = [
   { slug: 'unlock', label: 'Unlock PDF', description: 'Remove a password from a PDF', icon: Unlock, to: '/unlock', category: 'security', ready: true },
 
   // CoreHives exclusive
-  { slug: 'batch', label: 'Batch Processing', description: 'Run any tool on many files at once — free, no limit', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: false },
+  { slug: 'batch', label: 'Batch Processing', description: 'Run any tool on many files at once — free, no limit', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: true },
   { slug: 'privacy', label: 'Auto-Delete Privacy', description: 'Every file is wiped 1 hour after processing', icon: ShieldCheck, to: '/privacy', category: 'exclusive', ready: true },
   { slug: 'urdu', label: 'Urdu / Hindi Support', description: 'Full interface in your language, not just English', icon: Globe, to: '/', category: 'exclusive', ready: true },
 ]

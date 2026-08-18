@@ -90,7 +90,12 @@
     "drawSignatureFirst": "Dibuja tu firma primero.",
     "organizeHint": "Arrastra para reordenar las páginas. Haz clic en una página para eliminarla.",
     "loadingPreview": "Cargando vistas previas de páginas…",
-    "applyOrganize": "Guardar cambios"
+    "applyOrganize": "Guardar cambios",
+    "enterTextPrompt": "Introduce el texto",
+    "addTextFirst": "Añade al menos un elemento de texto.",
+    "clickToAddText": "Haz clic en cualquier parte de la página para añadir texto",
+    "clickToRemoveText": "Haz clic para eliminar",
+    "selectToolLabel": "Elige una herramienta para aplicar"
   },
   "footer": {
     "tagline": "Herramientas PDF gratuitas, sin registro, sin marca de agua — un producto de CoreHives.",

@@ -16,8 +16,8 @@ Route::post('/tools/sign', [SignController::class, 'store'])
 Route::post('/tools/{tool}', [ToolController::class, 'store'])
     ->whereIn('tool', [
         'split', 'remove-pages', 'extract-pages', 'watermark', 'page-numbers', 'jpg-to-pdf',
-        'compress', 'rotate', 'protect', 'unlock', 'crop', 'organize',
-        'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'ocr',
+        'compress', 'rotate', 'protect', 'unlock', 'crop', 'organize', 'edit', 'batch',
+        'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
     ])
     ->middleware('throttle:20,60');
 

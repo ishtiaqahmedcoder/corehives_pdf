@@ -70,6 +70,15 @@ abstract class BasePdfJob implements ShouldQueue
      */
     abstract protected function process(PdfJob $job, \Illuminate\Contracts\Filesystem\Filesystem $disk): array;
 
+    /**
+     * Let a long-running process() report progress between the 10% (started)
+     * and 90% (outputs saved) marks that handle() sets automatically.
+     */
+    protected function updateProgress(PdfJob $job, int $progress): void
+    {
+        $job->update(['progress' => max(10, min($progress, 89))]);
+    }
+
     protected function friendlyError(): string
     {
         return 'Could not process your file(s). Please make sure they are valid, non-corrupted PDFs and try again.';
