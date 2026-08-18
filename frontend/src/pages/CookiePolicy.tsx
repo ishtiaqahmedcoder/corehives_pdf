@@ -6,7 +6,7 @@ export function CookiePolicy() {
       <ContentSection title="What we use today">
         <p>
           CoreHives PDF currently uses zero tracking cookies. Your light/dark theme choice is
-          saved in your browser's local storage, not a cookie — it stays on your device and is
+          saved in your browser's local storage, not a cookie. It stays on your device and is
           never sent to our servers.
         </p>
       </ContentSection>

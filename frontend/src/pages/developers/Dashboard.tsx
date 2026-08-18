@@ -69,7 +69,7 @@ function KeyRow({ apiKey, onRevoke }: { apiKey: ApiKeySummary; onRevoke: (id: nu
         <div className="mt-3 flex gap-2">
           <input
             type="url"
-            placeholder="Webhook URL (optional) — https://yourapp.com/webhooks/corehives"
+            placeholder="Webhook URL (optional): https://yourapp.com/webhooks/corehives"
             value={webhook}
             onChange={(e) => setWebhook(e.target.value)}
             className="flex-1 rounded-lg border px-2.5 py-1.5 text-xs outline-none"
@@ -169,7 +169,7 @@ export function DeveloperDashboard() {
             style={{ borderColor: 'var(--accent)', background: 'var(--accent-soft)' }}
           >
             <p className="text-sm font-medium" style={{ color: 'var(--text-h)' }}>
-              Copy your key now — you won't be able to see it again.
+              Copy your key now. You won't be able to see it again.
             </p>
             <div className="mt-2 flex items-center gap-2">
               <code className="flex-1 overflow-x-auto rounded-lg border bg-black/5 px-2.5 py-2 text-xs" style={{ borderColor: 'var(--border)' }}>
@@ -215,7 +215,7 @@ export function DeveloperDashboard() {
       {loading ? (
         <p className="py-10 text-center text-sm opacity-60">Loading…</p>
       ) : keys.length === 0 ? (
-        <p className="py-10 text-center text-sm opacity-60">No API keys yet — create one above to get started.</p>
+        <p className="py-10 text-center text-sm opacity-60">No API keys yet. Create one above to get started.</p>
       ) : (
         <div className="space-y-3">
           {keys.map((k) => (

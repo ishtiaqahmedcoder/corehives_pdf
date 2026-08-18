@@ -15,7 +15,7 @@
   },
   "home": {
     "title": "Todas las herramientas PDF que necesitas. Gratis. Para siempre.",
-    "subtitle": "Sin registro, sin marca de agua, sin límite de páginas — elige una herramienta y listo."
+    "subtitle": "Sin registro, sin marca de agua, sin límite de páginas. Elige una herramienta y listo."
   },
   "tools": {
     "merge": { "label": "Unir PDF", "description": "Combina PDFs en el orden que elijas" },
@@ -40,7 +40,7 @@
     "sign": { "label": "Firmar PDF", "description": "Dibuja o sube tu firma" },
     "protect": { "label": "Proteger PDF", "description": "Añade una contraseña a un PDF" },
     "unlock": { "label": "Desbloquear PDF", "description": "Elimina la contraseña de un PDF" },
-    "batch": { "label": "Procesamiento por lotes", "description": "Ejecuta cualquier herramienta en muchos archivos a la vez — gratis, sin límite" },
+    "batch": { "label": "Procesamiento por lotes", "description": "Ejecuta cualquier herramienta en muchos archivos a la vez. Gratis, sin límite" },
     "privacy": { "label": "Privacidad de autoeliminación", "description": "Cada archivo se borra 1 hora después de procesarse" },
     "urdu": { "label": "Soporte de urdu / hindi", "description": "Interfaz completa en tu idioma, no solo en inglés" }
   },
@@ -49,8 +49,8 @@
     "freeForever": "Gratis para siempre",
     "dragDrop": "Arrastra y suelta PDFs, o haz clic para explorar",
     "dropHere": "Suelta tus PDFs aquí",
-    "privacyNote": "Tus archivos siguen bajo tu control — se eliminan automáticamente 1 hora después de procesarse",
-    "importFrom": "Importar desde {{provider}} — próximamente",
+    "privacyNote": "Tus archivos siguen bajo tu control. Se eliminan automáticamente 1 hora después de procesarse",
+    "importFrom": "Importar desde {{provider}} (próximamente)",
     "removeFile": "Eliminar {{name}}",
     "uploading": "Subiendo…",
     "startAnother": "Empezar de nuevo",
@@ -66,7 +66,7 @@
     "pageRangePlaceholder": "ej. 1,3,5-7",
     "pagesToRemove": "Páginas a eliminar",
     "pagesToExtract": "Páginas a extraer",
-    "pagesOptional": "Páginas (opcional — déjalo vacío para todas las páginas)",
+    "pagesOptional": "Páginas (opcional: déjalo vacío para todas las páginas)",
     "enterPagesToRemove": "Indica qué páginas eliminar.",
     "enterPagesToExtract": "Indica qué páginas extraer.",
     "watermarkTextLabel": "Texto de la marca de agua",
@@ -98,12 +98,12 @@
     "selectToolLabel": "Elige una herramienta para aplicar"
   },
   "footer": {
-    "tagline": "Herramientas PDF gratuitas, sin registro, sin marca de agua — un producto de CoreHives.",
+    "tagline": "Herramientas PDF gratuitas, sin registro, sin marca de agua. Un producto de CoreHives.",
     "tools": "Herramientas",
     "legal": "Legal",
     "company": "Empresa",
     "allTools": "Todas las herramientas →",
-    "copyright": "© {{year}} CoreHives — herramientas PDF gratuitas, sin necesidad de registro.",
+    "copyright": "© {{year}} CoreHives. Herramientas PDF gratuitas, sin necesidad de registro.",
     "privacyPolicy": "Política de privacidad",
     "terms": "Términos y condiciones",
     "cookies": "Política de cookies",

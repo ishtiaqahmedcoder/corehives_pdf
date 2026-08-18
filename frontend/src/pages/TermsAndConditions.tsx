@@ -22,7 +22,7 @@ export function TermsAndConditions() {
       <ContentSection title="No warranty">
         <p>
           The service is provided "as is." While we test every tool, we can't guarantee the
-          output will always be perfect for every file — always keep your own copy of important
+          output will always be perfect for every file. Always keep your own copy of important
           documents before processing them.
         </p>
       </ContentSection>

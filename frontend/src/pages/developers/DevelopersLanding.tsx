@@ -18,7 +18,7 @@ export function DevelopersLanding() {
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-lg opacity-70">
           Every tool on this site, available as a simple REST API. Merge, split, compress, convert,
-          sign, and more — integrate PDF processing into your own product in minutes.
+          sign, and more. Integrate PDF processing into your own product in minutes.
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <Link
@@ -67,7 +67,7 @@ export function DevelopersLanding() {
       </div>
 
       <p className="mt-6 text-center text-xs opacity-50">
-        Paid plans are launching soon — every account starts on Free today.
+        Paid plans are launching soon. Every account starts on Free today.
       </p>
     </div>
   )

@@ -1,10 +1,6 @@
 import { motion } from 'framer-motion'
-import { TOOLS } from '@/lib/tools'
-
-const BESPOKE_ENDPOINTS = new Set(['merge', 'sign'])
-const NON_API_SLUGS = new Set(['privacy', 'urdu']) // marketing cards, not real endpoints
-
-const API_TOOLS = TOOLS.filter((t) => t.ready && !NON_API_SLUGS.has(t.slug))
+import { API_TOOL_SCHEMAS, type ApiToolSchema } from '@/lib/apiToolSchemas'
+import { ApiTester } from '@/components/developers/ApiTester'
 
 function CodeBlock({ children }: { children: string }) {
   return (
@@ -17,9 +13,9 @@ function CodeBlock({ children }: { children: string }) {
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ id, title, children }: { id?: string; title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-10">
+    <section id={id} className="mt-12 scroll-mt-20">
       <h2 className="mb-3 text-xl font-semibold" style={{ color: 'var(--text-h)' }}>
         {title}
       </h2>
@@ -28,102 +24,180 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
-export function DeveloperDocs() {
+function exampleValue(field: { placeholder?: string; default?: string; choices?: string[] }): string {
+  if (field.choices?.length) return field.choices[0]
+  return field.placeholder ?? field.default ?? ''
+}
+
+function buildExampleCurl(schema: ApiToolSchema): string {
+  const lines = [`curl -X POST https://corehives.com/api${schema.path} \\`, `  -H "Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx" \\`]
+
+  schema.fileFields.forEach((field) => {
+    const ext = field.accept.split(',')[0].replace('.', '')
+    lines.push(`  -F "${field.name}=@example.${ext}" \\`)
+  })
+
+  schema.optionFields.forEach((field) => {
+    const value = exampleValue(field)
+    if (!value) return
+    const key = field.topLevel ? field.name : `options[${field.name}]`
+    lines.push(`  -F "${key}=${value}" \\`)
+  })
+
+  const last = lines[lines.length - 1]
+  lines[lines.length - 1] = last.endsWith('\\') ? last.slice(0, -2) : last
+  return lines.join('\n')
+}
+
+function ToolReference({ schema }: { schema: ApiToolSchema }) {
   return (
-    <div className="mx-auto max-w-2xl">
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-semibold" style={{ color: 'var(--text-h)' }}>
-          API Documentation
-        </h1>
-        <p className="mt-2 opacity-70">
-          Base URL: <code className="rounded bg-[var(--bg-soft)] px-1.5 py-0.5">https://corehives.com/api/v1</code>
-        </p>
-      </motion.div>
+    <div id={schema.slug} className="scroll-mt-20 rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className="font-semibold" style={{ color: 'var(--text-h)' }}>
+          {schema.label}
+        </h3>
+        <code className="text-xs opacity-60">POST {schema.path}</code>
+      </div>
+      <p className="mt-1 text-sm opacity-70">{schema.summary}</p>
 
-      <Section title="Authentication">
-        <p>Every request needs your API key as a bearer token:</p>
-        <CodeBlock>{`Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx`}</CodeBlock>
-        <p>Get a key from your <a href="/developers/dashboard" className="underline" style={{ color: 'var(--accent)' }}>dashboard</a> — free accounts get 100 files/month.</p>
-      </Section>
-
-      <Section title="The flow">
-        <p>Every tool follows the same three steps:</p>
-        <ol className="list-decimal space-y-1 pl-5">
-          <li><strong>Submit</strong> — <code>POST /v1/tools/&#123;tool&#125;</code> with your file(s), get back a <code>job_id</code> immediately (202 Accepted).</li>
-          <li><strong>Poll</strong> — <code>GET /v1/jobs/&#123;job_id&#125;</code> until <code>status</code> is <code>completed</code> or <code>failed</code> (doesn't count against your quota).</li>
-          <li><strong>Download</strong> — follow the <code>download_url</code> from the completed response (a signed URL, valid for 30 minutes).</li>
-        </ol>
-        <p>Or skip polling entirely and register a <a href="#webhooks" className="underline" style={{ color: 'var(--accent)' }}>webhook</a> to get notified when the job finishes.</p>
-      </Section>
-
-      <Section title="Example: Merge PDF">
-        <CodeBlock>{`curl -X POST https://corehives.com/api/v1/tools/merge \\
-  -H "Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx" \\
-  -F "files[]=@first.pdf" \\
-  -F "files[]=@second.pdf"
-
-# => { "job_id": "0199f1a2-..." }
-
-curl https://corehives.com/api/v1/jobs/0199f1a2-... \\
-  -H "Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx"
-
-# => { "status": "completed", "download_url": "https://..." }`}</CodeBlock>
-      </Section>
-
-      <Section title="Tool options">
-        <p>
-          Tools that take extra settings (page ranges, watermark text, passwords, rotation degrees…) accept them as
-          multipart fields prefixed with <code>options</code>, e.g. <code>options[pages]=1,3,5-7</code> or{' '}
-          <code>options[text]=CONFIDENTIAL</code>. These match the same option names used by each tool's page on the
-          website.
-        </p>
-      </Section>
-
-      <Section title="Sign PDF (different shape)">
-        <p>
-          <code>POST /v1/tools/sign</code> is the one exception — it takes two separate files instead of a{' '}
-          <code>files[]</code> array: a <code>pdf</code> field and a <code>signature</code> field (PNG/JPG), plus an
-          optional <code>page</code> field (0 = last page, default).
-        </p>
-      </Section>
-
-      <Section title="Available tools">
-        <div className="overflow-hidden rounded-xl border" style={{ borderColor: 'var(--border)' }}>
-          <table className="w-full text-left text-sm">
+      {(schema.fileFields.length > 0 || schema.optionFields.length > 0) && (
+        <div className="mt-4 overflow-hidden rounded-xl border" style={{ borderColor: 'var(--border)' }}>
+          <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b" style={{ borderColor: 'var(--border)' }}>
-                <th className="px-3 py-2 font-medium opacity-60">Endpoint</th>
-                <th className="px-3 py-2 font-medium opacity-60">Tool</th>
+                <th className="px-3 py-2 font-medium opacity-60">Field</th>
+                <th className="px-3 py-2 font-medium opacity-60">Type</th>
+                <th className="px-3 py-2 font-medium opacity-60">Required</th>
+                <th className="px-3 py-2 font-medium opacity-60">Description</th>
               </tr>
             </thead>
             <tbody>
-              {API_TOOLS.map((tool) => (
-                <tr key={tool.slug} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
-                  <td className="px-3 py-1.5 font-mono text-xs">
-                    POST /v1/tools/{tool.slug}
-                    {BESPOKE_ENDPOINTS.has(tool.slug) && <span className="ml-1 opacity-50">*</span>}
+              {schema.fileFields.map((field) => (
+                <tr key={field.name} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
+                  <td className="px-3 py-2 font-mono">{field.name}</td>
+                  <td className="px-3 py-2 opacity-70">file</td>
+                  <td className="px-3 py-2 opacity-70">Yes</td>
+                  <td className="px-3 py-2 opacity-70">{field.hint}</td>
+                </tr>
+              ))}
+              {schema.optionFields.map((field) => (
+                <tr key={field.name} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
+                  <td className="px-3 py-2 font-mono">{field.topLevel ? field.name : `options[${field.name}]`}</td>
+                  <td className="px-3 py-2 opacity-70">{field.type}</td>
+                  <td className="px-3 py-2 opacity-70">
+                    {field.required ? 'Yes' : field.default !== undefined ? `No, default ${field.default}` : 'No'}
                   </td>
-                  <td className="px-3 py-1.5 opacity-80">{tool.label}</td>
+                  <td className="px-3 py-2 opacity-70">{field.description}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="text-xs opacity-50">* See the note above — this endpoint's request shape differs from the rest.</p>
+      )}
+
+      {schema.notes && (
+        <ul className="mt-3 list-disc space-y-1 pl-5 text-xs opacity-60">
+          {schema.notes.map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      )}
+
+      <details className="mt-4">
+        <summary className="cursor-pointer text-xs font-medium opacity-60">Example request</summary>
+        <div className="mt-2">
+          <CodeBlock>{buildExampleCurl(schema)}</CodeBlock>
+        </div>
+      </details>
+    </div>
+  )
+}
+
+export function DeveloperDocs() {
+  return (
+    <div className="mx-auto max-w-3xl">
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+        <h1 className="text-3xl font-semibold" style={{ color: 'var(--text-h)' }}>
+          API reference
+        </h1>
+        <p className="mt-2 max-w-xl opacity-70">
+          Every PDF tool on CoreHives, available as a REST API. This page documents every endpoint's exact request
+          fields and response shape, and includes a live tester so you can send a real request before you write any code.
+        </p>
+        <p className="mt-2 opacity-70">
+          Base URL: <code className="rounded bg-[var(--bg-soft)] px-1.5 py-0.5">https://corehives.com/api</code>
+        </p>
+      </motion.div>
+
+      <Section title="Authentication">
+        <p>Every request needs your API key as a bearer token.</p>
+        <CodeBlock>{`Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx`}</CodeBlock>
+        <p>
+          Get a key from your <a href="/developers/dashboard" className="underline" style={{ color: 'var(--accent)' }}>dashboard</a>. Free
+          accounts get 100 files per month.
+        </p>
+      </Section>
+
+      <Section title="The request flow">
+        <p>Every tool follows the same three steps.</p>
+        <ol className="list-decimal space-y-1 pl-5">
+          <li>
+            <strong>Submit.</strong> <code>POST /v1/tools/&#123;tool&#125;</code> with your file(s) and options. You get back a{' '}
+            <code>job_id</code> immediately, with a <code>202</code> status.
+          </li>
+          <li>
+            <strong>Poll.</strong> <code>GET /v1/jobs/&#123;job_id&#125;</code> until <code>status</code> is{' '}
+            <code>completed</code> or <code>failed</code>. Polling does not count against your quota.
+          </li>
+          <li>
+            <strong>Download.</strong> Follow the <code>download_url</code> from the completed response. It is a signed
+            URL, valid for 30 minutes.
+          </li>
+        </ol>
+        <p>
+          Or skip polling entirely and register a <a href="#webhooks" className="underline" style={{ color: 'var(--accent)' }}>webhook</a> to
+          get notified the moment a job finishes.
+        </p>
+      </Section>
+
+      <Section title="Job status response">
+        <p><code>GET /v1/jobs/&#123;job_id&#125;</code> returns:</p>
+        <CodeBlock>{`{
+  "id": "0199f1a2-...",
+  "tool_type": "merge",
+  "status": "completed",
+  "progress": 100,
+  "error_message": null,
+  "download_url": "https://corehives.com/api/jobs/0199f1a2-.../download?...",
+  "expires_at": "2026-08-19T15:04:00.000000Z"
+}`}</CodeBlock>
+        <p>
+          <code>status</code> is one of <code>pending</code>, <code>processing</code>, <code>completed</code>, or{' '}
+          <code>failed</code>. <code>expires_at</code> is when the input and output files are permanently deleted
+          (1 hour after the job was created).
+        </p>
       </Section>
 
       <Section title="Errors">
         <ul className="list-disc space-y-1 pl-5">
-          <li><code>401</code> — missing or invalid API key</li>
-          <li><code>422</code> — invalid request (bad file type, missing required option)</li>
-          <li><code>429</code> — you've used your monthly quota; <code>resets_at</code> tells you when it refills</li>
+          <li><code>401 missing_api_key</code> or <code>invalid_api_key</code>: no key, or the key is wrong or revoked.</li>
+          <li><code>422</code>: invalid request, such as a missing required option or an unsupported file type.</li>
+          <li>
+            <code>429 quota_exceeded</code>: you have used your monthly quota. The response includes{' '}
+            <code>quota</code>, <code>used</code>, and <code>resets_at</code>.
+          </li>
         </ul>
+        <CodeBlock>{`{
+  "error": "quota_exceeded",
+  "message": "You've used all 100 files in your free plan for this period.",
+  "quota": 100,
+  "used": 100,
+  "resets_at": "2026-09-01T00:00:00.000000Z"
+}`}</CodeBlock>
       </Section>
 
-      <Section title="Webhooks">
-        <p id="webhooks">
-          Set a webhook URL on your key from the dashboard. When a job finishes, we <code>POST</code> to it:
-        </p>
+      <Section id="webhooks" title="Webhooks">
+        <p>Set a webhook URL on your key from the dashboard. When a job finishes, CoreHives sends a <code>POST</code> to it.</p>
         <CodeBlock>{`{
   "event": "task.completed",
   "data": {
@@ -134,8 +208,28 @@ curl https://corehives.com/api/v1/jobs/0199f1a2-... \\
     "error_message": null
   }
 }`}</CodeBlock>
-        <p>The same shape is sent with <code>"event": "task.failed"</code> and <code>download_url: null</code> if the job fails.</p>
+        <p>The same shape is sent with <code>"event": "task.failed"</code> and <code>download_url: null</code> when a job fails.</p>
       </Section>
+
+      <Section title="Try it live">
+        <p>Paste a real API key, fill in the fields, and send an actual request against your account.</p>
+        <ApiTester />
+      </Section>
+
+      <section className="mt-12">
+        <h2 className="mb-3 text-xl font-semibold" style={{ color: 'var(--text-h)' }}>
+          Endpoints
+        </h2>
+        <p className="mb-4 text-sm opacity-70">
+          Every field each endpoint accepts, with an example request. Tools not listed here take no options beyond
+          the file itself.
+        </p>
+        <div className="space-y-4">
+          {API_TOOL_SCHEMAS.map((schema) => (
+            <ToolReference key={schema.slug} schema={schema} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

@@ -16,7 +16,7 @@ const VALUES = [
   {
     icon: Globe2,
     title: 'Built for everyone',
-    body: 'Starting with English and expanding to Urdu, Hindi, and more — because PDF tools shouldn’t require English fluency.',
+    body: 'Starting with English and expanding to Urdu, Hindi, and more, because PDF tools shouldn’t require English fluency.',
   },
 ]
 

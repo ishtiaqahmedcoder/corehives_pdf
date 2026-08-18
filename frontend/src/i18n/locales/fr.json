@@ -15,7 +15,7 @@
   },
   "home": {
     "title": "Tous les outils PDF dont vous avez besoin. Gratuit. Pour toujours.",
-    "subtitle": "Pas d'inscription, pas de filigrane, pas de limite de pages — choisissez un outil et lancez-vous."
+    "subtitle": "Pas d'inscription, pas de filigrane, pas de limite de pages. Choisissez un outil et lancez-vous."
   },
   "tools": {
     "merge": { "label": "Fusionner PDF", "description": "Combinez des PDF dans l'ordre de votre choix" },
@@ -40,7 +40,7 @@
     "sign": { "label": "Signer le PDF", "description": "Dessinez ou importez votre signature" },
     "protect": { "label": "Protéger le PDF", "description": "Ajoutez un mot de passe à un PDF" },
     "unlock": { "label": "Déverrouiller le PDF", "description": "Supprimez le mot de passe d'un PDF" },
-    "batch": { "label": "Traitement par lots", "description": "Exécutez n'importe quel outil sur plusieurs fichiers à la fois — gratuit, sans limite" },
+    "batch": { "label": "Traitement par lots", "description": "Exécutez n'importe quel outil sur plusieurs fichiers à la fois. Gratuit, sans limite" },
     "privacy": { "label": "Confidentialité à suppression automatique", "description": "Chaque fichier est effacé 1 heure après le traitement" },
     "urdu": { "label": "Support ourdou / hindi", "description": "Interface complète dans votre langue, pas seulement en anglais" }
   },
@@ -49,8 +49,8 @@
     "freeForever": "Gratuit pour toujours",
     "dragDrop": "Glissez-déposez vos PDF, ou cliquez pour parcourir",
     "dropHere": "Déposez vos PDF ici",
-    "privacyNote": "Vos fichiers restent sous votre contrôle — supprimés automatiquement 1 heure après le traitement",
-    "importFrom": "Importer depuis {{provider}} — bientôt disponible",
+    "privacyNote": "Vos fichiers restent sous votre contrôle. Supprimés automatiquement 1 heure après le traitement",
+    "importFrom": "Importer depuis {{provider}} (bientôt disponible)",
     "removeFile": "Supprimer {{name}}",
     "uploading": "Envoi en cours…",
     "startAnother": "Recommencer",
@@ -66,7 +66,7 @@
     "pageRangePlaceholder": "ex. 1,3,5-7",
     "pagesToRemove": "Pages à supprimer",
     "pagesToExtract": "Pages à extraire",
-    "pagesOptional": "Pages (facultatif — laissez vide pour toutes les pages)",
+    "pagesOptional": "Pages (facultatif : laissez vide pour toutes les pages)",
     "enterPagesToRemove": "Indiquez les pages à supprimer.",
     "enterPagesToExtract": "Indiquez les pages à extraire.",
     "watermarkTextLabel": "Texte du filigrane",
@@ -98,12 +98,12 @@
     "selectToolLabel": "Choisissez un outil à appliquer"
   },
   "footer": {
-    "tagline": "Outils PDF gratuits, sans inscription, sans filigrane — un produit CoreHives.",
+    "tagline": "Outils PDF gratuits, sans inscription, sans filigrane. Un produit CoreHives.",
     "tools": "Outils",
     "legal": "Mentions légales",
     "company": "Entreprise",
     "allTools": "Tous les outils →",
-    "copyright": "© {{year}} CoreHives — outils PDF gratuits, aucune inscription requise.",
+    "copyright": "© {{year}} CoreHives. Outils PDF gratuits, aucune inscription requise.",
     "privacyPolicy": "Politique de confidentialité",
     "terms": "Conditions générales",
     "cookies": "Politique de cookies",

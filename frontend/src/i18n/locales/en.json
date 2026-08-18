@@ -15,7 +15,7 @@
   },
   "home": {
     "title": "Every PDF tool you need. Free. Forever.",
-    "subtitle": "No signup, no watermark, no page limits — just pick a tool and go."
+    "subtitle": "No signup, no watermark, no page limits. Just pick a tool and go."
   },
   "tools": {
     "merge": { "label": "Merge PDF", "description": "Combine PDFs in the order you choose" },
@@ -40,7 +40,7 @@
     "sign": { "label": "Sign PDF", "description": "Draw or upload your signature" },
     "protect": { "label": "Protect PDF", "description": "Add a password to a PDF" },
     "unlock": { "label": "Unlock PDF", "description": "Remove a password from a PDF" },
-    "batch": { "label": "Batch Processing", "description": "Run any tool on many files at once — free, no limit" },
+    "batch": { "label": "Batch Processing", "description": "Run any tool on many files at once. Free, with no limit" },
     "privacy": { "label": "Auto-Delete Privacy", "description": "Every file is wiped 1 hour after processing" },
     "urdu": { "label": "Urdu / Hindi Support", "description": "Full interface in your language, not just English" }
   },
@@ -49,8 +49,8 @@
     "freeForever": "Free forever",
     "dragDrop": "Drag & drop PDFs, or click to browse",
     "dropHere": "Drop your PDFs here",
-    "privacyNote": "Files never leave your control — auto-deleted 1 hour after processing",
-    "importFrom": "Import from {{provider}} — coming soon",
+    "privacyNote": "Files never leave your control. Auto-deleted 1 hour after processing",
+    "importFrom": "Import from {{provider}} (coming soon)",
     "removeFile": "Remove {{name}}",
     "uploading": "Uploading…",
     "startAnother": "Start another",
@@ -66,7 +66,7 @@
     "pageRangePlaceholder": "e.g. 1,3,5-7",
     "pagesToRemove": "Pages to remove",
     "pagesToExtract": "Pages to extract",
-    "pagesOptional": "Pages (optional — leave empty for all pages)",
+    "pagesOptional": "Pages (optional: leave empty for all pages)",
     "enterPagesToRemove": "Enter which pages to remove.",
     "enterPagesToExtract": "Enter which pages to extract.",
     "watermarkTextLabel": "Watermark text",
@@ -98,12 +98,12 @@
     "selectToolLabel": "Choose a tool to apply"
   },
   "footer": {
-    "tagline": "Free PDF tools, no signup, no watermark — a CoreHives product.",
+    "tagline": "Free PDF tools, no signup, no watermark. A CoreHives product.",
     "tools": "Tools",
     "legal": "Legal",
     "company": "Company",
     "allTools": "All tools →",
-    "copyright": "© {{year}} CoreHives — free PDF tools, no signup required.",
+    "copyright": "© {{year}} CoreHives. Free PDF tools, no signup required.",
     "privacyPolicy": "Privacy Policy",
     "terms": "Terms & Conditions",
     "cookies": "Cookie Policy",

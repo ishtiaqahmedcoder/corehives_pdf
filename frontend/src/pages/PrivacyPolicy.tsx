@@ -13,7 +13,7 @@ export function PrivacyPolicy() {
 
       <ContentSection title="Auto-deletion">
         <p>
-          Every file — input and output — is automatically and permanently deleted 1 hour after
+          Every file, both input and output, is automatically and permanently deleted 1 hour after
           your job completes. We don't keep backups of your files beyond that window, and we
           don't read, scan, or analyze their contents for any purpose other than running the tool
           you selected.
@@ -32,7 +32,7 @@ export function PrivacyPolicy() {
       <ContentSection title="Cookies">
         <p>
           We use a single cookie-free browser preference (light/dark theme) stored in your
-          browser's local storage — it never leaves your device. See our{' '}
+          browser's local storage. It never leaves your device. See our{' '}
           <a href="/cookies" className="underline" style={{ color: 'var(--accent)' }}>
             Cookie Policy
           </a>{' '}

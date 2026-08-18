@@ -89,7 +89,7 @@ export const TOOLS: Tool[] = [
   { slug: 'unlock', label: 'Unlock PDF', description: 'Remove a password from a PDF', icon: Unlock, to: '/unlock', category: 'security', ready: true },
 
   // CoreHives exclusive
-  { slug: 'batch', label: 'Batch Processing', description: 'Run any tool on many files at once — free, no limit', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: true },
+  { slug: 'batch', label: 'Batch Processing', description: 'Run any tool on many files at once. Free, with no limit', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: true },
   { slug: 'privacy', label: 'Auto-Delete Privacy', description: 'Every file is wiped 1 hour after processing', icon: ShieldCheck, to: '/privacy', category: 'exclusive', ready: true },
   { slug: 'urdu', label: 'Urdu / Hindi Support', description: 'Full interface in your language, not just English', icon: Globe, to: '/', category: 'exclusive', ready: true },
 ]
