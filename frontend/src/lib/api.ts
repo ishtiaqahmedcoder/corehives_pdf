@@ -33,6 +33,18 @@ export async function uploadToolFiles(tool: string, files: File[], options?: Rec
   return data.job_id
 }
 
+export async function uploadSignFiles(pdf: File, signature: Blob, page = 0) {
+  const formData = new FormData()
+  formData.append('pdf', pdf)
+  formData.append('signature', signature, 'signature.png')
+  formData.append('page', String(page))
+
+  const { data } = await api.post<{ job_id: string }>('/tools/sign', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return data.job_id
+}
+
 export async function getJobStatus(jobId: string) {
   const { data } = await api.get<PdfJob>(`/jobs/${jobId}`)
   return data

@@ -80,7 +80,17 @@
     "rotationLabel": "Rotation",
     "rotate90": "90° dans le sens horaire",
     "rotate180": "180°",
-    "rotate270": "90° dans le sens antihoraire"
+    "rotate270": "90° dans le sens antihoraire",
+    "cropMarginsLabel": "Marges à rogner (mm)",
+    "cropHelper": "Laissez un champ vide ou à 0 pour ne pas modifier ce côté.",
+    "crop": { "top": "Haut", "right": "Droite", "bottom": "Bas", "left": "Gauche" },
+    "signaturePad": "Dessinez votre signature",
+    "clear": "Effacer",
+    "signHere": "Signez ici",
+    "drawSignatureFirst": "Dessinez d'abord votre signature.",
+    "organizeHint": "Glissez pour réorganiser les pages. Cliquez sur une page pour la supprimer.",
+    "loadingPreview": "Chargement des aperçus de pages…",
+    "applyOrganize": "Enregistrer les modifications"
   },
   "footer": {
     "tagline": "Outils PDF gratuits, sans inscription, sans filigrane — un produit CoreHives.",

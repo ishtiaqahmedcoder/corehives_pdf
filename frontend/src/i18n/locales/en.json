@@ -80,7 +80,17 @@
     "rotationLabel": "Rotation",
     "rotate90": "90° clockwise",
     "rotate180": "180°",
-    "rotate270": "90° counter-clockwise"
+    "rotate270": "90° counter-clockwise",
+    "cropMarginsLabel": "Margins to trim (mm)",
+    "cropHelper": "Leave a field empty or 0 to keep that side unchanged.",
+    "crop": { "top": "Top", "right": "Right", "bottom": "Bottom", "left": "Left" },
+    "signaturePad": "Draw your signature",
+    "clear": "Clear",
+    "signHere": "Sign here",
+    "drawSignatureFirst": "Draw your signature first.",
+    "organizeHint": "Drag to reorder pages. Click a page to remove it.",
+    "loadingPreview": "Loading page previews…",
+    "applyOrganize": "Save changes"
   },
   "footer": {
     "tagline": "Free PDF tools, no signup, no watermark — a CoreHives product.",

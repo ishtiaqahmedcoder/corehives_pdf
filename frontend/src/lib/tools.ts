@@ -61,7 +61,7 @@ export const TOOLS: Tool[] = [
   { slug: 'split', label: 'Split PDF', description: 'Break a PDF into separate files', icon: Scissors, to: '/split', category: 'organize', ready: true },
   { slug: 'remove-pages', label: 'Remove Pages', description: 'Delete pages you don’t need', icon: Trash2, to: '/remove-pages', category: 'organize', ready: true },
   { slug: 'extract-pages', label: 'Extract Pages', description: 'Pull specific pages into a new PDF', icon: FileOutput, to: '/extract-pages', category: 'organize', ready: true },
-  { slug: 'organize', label: 'Organize PDF', description: 'Drag to reorder, rotate or delete pages', icon: ListOrdered, to: '/organize', category: 'organize', ready: false },
+  { slug: 'organize', label: 'Organize PDF', description: 'Drag to reorder, rotate or delete pages', icon: ListOrdered, to: '/organize', category: 'organize', ready: true },
   { slug: 'rotate', label: 'Rotate PDF', description: 'Fix sideways or upside-down pages', icon: RotateCw, to: '/rotate', category: 'organize', ready: true },
 
   // Optimize
@@ -81,8 +81,8 @@ export const TOOLS: Tool[] = [
   { slug: 'watermark', label: 'Add Watermark', description: 'Stamp text or a logo on every page', icon: Droplets, to: '/watermark', category: 'edit', ready: true },
   { slug: 'page-numbers', label: 'Add Page Numbers', description: 'Number pages automatically', icon: Hash, to: '/page-numbers', category: 'edit', ready: true },
   { slug: 'edit', label: 'Edit PDF', description: 'Add text, shapes and annotations', icon: PencilLine, to: '/edit', category: 'edit', ready: false },
-  { slug: 'crop', label: 'Crop PDF', description: 'Trim margins and page edges', icon: Crop, to: '/crop', category: 'edit', ready: false },
-  { slug: 'sign', label: 'Sign PDF', description: 'Draw or upload your signature', icon: PenTool, to: '/sign', category: 'edit', ready: false },
+  { slug: 'crop', label: 'Crop PDF', description: 'Trim margins and page edges', icon: Crop, to: '/crop', category: 'edit', ready: true },
+  { slug: 'sign', label: 'Sign PDF', description: 'Draw or upload your signature', icon: PenTool, to: '/sign', category: 'edit', ready: true },
 
   // Security
   { slug: 'protect', label: 'Protect PDF', description: 'Add a password to a PDF', icon: Lock, to: '/protect', category: 'security', ready: true },
@@ -90,8 +90,8 @@ export const TOOLS: Tool[] = [
 
   // CoreHives exclusive
   { slug: 'batch', label: 'Batch Processing', description: 'Run any tool on many files at once — free, no limit', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: false },
-  { slug: 'privacy', label: 'Auto-Delete Privacy', description: 'Every file is wiped 1 hour after processing', icon: ShieldCheck, to: '/privacy', category: 'exclusive', ready: false },
-  { slug: 'urdu', label: 'Urdu / Hindi Support', description: 'Full interface in your language, not just English', icon: Globe, to: '/', category: 'exclusive', ready: false },
+  { slug: 'privacy', label: 'Auto-Delete Privacy', description: 'Every file is wiped 1 hour after processing', icon: ShieldCheck, to: '/privacy', category: 'exclusive', ready: true },
+  { slug: 'urdu', label: 'Urdu / Hindi Support', description: 'Full interface in your language, not just English', icon: Globe, to: '/', category: 'exclusive', ready: true },
 ]
 
 export function toolsByCategory(category: ToolCategory | 'all'): Tool[] {

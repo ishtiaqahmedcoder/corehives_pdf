@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\CompressPdfJob;
+use App\Jobs\CropPdfJob;
 use App\Jobs\ExtractPagesPdfJob;
 use App\Jobs\ImageToPdfJob;
 use App\Jobs\OcrPdfJob;
 use App\Jobs\OfficeConvertJob;
+use App\Jobs\OrganizePdfJob;
 use App\Jobs\PageNumbersPdfJob;
 use App\Jobs\ProtectPdfJob;
 use App\Jobs\RemovePagesPdfJob;
@@ -41,6 +43,8 @@ class ToolController extends Controller
         'rotate' => ['dispatch' => [RotatePdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
         'protect' => ['dispatch' => [ProtectPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
         'unlock' => ['dispatch' => [UnlockPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'crop' => ['dispatch' => [CropPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
+        'organize' => ['dispatch' => [OrganizePdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
 
         // Heavier tools: Ghostscript / LibreOffice, routed to the 'heavy' queue.
         // Note: only Office->PDF directions are registered. PDF->Office (docx/pptx/xlsx
@@ -65,7 +69,7 @@ class ToolController extends Controller
             'files' => ['required', 'array', "min:{$config['min_files']}", "max:{$config['max_files']}"],
             'files.*' => ['required', 'file', "mimes:{$config['mimes']}", 'max:51200'],
             'options' => ['sometimes', 'array'],
-            'options.*' => ['nullable', 'string', 'max:500'],
+            'options.*' => ['nullable', 'string', 'max:8000'],
         ]);
 
         $job = PdfJob::create([

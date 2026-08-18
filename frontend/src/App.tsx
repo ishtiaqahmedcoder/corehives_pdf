@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from '@/components/Layout'
 import { Home } from '@/pages/Home'
@@ -16,12 +17,16 @@ import { WordToPdf } from '@/pages/tools/WordToPdf'
 import { PptToPdf } from '@/pages/tools/PptToPdf'
 import { ExcelToPdf } from '@/pages/tools/ExcelToPdf'
 import { OcrPdf } from '@/pages/tools/OcrPdf'
+import { CropPdf } from '@/pages/tools/CropPdf'
+import { SignPdf } from '@/pages/tools/SignPdf'
 import { PrivacyPolicy } from '@/pages/PrivacyPolicy'
 import { TermsAndConditions } from '@/pages/TermsAndConditions'
 import { CookiePolicy } from '@/pages/CookiePolicy'
 import { About } from '@/pages/About'
 import { Contact } from '@/pages/Contact'
 import { Blog } from '@/pages/Blog'
+
+const OrganizePdf = lazy(() => import('@/pages/tools/OrganizePdf').then((m) => ({ default: m.OrganizePdf })))
 
 function App() {
   return (
@@ -43,6 +48,16 @@ function App() {
         <Route path="/ppt-to-pdf" element={<PptToPdf />} />
         <Route path="/excel-to-pdf" element={<ExcelToPdf />} />
         <Route path="/ocr" element={<OcrPdf />} />
+        <Route path="/crop" element={<CropPdf />} />
+        <Route path="/sign" element={<SignPdf />} />
+        <Route
+          path="/organize"
+          element={
+            <Suspense fallback={<div className="py-20 text-center opacity-60">Loading…</div>}>
+              <OrganizePdf />
+            </Suspense>
+          }
+        />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/cookies" element={<CookiePolicy />} />
