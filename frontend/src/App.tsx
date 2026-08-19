@@ -20,6 +20,9 @@ import { WatermarkImage } from '@/pages/images/WatermarkImage'
 import { MemeGenerator } from '@/pages/images/MemeGenerator'
 import { PhotoEditor } from '@/pages/images/PhotoEditor'
 import { HtmlToImage } from '@/pages/images/HtmlToImage'
+import { UpscaleImage } from '@/pages/images/UpscaleImage'
+import { RemoveBackground } from '@/pages/images/RemoveBackground'
+import { BlurFace } from '@/pages/images/BlurFace'
 import { MergePdf } from '@/pages/tools/MergePdf'
 import { SplitPdf } from '@/pages/tools/SplitPdf'
 import { RemovePages } from '@/pages/tools/RemovePages'
@@ -89,6 +92,9 @@ function App() {
         <Route path="/images/meme" element={<MemeGenerator />} />
         <Route path="/images/editor" element={<PhotoEditor />} />
         <Route path="/images/html-to-image" element={<HtmlToImage />} />
+        <Route path="/images/upscale" element={<UpscaleImage />} />
+        <Route path="/images/remove-background" element={<RemoveBackground />} />
+        <Route path="/images/blur-face" element={<BlurFace />} />
         <Route
           path="/organize"
           element={

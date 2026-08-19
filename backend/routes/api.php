@@ -27,6 +27,7 @@ Route::post('/tools/{tool}', [ToolController::class, 'store'])
         'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
         'compress-image', 'resize-image', 'rotate-image', 'convert-to-jpg',
         'crop-image', 'convert-from-jpg', 'watermark-image', 'meme-generator', 'photo-editor',
+        'upscale-image', 'remove-background', 'blur-face',
     ])
     ->middleware('throttle:20,60');
 
@@ -64,6 +65,7 @@ Route::prefix('v1')->group(function () {
             'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
             'compress-image', 'resize-image', 'rotate-image', 'convert-to-jpg',
             'crop-image', 'convert-from-jpg', 'watermark-image', 'meme-generator', 'photo-editor',
+            'upscale-image', 'remove-background', 'blur-face',
         ])
         ->middleware('apikey');
 

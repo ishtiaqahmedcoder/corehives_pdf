@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\BatchPdfJob;
+use App\Jobs\BlurFaceJob;
 use App\Jobs\CompressImageJob;
 use App\Jobs\CompressPdfJob;
 use App\Jobs\ConvertFromJpgJob;
@@ -21,12 +22,14 @@ use App\Jobs\PageNumbersPdfJob;
 use App\Jobs\PdfToOfficeJob;
 use App\Jobs\PhotoEditorJob;
 use App\Jobs\ProtectPdfJob;
+use App\Jobs\RemoveBackgroundJob;
 use App\Jobs\RemovePagesPdfJob;
 use App\Jobs\ResizeImageJob;
 use App\Jobs\RotateImageJob;
 use App\Jobs\RotatePdfJob;
 use App\Jobs\SplitPdfJob;
 use App\Jobs\UnlockPdfJob;
+use App\Jobs\UpscaleImageJob;
 use App\Jobs\WatermarkImageJob;
 use App\Jobs\WatermarkPdfJob;
 use App\Models\PdfJob;
@@ -84,6 +87,11 @@ class ToolController extends Controller
         'watermark-image' => ['dispatch' => [WatermarkImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
         'meme-generator' => ['dispatch' => [MemeGeneratorJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
         'photo-editor' => ['dispatch' => [PhotoEditorJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+
+        // AI-assisted image tools (free/open-source models, run locally — no paid API).
+        'upscale-image' => ['dispatch' => [UpscaleImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'heavy'],
+        'remove-background' => ['dispatch' => [RemoveBackgroundJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'heavy'],
+        'blur-face' => ['dispatch' => [BlurFaceJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'heavy'],
         ];
     }
 

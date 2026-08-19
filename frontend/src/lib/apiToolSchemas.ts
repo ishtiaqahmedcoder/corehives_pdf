@@ -457,6 +457,33 @@ export const API_TOOL_SCHEMAS: ApiToolSchema[] = [
     ],
     notes: ['This endpoint takes no file — `url` and `format` are sent as regular fields, not `files[]`.'],
   },
+  {
+    slug: 'upscale-image',
+    label: 'Upscale Image',
+    summary: 'Enlarge a JPG or PNG image 4x using Real-ESRGAN.',
+    path: '/v1/tools/upscale-image',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [],
+    notes: ['Fixed at 4x — only the bundled model is available.', 'Runs locally (no external API); processing can take longer than other tools for large images.'],
+  },
+  {
+    slug: 'remove-background',
+    label: 'Remove Background',
+    summary: 'Cut a subject out of a JPG or PNG image automatically.',
+    path: '/v1/tools/remove-background',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [],
+    notes: ['Output is always a PNG, since the cut-out subject needs a transparent background.'],
+  },
+  {
+    slug: 'blur-face',
+    label: 'Blur Face',
+    summary: 'Detect and blur faces in a JPG or PNG image.',
+    path: '/v1/tools/blur-face',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [],
+    notes: ['Detects faces only (not license plates or other objects).'],
+  },
 ]
 
 export const API_TOOL_SCHEMA_BY_SLUG: Record<string, ApiToolSchema> = Object.fromEntries(

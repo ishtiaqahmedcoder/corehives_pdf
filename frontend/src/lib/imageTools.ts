@@ -54,9 +54,9 @@ export const IMAGE_TOOLS: ImageTool[] = [
   { slug: 'watermark-image', label: 'Watermark Image', description: 'Stamp text over a photo', icon: Droplets, to: '/images/watermark', category: 'edit', ready: true },
   { slug: 'photo-editor', label: 'Photo Editor', description: 'Add text, frames, and stickers', icon: PencilLine, to: '/images/editor', category: 'create', ready: true },
   { slug: 'meme-generator', label: 'Meme Generator', description: 'Caption an image in seconds', icon: Smile, to: '/images/meme', category: 'create', ready: true },
-  { slug: 'upscale-image', label: 'Upscale Image', description: 'Enlarge a photo without losing quality', icon: Expand, to: '/images/upscale', category: 'optimize', ready: false },
-  { slug: 'remove-background', label: 'Remove Background', description: 'Cut a subject out automatically', icon: Eraser, to: '/images/remove-background', category: 'edit', ready: false },
-  { slug: 'blur-face', label: 'Blur Face', description: 'Hide faces or plates for privacy', icon: ScanFace, to: '/images/blur-face', category: 'security', ready: false },
+  { slug: 'upscale-image', label: 'Upscale Image', description: 'Enlarge a photo 4x without losing quality', icon: Expand, to: '/images/upscale', category: 'optimize', ready: true },
+  { slug: 'remove-background', label: 'Remove Background', description: 'Cut a subject out automatically', icon: Eraser, to: '/images/remove-background', category: 'edit', ready: true },
+  { slug: 'blur-face', label: 'Blur Face', description: 'Hide faces for privacy', icon: ScanFace, to: '/images/blur-face', category: 'security', ready: true },
   { slug: 'html-to-image', label: 'HTML to Image', description: 'Turn a web page into a JPG or PNG', icon: Globe, to: '/images/html-to-image', category: 'convert', ready: true },
 ]
 
