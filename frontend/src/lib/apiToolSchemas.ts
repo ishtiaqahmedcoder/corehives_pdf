@@ -374,11 +374,76 @@ export const API_TOOL_SCHEMAS: ApiToolSchema[] = [
   {
     slug: 'convert-to-jpg',
     label: 'Convert to JPG',
-    summary: 'Convert a PNG or GIF image to JPG.',
+    summary: 'Convert a PNG, GIF, or WEBP image to JPG.',
     path: '/v1/tools/convert-to-jpg',
-    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.png,.gif', multiple: false, min: 1, max: 1, hint: 'One PNG or GIF image' }],
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.png,.gif,.webp', multiple: false, min: 1, max: 1, hint: 'One PNG, GIF, or WEBP image' }],
     optionFields: [],
     notes: ['Transparent areas are flattened onto a white background, since JPG has no transparency.'],
+  },
+  {
+    slug: 'crop-image',
+    label: 'Crop Image',
+    summary: 'Trim margins from a JPG or PNG image.',
+    path: '/v1/tools/crop-image',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: (['top', 'right', 'bottom', 'left'] as const).map((side) => ({
+      name: side,
+      label: side,
+      type: 'int' as const,
+      required: false,
+      default: '0',
+      placeholder: '0',
+      description: `Pixels to trim from the ${side} of the image.`,
+    })),
+  },
+  {
+    slug: 'convert-from-jpg',
+    label: 'Convert from JPG',
+    summary: 'Convert a JPG image to PNG, GIF, or WEBP.',
+    path: '/v1/tools/convert-from-jpg',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg', multiple: false, min: 1, max: 1, hint: 'One JPG image' }],
+    optionFields: [
+      { name: 'format', label: 'format', type: 'select', required: false, default: 'png', description: 'The output format.', choices: ['png', 'gif', 'webp'] },
+    ],
+  },
+  {
+    slug: 'watermark-image',
+    label: 'Watermark Image',
+    summary: 'Stamp text across a JPG or PNG image.',
+    path: '/v1/tools/watermark-image',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [
+      { name: 'text', label: 'text', type: 'string', required: true, placeholder: 'CONFIDENTIAL', description: 'The watermark text stamped across the image.' },
+    ],
+  },
+  {
+    slug: 'meme-generator',
+    label: 'Meme Generator',
+    summary: 'Add a classic top/bottom caption to a JPG or PNG image.',
+    path: '/v1/tools/meme-generator',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [
+      { name: 'top_text', label: 'top_text', type: 'string', required: false, placeholder: 'WHEN THE CODE', description: 'Caption shown at the top of the image.' },
+      { name: 'bottom_text', label: 'bottom_text', type: 'string', required: false, placeholder: 'FINALLY WORKS', description: 'Caption shown at the bottom of the image.' },
+    ],
+    notes: ['At least one of top_text or bottom_text is required.'],
+  },
+  {
+    slug: 'photo-editor',
+    label: 'Photo Editor',
+    summary: 'Overlay text onto a JPG or PNG image.',
+    path: '/v1/tools/photo-editor',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [
+      {
+        name: 'edits',
+        label: 'edits',
+        type: 'json',
+        required: true,
+        placeholder: '[{"x":0.1,"y":0.2,"text":"Hello","fontSize":24,"color":"#111111"}]',
+        description: 'A JSON array of text overlays: {x, y} as fractions (0 to 1) of the image width/height, plus text, and optional fontSize and color (hex).',
+      },
+    ],
   },
 ]
 

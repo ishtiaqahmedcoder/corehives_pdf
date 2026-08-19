@@ -5,9 +5,9 @@ export function ConvertToJpg() {
     <SimpleToolPage
       tool="convert-to-jpg"
       title="Convert to JPG"
-      description="Turn PNG or GIF into JPG"
+      description="Turn PNG, GIF, or WEBP into JPG"
       submitLabel="Convert to JPG"
-      accept={{ 'image/png': ['.png'], 'image/gif': ['.gif'] }}
+      accept={{ 'image/png': ['.png'], 'image/gif': ['.gif'], 'image/webp': ['.webp'] }}
     />
   )
 }

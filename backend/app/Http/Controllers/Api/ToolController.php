@@ -6,16 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Jobs\BatchPdfJob;
 use App\Jobs\CompressImageJob;
 use App\Jobs\CompressPdfJob;
+use App\Jobs\ConvertFromJpgJob;
 use App\Jobs\ConvertToJpgJob;
+use App\Jobs\CropImageJob;
 use App\Jobs\CropPdfJob;
 use App\Jobs\EditPdfJob;
 use App\Jobs\ExtractPagesPdfJob;
 use App\Jobs\ImageToPdfJob;
+use App\Jobs\MemeGeneratorJob;
 use App\Jobs\OcrPdfJob;
 use App\Jobs\OfficeConvertJob;
 use App\Jobs\OrganizePdfJob;
 use App\Jobs\PageNumbersPdfJob;
 use App\Jobs\PdfToOfficeJob;
+use App\Jobs\PhotoEditorJob;
 use App\Jobs\ProtectPdfJob;
 use App\Jobs\RemovePagesPdfJob;
 use App\Jobs\ResizeImageJob;
@@ -23,6 +27,7 @@ use App\Jobs\RotateImageJob;
 use App\Jobs\RotatePdfJob;
 use App\Jobs\SplitPdfJob;
 use App\Jobs\UnlockPdfJob;
+use App\Jobs\WatermarkImageJob;
 use App\Jobs\WatermarkPdfJob;
 use App\Models\PdfJob;
 use Illuminate\Http\JsonResponse;
@@ -73,7 +78,12 @@ class ToolController extends Controller
         'compress-image' => ['dispatch' => [CompressImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
         'resize-image' => ['dispatch' => [ResizeImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
         'rotate-image' => ['dispatch' => [RotateImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
-        'convert-to-jpg' => ['dispatch' => [ConvertToJpgJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'png,gif', 'queue' => 'light'],
+        'convert-to-jpg' => ['dispatch' => [ConvertToJpgJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'png,gif,webp', 'queue' => 'light'],
+        'crop-image' => ['dispatch' => [CropImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'convert-from-jpg' => ['dispatch' => [ConvertFromJpgJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg', 'queue' => 'light'],
+        'watermark-image' => ['dispatch' => [WatermarkImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'meme-generator' => ['dispatch' => [MemeGeneratorJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'photo-editor' => ['dispatch' => [PhotoEditorJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
         ];
     }
 

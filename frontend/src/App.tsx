@@ -14,6 +14,11 @@ import { CompressImage } from '@/pages/images/CompressImage'
 import { ResizeImage } from '@/pages/images/ResizeImage'
 import { RotateImage } from '@/pages/images/RotateImage'
 import { ConvertToJpg } from '@/pages/images/ConvertToJpg'
+import { CropImage } from '@/pages/images/CropImage'
+import { ConvertFromJpg } from '@/pages/images/ConvertFromJpg'
+import { WatermarkImage } from '@/pages/images/WatermarkImage'
+import { MemeGenerator } from '@/pages/images/MemeGenerator'
+import { PhotoEditor } from '@/pages/images/PhotoEditor'
 import { MergePdf } from '@/pages/tools/MergePdf'
 import { SplitPdf } from '@/pages/tools/SplitPdf'
 import { RemovePages } from '@/pages/tools/RemovePages'
@@ -77,6 +82,11 @@ function App() {
         <Route path="/images/resize" element={<ResizeImage />} />
         <Route path="/images/rotate" element={<RotateImage />} />
         <Route path="/images/convert-to-jpg" element={<ConvertToJpg />} />
+        <Route path="/images/crop" element={<CropImage />} />
+        <Route path="/images/convert-from-jpg" element={<ConvertFromJpg />} />
+        <Route path="/images/watermark" element={<WatermarkImage />} />
+        <Route path="/images/meme" element={<MemeGenerator />} />
+        <Route path="/images/editor" element={<PhotoEditor />} />
         <Route
           path="/organize"
           element={
