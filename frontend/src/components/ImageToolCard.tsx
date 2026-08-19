@@ -1,18 +1,14 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { IMAGE_CATEGORY_STYLES, type ImageTool } from '@/lib/imageTools'
+import { IMAGE_CATEGORY_ICON_COLOR, type ImageTool } from '@/lib/imageTools'
+import { ToolIcon } from '@/components/ToolIcon'
 
 export function ImageToolCard({ tool, index = 0 }: { tool: ImageTool; index?: number }) {
-  const Icon = tool.icon
-  const badgeClass = IMAGE_CATEGORY_STYLES[tool.category]
-
   const content = (
     <>
-      <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${badgeClass}`}>
-        <Icon className="h-5 w-5" strokeWidth={1.75} />
-      </div>
-      <div className="mt-3 flex items-center gap-2">
-        <h3 className="font-medium" style={{ color: 'var(--text-h)' }}>
+      <ToolIcon icon={tool.icon} color={IMAGE_CATEGORY_ICON_COLOR[tool.category]} />
+      <div className="mt-4 flex items-center gap-2">
+        <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
           {tool.label}
         </h3>
         {!tool.ready && (
@@ -21,7 +17,9 @@ export function ImageToolCard({ tool, index = 0 }: { tool: ImageTool; index?: nu
           </span>
         )}
       </div>
-      <p className="mt-1 text-sm opacity-70">{tool.description}</p>
+      <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
+        {tool.description}
+      </p>
     </>
   )
 
@@ -35,6 +33,7 @@ export function ImageToolCard({ tool, index = 0 }: { tool: ImageTool; index?: nu
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.3, delay: Math.min(index * 0.04, 0.3) }}
       whileHover={tool.ready ? { y: -3 } : undefined}
+      className="h-full"
     >
       {tool.ready ? (
         <Link to={tool.to} className={className} style={style}>

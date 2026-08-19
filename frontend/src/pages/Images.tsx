@@ -26,7 +26,9 @@ export function Images() {
         <h1 className="text-4xl font-semibold" style={{ color: 'var(--text-h)' }}>
           Every image tool you need. Free. Forever.
         </h1>
-        <p className="mt-3 text-lg opacity-70">No signup, no watermark, no limits. Just pick a tool and go.</p>
+        <p className="mt-3 text-lg" style={{ color: 'var(--text)' }}>
+          No signup, no watermark, no limits. Just pick a tool and go.
+        </p>
       </motion.div>
 
       <div className="mb-8 flex flex-wrap justify-center gap-2">
@@ -51,7 +53,7 @@ export function Images() {
         })}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {tools.map((tool, i) => (
           <ImageToolCard key={tool.slug} tool={tool} index={i} />
         ))}

@@ -32,18 +32,15 @@ function BackButton() {
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <button
-        type="button"
-        onClick={handleBack}
-        aria-label="Go back"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
-        style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
-      >
-        <ArrowLeft className="h-4 w-4" />
-      </button>
-      <span className="h-6 w-px" style={{ background: 'var(--border)' }} />
-    </div>
+    <button
+      type="button"
+      onClick={handleBack}
+      className="mb-5 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium"
+      style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
+    >
+      <ArrowLeft className="h-4 w-4" />
+      Back
+    </button>
   )
 }
 
@@ -55,13 +52,10 @@ export function Layout({ children }: { children: ReactNode }) {
     <div className="flex min-h-svh flex-col">
       <header className="sticky top-0 z-40 border-b backdrop-blur" style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--bg) 85%, transparent)' }}>
         <div className="flex w-full items-center justify-between gap-4 px-6 py-3.5 lg:px-10">
-          <div className="flex items-center gap-4">
-            <BackButton />
-            <Link to="/" className="flex items-center gap-2.5 font-semibold" style={{ color: 'var(--text-h)' }}>
-              <Logo />
-              <span>{APP_NAME}</span>
-            </Link>
-          </div>
+          <Link to="/" className="flex items-center gap-2.5 font-semibold" style={{ color: 'var(--text-h)' }}>
+            <Logo />
+            <span>{APP_NAME}</span>
+          </Link>
 
           <nav className="flex items-center gap-1">
             <Link
@@ -85,7 +79,10 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="w-full flex-1 px-6 py-10 lg:px-10">{children}</main>
+      <main className="w-full flex-1 px-6 py-10 lg:px-10">
+        <BackButton />
+        {children}
+      </main>
 
       <Footer />
     </div>

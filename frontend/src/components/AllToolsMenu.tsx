@@ -15,6 +15,7 @@ export function AllToolsMenu() {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     function onPointerDown(e: PointerEvent) {
@@ -33,8 +34,18 @@ export function AllToolsMenu() {
     }
   }, [])
 
+  function openNow() {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setOpen(true)
+  }
+
+  function closeSoon() {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => setOpen(false), 150)
+  }
+
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative" onMouseEnter={openNow} onMouseLeave={closeSoon}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}

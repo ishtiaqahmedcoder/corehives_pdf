@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { CATEGORY_STYLES, type Tool } from '@/lib/tools'
+import { CATEGORY_ICON_COLOR, type Tool } from '@/lib/tools'
+import { ToolIcon } from '@/components/ToolIcon'
 
 interface ToolCardProps {
   tool: Tool
@@ -10,16 +11,12 @@ interface ToolCardProps {
 
 export function ToolCard({ tool, index = 0 }: ToolCardProps) {
   const { t } = useTranslation()
-  const Icon = tool.icon
-  const badgeClass = CATEGORY_STYLES[tool.category]
 
   const content = (
     <>
-      <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${badgeClass}`}>
-        <Icon className="h-5 w-5" strokeWidth={1.75} />
-      </div>
-      <div className="mt-3 flex items-center gap-2">
-        <h3 className="font-medium" style={{ color: 'var(--text-h)' }}>
+      <ToolIcon icon={tool.icon} color={CATEGORY_ICON_COLOR[tool.category]} />
+      <div className="mt-4 flex items-center gap-2">
+        <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
           {t(`tools.${tool.slug}.label`, tool.label)}
         </h3>
         {tool.category === 'exclusive' && (
@@ -36,7 +33,9 @@ export function ToolCard({ tool, index = 0 }: ToolCardProps) {
           </span>
         )}
       </div>
-      <p className="mt-1 text-sm opacity-70">{t(`tools.${tool.slug}.description`, tool.description)}</p>
+      <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
+        {t(`tools.${tool.slug}.description`, tool.description)}
+      </p>
     </>
   )
 
@@ -50,6 +49,7 @@ export function ToolCard({ tool, index = 0 }: ToolCardProps) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.3, delay: Math.min(index * 0.04, 0.3) }}
       whileHover={tool.ready ? { y: -3 } : undefined}
+      className="h-full"
     >
       {tool.ready ? (
         <Link to={tool.to} className={className} style={style}>
