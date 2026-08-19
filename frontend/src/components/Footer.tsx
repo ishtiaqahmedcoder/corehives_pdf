@@ -2,9 +2,13 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { TOOLS } from '@/lib/tools'
+import { IMAGE_TOOLS } from '@/lib/imageTools'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { Logo } from '@/components/Logo'
+import { APP_NAME } from '@/lib/brand'
 
 const FOOTER_TOOLS = TOOLS.filter((t) => t.ready).slice(0, 5)
+const FOOTER_IMAGE_TOOLS = IMAGE_TOOLS.filter((t) => t.ready).slice(0, 5)
 
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -27,25 +31,19 @@ export function Footer() {
     { label: t('footer.about'), to: '/about' },
     { label: t('footer.contact'), to: '/contact' },
     { label: t('footer.blog'), to: '/blog' },
-    { label: 'Image Tools', to: '/images' },
     { label: 'Developer API', to: '/developers' },
   ]
 
   return (
     <footer className="border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
-      <div className="mx-auto max-w-5xl px-6 py-12">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-          <div className="col-span-2 sm:col-span-1">
+      <div className="w-full px-6 py-12 lg:px-10">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 font-semibold" style={{ color: 'var(--text-h)' }}>
-              <span
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-sm text-white"
-                style={{ background: 'var(--accent)' }}
-              >
-                C
-              </span>
-              CoreHives PDF
+              <Logo className="h-7 w-7" />
+              {APP_NAME}
             </Link>
-            <p className="mt-3 max-w-[220px] text-sm opacity-60">{t('footer.tagline')}</p>
+            <p className="mt-3 max-w-[240px] text-sm opacity-60">{t('footer.tagline')}</p>
           </div>
 
           <FooterColumn title={t('footer.tools')}>
@@ -59,6 +57,21 @@ export function Footer() {
             <li>
               <Link to="/" className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
                 {t('footer.allTools')}
+              </Link>
+            </li>
+          </FooterColumn>
+
+          <FooterColumn title="Image Tools">
+            {FOOTER_IMAGE_TOOLS.map((tool) => (
+              <li key={tool.slug}>
+                <Link to={tool.to} className="text-sm opacity-70 hover:opacity-100">
+                  {tool.label}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link to="/images" className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+                All image tools →
               </Link>
             </li>
           </FooterColumn>

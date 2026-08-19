@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { API_TOOL_SCHEMAS, type ApiToolSchema } from '@/lib/apiToolSchemas'
 import { ApiTester } from '@/components/developers/ApiTester'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const TESTER_KEY_STORAGE = 'corehives-api-tester-key'
 
@@ -88,7 +89,7 @@ function exampleValue(field: { placeholder?: string; default?: string; choices?:
 }
 
 function buildExampleCurl(schema: ApiToolSchema): string {
-  const lines = [`curl -X POST https://corehives.com/api${schema.path} \\`, `  -H "Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx" \\`]
+  const lines = [`curl -X POST https://corehives.com/api${schema.path} \\`, `  -H "Authorization: Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx" \\`]
 
   schema.fileFields.forEach((field) => {
     const ext = field.accept.split(',')[0].replace('.', '')
@@ -178,6 +179,7 @@ function ToolReference({ schema, apiKey }: { schema: ApiToolSchema; apiKey: stri
 }
 
 export function DeveloperDocs() {
+  usePageMeta('API Reference', 'Full request and response reference for every PDFHives endpoint, with a live tester for each one.')
   const [apiKey, setApiKey] = useState(() => localStorage.getItem(TESTER_KEY_STORAGE) ?? '')
   const activeId = useScrollSpy(ALL_NAV_IDS)
 
@@ -208,7 +210,7 @@ export function DeveloperDocs() {
             API reference
           </h1>
           <p className="mt-3 text-[17px] leading-relaxed opacity-75">
-            Every PDF tool on CoreHives, available as a REST API. This page documents every endpoint's exact request
+            Every PDF and image tool on PDFHives, available as a REST API. This page documents every endpoint's exact request
             fields and response shape, and includes a live tester on each one so you can send a real request before
             you write any code.
           </p>
@@ -219,7 +221,7 @@ export function DeveloperDocs() {
 
         <Section id="authentication" title="Authentication">
           <p>Every request needs your API key as a bearer token.</p>
-          <CodeBlock>{`Authorization: Bearer chp_live_xxxxxxxxxxxxxxxxxxxxxxxx`}</CodeBlock>
+          <CodeBlock>{`Authorization: Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx`}</CodeBlock>
           <p>
             Get a key from your <a href="/developers/dashboard" className="underline" style={{ color: 'var(--accent)' }}>dashboard</a>. Free
             accounts get 100 files per month.
@@ -285,7 +287,7 @@ export function DeveloperDocs() {
         </Section>
 
         <Section id="webhooks" title="Webhooks">
-          <p>Set a webhook URL on your key from the dashboard. When a job finishes, CoreHives sends a <code className="font-mono">POST</code> to it.</p>
+          <p>Set a webhook URL on your key from the dashboard. When a job finishes, PDFHives sends a <code className="font-mono">POST</code> to it.</p>
           <CodeBlock>{`{
   "event": "task.completed",
   "data": {
@@ -314,7 +316,7 @@ export function DeveloperDocs() {
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="chp_live_..."
+              placeholder="pdfh_live_..."
               className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
             />

@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export function ContentPage({
   title,
@@ -10,6 +11,8 @@ export function ContentPage({
   subtitle?: string
   children: ReactNode
 }) {
+  usePageMeta(title, subtitle)
+
   return (
     <div className="mx-auto max-w-2xl">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">

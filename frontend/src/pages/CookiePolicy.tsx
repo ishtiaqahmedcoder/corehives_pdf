@@ -5,7 +5,7 @@ export function CookiePolicy() {
     <ContentPage title="Cookie Policy" subtitle="Last updated August 2026">
       <ContentSection title="What we use today">
         <p>
-          CoreHives PDF currently uses zero tracking cookies. Your light/dark theme choice is
+          PDFHives currently uses zero tracking cookies. Your light/dark theme choice is
           saved in your browser's local storage, not a cookie. It stays on your device and is
           never sent to our servers.
         </p>
@@ -22,7 +22,7 @@ export function CookiePolicy() {
       <ContentSection title="Controlling cookies">
         <p>
           You can clear or block cookies at any time through your browser's settings. Doing so
-          won't stop any CoreHives PDF tool from working.
+          won't stop any PDFHives tool from working.
         </p>
       </ContentSection>
     </ContentPage>

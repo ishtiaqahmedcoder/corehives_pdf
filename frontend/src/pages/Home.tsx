@@ -6,6 +6,7 @@ import { Image, Code2 } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { CATEGORIES, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const DISCOVERY_CARDS = [
   {
@@ -26,6 +27,10 @@ const FILTER_KEYS: ('all' | (typeof CATEGORIES)[number])[] = ['all', ...CATEGORI
 
 export function Home() {
   const { t } = useTranslation()
+  usePageMeta(
+    'Free PDF & Image Tools Online',
+    'Merge, split, compress, convert, and edit PDFs and images for free. No signup, no watermark, no file limits.',
+  )
   const [active, setActive] = useState<(typeof FILTER_KEYS)[number]>('all')
   const tools = toolsByCategory(active)
 
@@ -72,7 +77,7 @@ export function Home() {
       </div>
 
       <div className="mt-12">
-        <h2 className="mb-4 text-center text-sm font-semibold uppercase tracking-wide opacity-50">More from CoreHives</h2>
+        <h2 className="mb-4 text-center text-sm font-semibold uppercase tracking-wide opacity-50">More from PDFHives</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {DISCOVERY_CARDS.map((card) => {
             const Icon = card.icon

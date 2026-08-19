@@ -245,7 +245,7 @@ function buildCurlPreview(
   files: Record<string, FileList | null>,
   optionValues: Record<string, string>,
 ) {
-  const lines = [`curl -X POST https://corehives.com/api${schema.path} \\`, `  -H "Authorization: Bearer ${apiKey || 'chp_live_xxxxxxxxxxxxxxxxxxxxxxxx'}" \\`]
+  const lines = [`curl -X POST https://corehives.com/api${schema.path} \\`, `  -H "Authorization: Bearer ${apiKey || 'pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx'}" \\`]
 
   schema.fileFields.forEach((field) => {
     const list = files[field.name]

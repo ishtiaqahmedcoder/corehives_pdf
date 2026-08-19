@@ -1,4 +1,4 @@
-# CoreHives PDF Tool — Technical Plan
+# PDFHives — Technical Plan
 
 Stack: **Laravel 11 (API backend)** + **React (Vite + TypeScript SPA)**. Fully free/open-source infra, no paid third-party APIs. Monetization: Google AdSense (organic traffic driven).
 

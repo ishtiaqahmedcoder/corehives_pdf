@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
 import { Newspaper } from 'lucide-react'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export function Blog() {
+  usePageMeta('Blog', 'Guides, product updates, and tips for getting more out of PDFHives.')
+
   return (
     <div className="mx-auto max-w-md text-center">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>

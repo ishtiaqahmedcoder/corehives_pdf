@@ -2,23 +2,27 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { ApiKey } from '@/lib/apiKeyPlans'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const PLANS = [
-  { name: 'Free', price: '$0', quota: ApiKey.free, features: ['All 22 PDF tools', 'Webhooks', 'Community support'] },
+  { name: 'Free', price: '$0', quota: ApiKey.free, features: ['All PDF and image tools', 'Webhooks', 'Community support'] },
   { name: 'Starter', price: '$19/mo', quota: ApiKey.starter, features: ['Everything in Free', 'Priority queue', 'Email support'], highlight: true },
   { name: 'Pro', price: '$79/mo', quota: ApiKey.pro, features: ['Everything in Starter', 'Highest priority queue', 'Priority support'] },
 ]
 
 export function DevelopersLanding() {
+  usePageMeta('Developer API', 'Every PDF and image tool on PDFHives, available as a REST API with keys, quotas, and webhooks.')
+
   return (
     <div className="mx-auto max-w-3xl">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-12 text-center">
         <h1 className="text-4xl font-semibold" style={{ color: 'var(--text-h)' }}>
-          CoreHives PDF API
+          PDFHives API
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-lg opacity-70">
-          Every tool on this site, available as a simple REST API. Merge, split, compress, convert,
-          sign, and more. Integrate PDF processing into your own product in minutes.
+          Every PDF and image tool on this site, available as a simple REST API. Merge, split,
+          compress, convert, sign, and more. Integrate document and image processing into your
+          own product in minutes.
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <Link

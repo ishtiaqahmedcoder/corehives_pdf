@@ -49,14 +49,14 @@ export function AllToolsMenu() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-x-4 top-[68px] z-50 mx-auto max-w-5xl overflow-hidden rounded-2xl border shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:left-1/2 sm:top-auto sm:mt-3 sm:w-[min(90vw,880px)] sm:-translate-x-1/2"
+            className="fixed inset-x-0 top-[61px] z-50 w-full border-b shadow-2xl"
             style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
           >
-            <div className="grid max-h-[70vh] grid-cols-1 gap-x-6 gap-y-5 overflow-y-auto p-6 sm:grid-cols-3">
+            <div className="grid max-h-[70vh] grid-cols-2 gap-x-6 gap-y-5 overflow-y-auto px-6 py-6 sm:grid-cols-3 lg:px-10 xl:grid-cols-6">
               {CATEGORIES.map((category) => (
                 <div key={category}>
                   <div className="mb-2 flex items-center gap-2">
@@ -97,7 +97,7 @@ export function AllToolsMenu() {
               ))}
             </div>
             <div
-              className="flex flex-wrap items-center gap-2 border-t px-6 py-3"
+              className="flex flex-wrap items-center gap-2 border-t px-6 py-3 lg:px-10"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}
             >
               {QUICK_LINKS.map((link) => {

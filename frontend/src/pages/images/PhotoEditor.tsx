@@ -4,6 +4,7 @@ import { FileDropzone } from '@/components/FileDropzone'
 import { ProgressTracker } from '@/components/ProgressTracker'
 import { AdSlot } from '@/components/AdSlot'
 import { useJobStatus } from '@/hooks/useJobStatus'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { uploadToolFiles } from '@/lib/api'
 
 interface TextEdit {
@@ -19,6 +20,7 @@ const COLORS = ['#111111', '#ffffff', '#dc2626', '#2563eb', '#16a34a']
 const FONT_SIZES = [16, 24, 32, 48]
 
 export function PhotoEditor() {
+  usePageMeta('Photo Editor', 'Add text, frames, and stickers to a photo online for free, no signup required.')
   const [file, setFile] = useState<File | null>(null)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [elements, setElements] = useState<TextEdit[]>([])

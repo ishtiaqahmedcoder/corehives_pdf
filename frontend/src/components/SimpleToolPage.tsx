@@ -5,6 +5,7 @@ import { FileDropzone } from '@/components/FileDropzone'
 import { ProgressTracker } from '@/components/ProgressTracker'
 import { AdSlot } from '@/components/AdSlot'
 import { useJobStatus } from '@/hooks/useJobStatus'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { uploadToolFiles } from '@/lib/api'
 
 interface SimpleToolPageProps {
@@ -33,6 +34,7 @@ export function SimpleToolPage({
   validateOptions,
 }: SimpleToolPageProps) {
   const { t } = useTranslation()
+  usePageMeta(title, description)
   const [files, setFiles] = useState<File[]>([])
   const [options, setOptions] = useState<Record<string, string>>({})
   const [jobId, setJobId] = useState<string | null>(null)

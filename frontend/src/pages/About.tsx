@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ShieldCheck, Zap, Globe2 } from 'lucide-react'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const VALUES = [
   {
@@ -21,14 +22,16 @@ const VALUES = [
 ]
 
 export function About() {
+  usePageMeta('About Us', 'PDFHives is a free, ad-supported home for everyday PDF and image tools, built by CoreHives.')
+
   return (
     <div className="mx-auto max-w-2xl">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
         <h1 className="text-3xl font-semibold" style={{ color: 'var(--text-h)' }}>
-          About CoreHives
+          About PDFHives
         </h1>
         <p className="mt-3 opacity-70">
-          CoreHives PDF is built by{' '}
+          PDFHives is a free, ad-supported home for everyday PDF and image tools, built by{' '}
           <a href="https://corehives.com" target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--accent)' }}>
             CoreHives
           </a>

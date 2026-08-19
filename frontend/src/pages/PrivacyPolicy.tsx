@@ -5,7 +5,7 @@ export function PrivacyPolicy() {
     <ContentPage title="Privacy Policy" subtitle="Last updated August 2026">
       <ContentSection title="What we collect">
         <p>
-          When you use a CoreHives PDF tool, we temporarily store the files you upload and the
+          When you use a PDFHives tool, we temporarily store the files you upload and the
           file(s) we produce, purely to process your request. We also store a one-way hash of
           your IP address (not the IP itself) to apply fair-use rate limits and prevent abuse.
         </p>

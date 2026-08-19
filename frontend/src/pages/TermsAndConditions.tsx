@@ -5,15 +5,15 @@ export function TermsAndConditions() {
     <ContentPage title="Terms & Conditions" subtitle="Last updated August 2026">
       <ContentSection title="The service">
         <p>
-          CoreHives PDF is a free set of PDF tools provided by CoreHives. We aim to keep every
-          tool free, with no signup and no watermark. Fair-use limits (file size and requests
-          per hour) apply to keep the service usable for everyone.
+          PDFHives is a free set of PDF and image tools provided by CoreHives. We aim to keep
+          every tool free, with no signup and no watermark. Fair-use limits (file size and
+          requests per hour) apply to keep the service usable for everyone.
         </p>
       </ContentSection>
 
       <ContentSection title="Acceptable use">
         <p>
-          Don't use CoreHives PDF to process content that is illegal, infringes someone else's
+          Don't use PDFHives to process content that is illegal, infringes someone else's
           rights, or that you don't have the right to process. We reserve the right to block
           access for abuse of the service.
         </p>

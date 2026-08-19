@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
 import { Mail } from 'lucide-react'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export function Contact() {
+  usePageMeta('Contact', 'Questions, bug reports, or feature requests — get in touch with the PDFHives team.')
+
   return (
     <div className="mx-auto max-w-md text-center">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>

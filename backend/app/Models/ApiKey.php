@@ -45,7 +45,7 @@ class ApiKey extends Model
      */
     public static function generate(User $user, string $name, string $plan = 'free'): array
     {
-        $rawKey = 'chp_live_'.Str::random(40);
+        $rawKey = 'pdfh_live_'.Str::random(40);
 
         $key = self::create([
             'user_id' => $user->id,

@@ -3,10 +3,15 @@ import { motion } from 'framer-motion'
 import { AdSlot } from '@/components/AdSlot'
 import { ImageToolCard } from '@/components/ImageToolCard'
 import { IMAGE_CATEGORIES, IMAGE_CATEGORY_LABELS, imageToolsByCategory } from '@/lib/imageTools'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const FILTER_KEYS: ('all' | (typeof IMAGE_CATEGORIES)[number])[] = ['all', ...IMAGE_CATEGORIES]
 
 export function Images() {
+  usePageMeta(
+    'Free Image Tools Online',
+    'Compress, resize, crop, convert, watermark, and edit images for free. No signup, no watermark, no limits.',
+  )
   const [active, setActive] = useState<(typeof FILTER_KEYS)[number]>('all')
   const tools = imageToolsByCategory(active)
 

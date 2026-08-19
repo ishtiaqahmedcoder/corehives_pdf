@@ -3,9 +3,11 @@ import { motion } from 'framer-motion'
 import { AdSlot } from '@/components/AdSlot'
 import { ProgressTracker } from '@/components/ProgressTracker'
 import { useJobStatus } from '@/hooks/useJobStatus'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { submitHtmlToImage } from '@/lib/api'
 
 export function HtmlToImage() {
+  usePageMeta('HTML to Image', 'Turn any web page into a JPG or PNG screenshot online for free.')
   const [url, setUrl] = useState('')
   const [format, setFormat] = useState<'jpg' | 'png'>('jpg')
   const [jobId, setJobId] = useState<string | null>(null)
