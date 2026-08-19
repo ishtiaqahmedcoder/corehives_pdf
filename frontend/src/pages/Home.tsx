@@ -1,27 +1,30 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles } from 'lucide-react'
+import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles, ChevronDown } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { Faq, type FaqItem } from '@/components/Faq'
 import { CATEGORIES, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
+import { IMAGE_TOOLS, IMAGE_CATEGORY_ICON_COLOR } from '@/lib/imageTools'
+import { ToolIcon } from '@/components/ToolIcon'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { APP_NAME } from '@/lib/brand'
 
 const DISCOVERY_CARDS = [
   {
-    to: '/images',
     icon: Image,
-    title: 'Image tools',
-    description: 'Compress, resize, rotate, and convert images, free and unlimited.',
+    title: 'Image Tools',
+    description: 'Compress, resize, rotate, convert, watermark, and edit images, free and unlimited. Click to see all 13 tools.',
+    expandable: true as const,
   },
   {
     to: '/developers',
     icon: Code2,
     title: 'Developer API',
     description: 'Every tool on this site as a REST API, with a dashboard, keys, and webhooks.',
+    expandable: false as const,
   },
 ]
 
@@ -74,6 +77,7 @@ export function Home() {
   )
   const [active, setActive] = useState<(typeof FILTER_KEYS)[number]>('all')
   const tools = toolsByCategory(active)
+  const [imagesOpen, setImagesOpen] = useState(false)
 
   return (
     <div>
@@ -119,27 +123,27 @@ export function Home() {
         ))}
       </div>
 
-      <div className="mt-12">
-        <h2 className="mb-4 text-center text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--text-h)', opacity: 0.6 }}>
+      <section className="mt-16">
+        <h2 className="text-center text-3xl font-semibold" style={{ color: 'var(--text-h)' }}>
           More from {APP_NAME}
         </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <p className="mx-auto mt-2 max-w-xl text-center text-base" style={{ color: 'var(--text)' }}>
+          {APP_NAME} isn't just PDFs. A full image toolkit and a developer API live right alongside it.
+        </p>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {DISCOVERY_CARDS.map((card) => {
             const Icon = card.icon
-            return (
-              <Link
-                key={card.to}
-                to={card.to}
-                className="flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg"
-                style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
-              >
+            const cardStyle = { borderColor: 'var(--border)', background: 'var(--surface)' }
+            const inner = (
+              <>
                 <div
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
                   style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
                 >
                   <Icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
                     {card.title}
                   </h3>
@@ -147,11 +151,71 @@ export function Home() {
                     {card.description}
                   </p>
                 </div>
+                {card.expandable && (
+                  <ChevronDown
+                    className="mt-1 h-5 w-5 shrink-0 transition-transform"
+                    style={{ color: 'var(--accent)', transform: imagesOpen ? 'rotate(180deg)' : undefined }}
+                  />
+                )}
+              </>
+            )
+
+            if (card.expandable) {
+              return (
+                <button
+                  key={card.title}
+                  type="button"
+                  onClick={() => setImagesOpen((o) => !o)}
+                  aria-expanded={imagesOpen}
+                  className="flex items-start gap-4 rounded-2xl border p-5 text-left transition-shadow hover:shadow-lg"
+                  style={cardStyle}
+                >
+                  {inner}
+                </button>
+              )
+            }
+
+            return (
+              <Link key={card.title} to={card.to!} className="flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg" style={cardStyle}>
+                {inner}
               </Link>
             )
           })}
         </div>
-      </div>
+
+        <AnimatePresence>
+          {imagesOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-4 rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                  {IMAGE_TOOLS.map((tool) => (
+                    <Link
+                      key={tool.slug}
+                      to={tool.to}
+                      className="flex items-center gap-2.5 rounded-xl border p-2.5 transition-shadow hover:shadow-md"
+                      style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+                    >
+                      <ToolIcon icon={tool.icon} color={IMAGE_CATEGORY_ICON_COLOR[tool.category]} size="sm" />
+                      <span className="text-sm font-medium" style={{ color: 'var(--text-h)' }}>
+                        {tool.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+                <Link to="/images" className="mt-4 inline-block text-sm font-medium" style={{ color: 'var(--accent)' }}>
+                  See all image tools →
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
 
       <AdSlot variant="banner" className="mt-12" />
 
