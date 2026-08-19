@@ -13,7 +13,9 @@ const FOOTER_IMAGE_TOOLS = IMAGE_TOOLS.filter((t) => t.ready).slice(0, 5)
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
-      <h3 className="text-xs font-semibold uppercase tracking-wide opacity-50">{title}</h3>
+      <h3 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--text-h)' }}>
+        {title}
+      </h3>
       <ul className="mt-3 space-y-2.5">{children}</ul>
     </div>
   )
@@ -39,23 +41,25 @@ export function Footer() {
       <div className="w-full px-6 py-12 lg:px-10">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 font-semibold" style={{ color: 'var(--text-h)' }}>
+            <Link to="/" className="flex items-center gap-2 text-lg font-semibold" style={{ color: 'var(--text-h)' }}>
               <Logo className="h-7 w-7" />
               {APP_NAME}
             </Link>
-            <p className="mt-3 max-w-[240px] text-sm opacity-60">{t('footer.tagline')}</p>
+            <p className="mt-3 max-w-[240px] text-[15px] leading-relaxed" style={{ color: 'var(--text)' }}>
+              {t('footer.tagline')}
+            </p>
           </div>
 
           <FooterColumn title={t('footer.tools')}>
             {FOOTER_TOOLS.map((tool) => (
               <li key={tool.slug}>
-                <Link to={tool.to} className="text-sm opacity-70 hover:opacity-100">
+                <Link to={tool.to} className="text-[15px] hover:opacity-70" style={{ color: 'var(--text-h)' }}>
                   {t(`tools.${tool.slug}.label`, tool.label)}
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/" className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+              <Link to="/" className="text-[15px] font-medium" style={{ color: 'var(--accent)' }}>
                 {t('footer.allTools')}
               </Link>
             </li>
@@ -64,13 +68,13 @@ export function Footer() {
           <FooterColumn title="Image Tools">
             {FOOTER_IMAGE_TOOLS.map((tool) => (
               <li key={tool.slug}>
-                <Link to={tool.to} className="text-sm opacity-70 hover:opacity-100">
+                <Link to={tool.to} className="text-[15px] hover:opacity-70" style={{ color: 'var(--text-h)' }}>
                   {tool.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/images" className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+              <Link to="/images" className="text-[15px] font-medium" style={{ color: 'var(--accent)' }}>
                 All image tools →
               </Link>
             </li>
@@ -79,7 +83,7 @@ export function Footer() {
           <FooterColumn title={t('footer.legal')}>
             {legalLinks.map((link) => (
               <li key={link.to}>
-                <Link to={link.to} className="text-sm opacity-70 hover:opacity-100">
+                <Link to={link.to} className="text-[15px] hover:opacity-70" style={{ color: 'var(--text-h)' }}>
                   {link.label}
                 </Link>
               </li>
@@ -89,7 +93,7 @@ export function Footer() {
           <FooterColumn title={t('footer.company')}>
             {companyLinks.map((link) => (
               <li key={link.to}>
-                <Link to={link.to} className="text-sm opacity-70 hover:opacity-100">
+                <Link to={link.to} className="text-[15px] hover:opacity-70" style={{ color: 'var(--text-h)' }}>
                   {link.label}
                 </Link>
               </li>
@@ -98,8 +102,8 @@ export function Footer() {
         </div>
 
         <div
-          className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs opacity-60 sm:flex-row"
-          style={{ borderColor: 'var(--border)' }}
+          className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-6 text-sm sm:flex-row"
+          style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
         >
           <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
           <LanguageSwitcher />

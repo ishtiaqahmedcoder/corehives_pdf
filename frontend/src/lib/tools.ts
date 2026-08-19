@@ -21,8 +21,7 @@ import {
   Unlock,
   PenTool,
   PackageOpen,
-  ShieldCheck,
-  Globe,
+  FileCode2,
 } from 'lucide-react'
 import type { ToolIconColor } from '@/components/ToolIcon'
 
@@ -77,6 +76,7 @@ export const TOOLS: Tool[] = [
   { slug: 'word-to-pdf', label: 'Word to PDF', description: 'Convert a Word document (.doc or .docx) into a polished, universally readable PDF.', icon: FileType, to: '/word-to-pdf', category: 'convert', ready: true },
   { slug: 'ppt-to-pdf', label: 'PowerPoint to PDF', description: 'Convert a PowerPoint slideshow (.ppt or .pptx) into a PDF that looks the same everywhere.', icon: Presentation, to: '/ppt-to-pdf', category: 'convert', ready: true },
   { slug: 'excel-to-pdf', label: 'Excel to PDF', description: 'Convert an Excel spreadsheet (.xls or .xlsx) into a clean, print-ready PDF document.', icon: FileSpreadsheet, to: '/excel-to-pdf', category: 'convert', ready: true },
+  { slug: 'pdf-to-markdown', label: 'PDF to Markdown', description: 'Extract the text from a PDF and convert it into a clean, portable Markdown (.md) file.', icon: FileCode2, to: '/pdf-to-markdown', category: 'convert', ready: true },
 
   // Edit
   { slug: 'watermark', label: 'Add Watermark', description: 'Stamp custom text across every page of a PDF to mark it draft, confidential, or your own.', icon: Droplets, to: '/watermark', category: 'edit', ready: true },
@@ -91,8 +91,10 @@ export const TOOLS: Tool[] = [
 
   // PDFHives exclusive
   { slug: 'batch', label: 'Batch Processing', description: 'Run compress, rotate, watermark, and more across up to 20 files at once, free and unlimited.', icon: PackageOpen, to: '/batch', category: 'exclusive', ready: true },
-  { slug: 'privacy', label: 'Auto-Delete Privacy', description: 'Every file you upload or download is permanently deleted from our servers one hour after processing.', icon: ShieldCheck, to: '/privacy', category: 'exclusive', ready: true },
-  { slug: 'urdu', label: 'Urdu / Hindi Support', description: 'The full interface is available in Urdu and Hindi, not just English, for easier everyday use.', icon: Globe, to: '/', category: 'exclusive', ready: true },
+  // Commented out for now, per user request (2026-08-20) — marketing/informational
+  // cards rather than real tools. Re-enable by uncommenting if wanted back.
+  // { slug: 'privacy', label: 'Auto-Delete Privacy', description: 'Every file you upload or download is permanently deleted from our servers one hour after processing.', icon: ShieldCheck, to: '/privacy', category: 'exclusive', ready: true },
+  // { slug: 'urdu', label: 'Urdu / Hindi Support', description: 'The full interface is available in Urdu and Hindi, not just English, for easier everyday use.', icon: Globe, to: '/', category: 'exclusive', ready: true },
 ]
 
 export function toolsByCategory(category: ToolCategory | 'all'): Tool[] {

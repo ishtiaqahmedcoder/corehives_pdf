@@ -43,6 +43,7 @@ import { SignPdf } from '@/pages/tools/SignPdf'
 import { PdfToWord } from '@/pages/tools/PdfToWord'
 import { PdfToPpt } from '@/pages/tools/PdfToPpt'
 import { PdfToExcel } from '@/pages/tools/PdfToExcel'
+import { PdfToMarkdown } from '@/pages/tools/PdfToMarkdown'
 import { BatchProcessing } from '@/pages/tools/BatchProcessing'
 import { PrivacyPolicy } from '@/pages/PrivacyPolicy'
 import { TermsAndConditions } from '@/pages/TermsAndConditions'
@@ -80,6 +81,7 @@ function App() {
         <Route path="/pdf-to-word" element={<PdfToWord />} />
         <Route path="/pdf-to-ppt" element={<PdfToPpt />} />
         <Route path="/pdf-to-excel" element={<PdfToExcel />} />
+        <Route path="/pdf-to-markdown" element={<PdfToMarkdown />} />
         <Route path="/batch" element={<BatchProcessing />} />
         <Route path="/images" element={<Images />} />
         <Route path="/images/compress" element={<CompressImage />} />

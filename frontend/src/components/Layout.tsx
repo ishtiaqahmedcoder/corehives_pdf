@@ -2,7 +2,8 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft } from 'lucide-react'
-import { AllToolsMenu } from '@/components/AllToolsMenu'
+import { PdfToolsMenu } from '@/components/PdfToolsMenu'
+import { ImageToolsMenu } from '@/components/ImageToolsMenu'
 import { Footer } from '@/components/Footer'
 import { Logo } from '@/components/Logo'
 import { APP_NAME } from '@/lib/brand'
@@ -65,7 +66,8 @@ export function Layout({ children }: { children: ReactNode }) {
             >
               {t('nav.mergePdf')}
             </Link>
-            <AllToolsMenu />
+            <PdfToolsMenu />
+            <ImageToolsMenu />
             <Link
               to="/developers"
               className="rounded-full px-3 py-1.5 text-sm font-medium"

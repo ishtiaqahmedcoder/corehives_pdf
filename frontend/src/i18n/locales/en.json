@@ -30,6 +30,7 @@
     "pdf-to-word": { "label": "PDF to Word", "description": "Convert a PDF into an editable Word (.docx) file you can revise without retyping it." },
     "pdf-to-ppt": { "label": "PDF to PowerPoint", "description": "Turn PDF pages into an editable PowerPoint (.pptx) presentation, one slide per page." },
     "pdf-to-excel": { "label": "PDF to Excel", "description": "Pull tables and data out of a PDF straight into an editable Excel (.xlsx) spreadsheet." },
+    "pdf-to-markdown": { "label": "PDF to Markdown", "description": "Extract the text from a PDF and convert it into a clean, portable Markdown (.md) file." },
     "word-to-pdf": { "label": "Word to PDF", "description": "Convert a Word document (.doc or .docx) into a polished, universally readable PDF." },
     "ppt-to-pdf": { "label": "PowerPoint to PDF", "description": "Convert a PowerPoint slideshow (.ppt or .pptx) into a PDF that looks the same everywhere." },
     "excel-to-pdf": { "label": "Excel to PDF", "description": "Convert an Excel spreadsheet (.xls or .xlsx) into a clean, print-ready PDF document." },

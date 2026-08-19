@@ -1,43 +1,43 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles, ChevronDown } from 'lucide-react'
+import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
+import { ToolIcon, type ToolIconColor } from '@/components/ToolIcon'
 import { Faq, type FaqItem } from '@/components/Faq'
 import { CATEGORIES, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
-import { IMAGE_TOOLS, IMAGE_CATEGORY_ICON_COLOR } from '@/lib/imageTools'
-import { ToolIcon } from '@/components/ToolIcon'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { APP_NAME } from '@/lib/brand'
 
 const DISCOVERY_CARDS = [
   {
+    to: '/images',
     icon: Image,
+    color: 'fuchsia' as ToolIconColor,
     title: 'Image Tools',
-    description: 'Compress, resize, rotate, convert, watermark, and edit images, free and unlimited. Click to see all 13 tools.',
-    expandable: true as const,
+    description: 'Compress, resize, rotate, convert, watermark, and edit images, free and unlimited.',
   },
   {
     to: '/developers',
     icon: Code2,
+    color: 'violet' as ToolIconColor,
     title: 'Developer API',
     description: 'Every tool on this site as a REST API, with a dashboard, keys, and webhooks.',
-    expandable: false as const,
   },
 ]
 
 const STEPS = [
-  { icon: Upload, title: 'Upload your file', body: 'Drag and drop a PDF or image, or click to browse. Nothing leaves your device until you choose a tool.' },
-  { icon: Settings2, title: 'Pick a tool', body: 'Choose from 35+ PDF and image tools and set any options the tool needs, like a page range or password.' },
-  { icon: Download, title: 'Download the result', body: 'Your file is ready in seconds. Download it once, and the original is auto-deleted an hour later.' },
+  { icon: Upload, color: 'sky' as ToolIconColor, title: 'Upload your file', body: 'Drag and drop a PDF or image, or click to browse. Nothing leaves your device until you choose a tool.' },
+  { icon: Settings2, color: 'amber' as ToolIconColor, title: 'Pick a tool', body: 'Choose from 35+ PDF and image tools and set any options the tool needs, like a page range or password.' },
+  { icon: Download, color: 'emerald' as ToolIconColor, title: 'Download the result', body: 'Your file is ready in seconds. Download it once, and the original is auto-deleted an hour later.' },
 ]
 
 const STATS = [
-  { icon: Sparkles, label: '35+ tools', body: 'PDF and image tools in one place' },
-  { icon: InfinityIcon, label: 'No limits', body: 'No signup, no watermark, no page caps' },
-  { icon: ShieldCheck, label: '1-hour auto-delete', body: 'Every file is permanently wiped after processing' },
+  { icon: Sparkles, color: 'fuchsia' as ToolIconColor, label: '35+ tools', body: 'PDF and image tools in one place' },
+  { icon: InfinityIcon, color: 'violet' as ToolIconColor, label: 'No limits', body: 'No signup, no watermark, no page caps' },
+  { icon: ShieldCheck, color: 'rose' as ToolIconColor, label: '1-hour auto-delete', body: 'Every file is permanently wiped after processing' },
 ]
 
 const FAQ_ITEMS: FaqItem[] = [
@@ -77,7 +77,6 @@ export function Home() {
   )
   const [active, setActive] = useState<(typeof FILTER_KEYS)[number]>('all')
   const tools = toolsByCategory(active)
-  const [imagesOpen, setImagesOpen] = useState(false)
 
   return (
     <div>
@@ -132,89 +131,25 @@ export function Home() {
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {DISCOVERY_CARDS.map((card) => {
-            const Icon = card.icon
-            const cardStyle = { borderColor: 'var(--border)', background: 'var(--surface)' }
-            const inner = (
-              <>
-                <div
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
-                >
-                  <Icon className="h-5 w-5" strokeWidth={1.75} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
-                    {card.title}
-                  </h3>
-                  <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
-                    {card.description}
-                  </p>
-                </div>
-                {card.expandable && (
-                  <ChevronDown
-                    className="mt-1 h-5 w-5 shrink-0 transition-transform"
-                    style={{ color: 'var(--accent)', transform: imagesOpen ? 'rotate(180deg)' : undefined }}
-                  />
-                )}
-              </>
-            )
-
-            if (card.expandable) {
-              return (
-                <button
-                  key={card.title}
-                  type="button"
-                  onClick={() => setImagesOpen((o) => !o)}
-                  aria-expanded={imagesOpen}
-                  className="flex items-start gap-4 rounded-2xl border p-5 text-left transition-shadow hover:shadow-lg"
-                  style={cardStyle}
-                >
-                  {inner}
-                </button>
-              )
-            }
-
-            return (
-              <Link key={card.title} to={card.to!} className="flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg" style={cardStyle}>
-                {inner}
-              </Link>
-            )
-          })}
-        </div>
-
-        <AnimatePresence>
-          {imagesOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
+          {DISCOVERY_CARDS.map((card) => (
+            <Link
+              key={card.to}
+              to={card.to}
+              className="flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg"
+              style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
             >
-              <div className="mt-4 rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                  {IMAGE_TOOLS.map((tool) => (
-                    <Link
-                      key={tool.slug}
-                      to={tool.to}
-                      className="flex items-center gap-2.5 rounded-xl border p-2.5 transition-shadow hover:shadow-md"
-                      style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
-                    >
-                      <ToolIcon icon={tool.icon} color={IMAGE_CATEGORY_ICON_COLOR[tool.category]} size="sm" />
-                      <span className="text-sm font-medium" style={{ color: 'var(--text-h)' }}>
-                        {tool.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-                <Link to="/images" className="mt-4 inline-block text-sm font-medium" style={{ color: 'var(--accent)' }}>
-                  See all image tools →
-                </Link>
+              <ToolIcon icon={card.icon} color={card.color} />
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
+                  {card.title}
+                </h3>
+                <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
+                  {card.description}
+                </p>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </Link>
+          ))}
+        </div>
       </section>
 
       <AdSlot variant="banner" className="mt-12" />
@@ -235,7 +170,9 @@ export function Home() {
               >
                 {i + 1}
               </span>
-              <step.icon className="mt-4 h-6 w-6" style={{ color: 'var(--accent)' }} strokeWidth={1.75} />
+              <div className="mt-4">
+                <ToolIcon icon={step.icon} color={step.color} />
+              </div>
               <h3 className="mt-3 text-base font-semibold" style={{ color: 'var(--text-h)' }}>
                 {step.title}
               </h3>
@@ -250,8 +187,8 @@ export function Home() {
       <section className="mt-16 rounded-3xl border p-8 sm:p-10" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
           {STATS.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <stat.icon className="mx-auto h-6 w-6" style={{ color: 'var(--accent)' }} strokeWidth={1.75} />
+            <div key={stat.label} className="flex flex-col items-center text-center">
+              <ToolIcon icon={stat.icon} color={stat.color} />
               <p className="mt-3 text-2xl font-semibold" style={{ color: 'var(--text-h)' }}>
                 {stat.label}
               </p>

@@ -315,6 +315,15 @@ export const API_TOOL_SCHEMAS: ApiToolSchema[] = [
     notes: ['Preserves text content only, not the original layout, tables, or images.'],
   },
   {
+    slug: 'pdf-to-markdown',
+    label: 'PDF to Markdown',
+    summary: 'Extract text from a PDF and convert it into a Markdown (.md) file, one section per page.',
+    path: '/v1/tools/pdf-to-markdown',
+    fileFields: [PDF_FILE(1)],
+    optionFields: [],
+    notes: ['Preserves text content only, not the original layout, tables, or images.'],
+  },
+  {
     slug: 'batch',
     label: 'Batch Processing',
     summary: 'Run one tool across many files at once, returned as a zip.',

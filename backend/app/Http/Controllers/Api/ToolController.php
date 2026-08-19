@@ -19,6 +19,7 @@ use App\Jobs\OcrPdfJob;
 use App\Jobs\OfficeConvertJob;
 use App\Jobs\OrganizePdfJob;
 use App\Jobs\PageNumbersPdfJob;
+use App\Jobs\PdfToMarkdownJob;
 use App\Jobs\PdfToOfficeJob;
 use App\Jobs\PhotoEditorJob;
 use App\Jobs\ProtectPdfJob;
@@ -75,6 +76,7 @@ class ToolController extends Controller
         'pdf-to-word' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'docx', 'converted.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
         'pdf-to-ppt' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'pptx', 'converted.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
         'pdf-to-excel' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'xlsx', 'converted.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+        'pdf-to-markdown' => ['dispatch' => [PdfToMarkdownJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'light'],
         'ocr' => ['dispatch' => [OcrPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
 
         // Image tools (GD-based, pure PHP — no external binaries).

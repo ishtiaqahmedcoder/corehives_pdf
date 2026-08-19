@@ -51,12 +51,12 @@ body::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.8;
+  opacity: 1;
   pointer-events: none;
 }
 
 :root.dark body::before {
-  opacity: 0.35;
+  opacity: 0.55;
 }
 
 #root {

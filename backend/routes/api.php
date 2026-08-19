@@ -24,7 +24,7 @@ Route::post('/tools/{tool}', [ToolController::class, 'store'])
     ->whereIn('tool', [
         'split', 'remove-pages', 'extract-pages', 'watermark', 'page-numbers', 'jpg-to-pdf',
         'compress', 'rotate', 'protect', 'unlock', 'crop', 'organize', 'edit', 'batch',
-        'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
+        'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'pdf-to-markdown', 'ocr',
         'compress-image', 'resize-image', 'rotate-image', 'convert-to-jpg',
         'crop-image', 'convert-from-jpg', 'watermark-image', 'meme-generator', 'photo-editor',
         'upscale-image', 'remove-background', 'blur-face',
@@ -62,7 +62,7 @@ Route::prefix('v1')->group(function () {
         ->whereIn('tool', [
             'split', 'remove-pages', 'extract-pages', 'watermark', 'page-numbers', 'jpg-to-pdf',
             'compress', 'rotate', 'protect', 'unlock', 'crop', 'organize', 'edit', 'batch',
-            'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
+            'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'pdf-to-markdown', 'ocr',
             'compress-image', 'resize-image', 'rotate-image', 'convert-to-jpg',
             'crop-image', 'convert-from-jpg', 'watermark-image', 'meme-generator', 'photo-editor',
             'upscale-image', 'remove-background', 'blur-face',
