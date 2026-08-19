@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\BatchPdfJob;
+use App\Jobs\CompressImageJob;
 use App\Jobs\CompressPdfJob;
+use App\Jobs\ConvertToJpgJob;
 use App\Jobs\CropPdfJob;
 use App\Jobs\EditPdfJob;
 use App\Jobs\ExtractPagesPdfJob;
@@ -16,6 +18,8 @@ use App\Jobs\PageNumbersPdfJob;
 use App\Jobs\PdfToOfficeJob;
 use App\Jobs\ProtectPdfJob;
 use App\Jobs\RemovePagesPdfJob;
+use App\Jobs\ResizeImageJob;
+use App\Jobs\RotateImageJob;
 use App\Jobs\RotatePdfJob;
 use App\Jobs\SplitPdfJob;
 use App\Jobs\UnlockPdfJob;
@@ -64,6 +68,12 @@ class ToolController extends Controller
         'pdf-to-ppt' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'pptx', 'converted.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
         'pdf-to-excel' => ['dispatch' => fn ($id) => PdfToOfficeJob::dispatch($id, 'xlsx', 'converted.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
         'ocr' => ['dispatch' => [OcrPdfJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'pdf', 'queue' => 'heavy'],
+
+        // Image tools (GD-based, pure PHP — no external binaries).
+        'compress-image' => ['dispatch' => [CompressImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'resize-image' => ['dispatch' => [ResizeImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'rotate-image' => ['dispatch' => [RotateImageJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'jpg,jpeg,png', 'queue' => 'light'],
+        'convert-to-jpg' => ['dispatch' => [ConvertToJpgJob::class, 'dispatch'], 'min_files' => 1, 'max_files' => 1, 'mimes' => 'png,gif', 'queue' => 'light'],
         ];
     }
 

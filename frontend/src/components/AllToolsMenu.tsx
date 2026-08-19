@@ -2,8 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Image, Code2, LayoutDashboard } from 'lucide-react'
 import { CATEGORIES, CATEGORY_DOT, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
+
+const QUICK_LINKS = [
+  { to: '/images', label: 'Image tools', icon: Image },
+  { to: '/developers', label: 'Developer API', icon: Code2 },
+  { to: '/developers/dashboard', label: 'API dashboard', icon: LayoutDashboard },
+]
 
 export function AllToolsMenu() {
   const { t } = useTranslation()
@@ -89,6 +95,26 @@ export function AllToolsMenu() {
                   </ul>
                 </div>
               ))}
+            </div>
+            <div
+              className="flex flex-wrap items-center gap-2 border-t px-6 py-3"
+              style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}
+            >
+              {QUICK_LINKS.map((link) => {
+                const Icon = link.icon
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium"
+                    style={{ borderColor: 'var(--border)', color: 'var(--text-h)', background: 'var(--surface)' }}
+                  >
+                    <Icon className="h-3.5 w-3.5" style={{ color: 'var(--accent)' }} />
+                    {link.label}
+                  </Link>
+                )
+              })}
             </div>
           </motion.div>
         )}

@@ -21,6 +21,7 @@ Route::post('/tools/{tool}', [ToolController::class, 'store'])
         'split', 'remove-pages', 'extract-pages', 'watermark', 'page-numbers', 'jpg-to-pdf',
         'compress', 'rotate', 'protect', 'unlock', 'crop', 'organize', 'edit', 'batch',
         'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
+        'compress-image', 'resize-image', 'rotate-image', 'convert-to-jpg',
     ])
     ->middleware('throttle:20,60');
 
@@ -55,6 +56,7 @@ Route::prefix('v1')->group(function () {
             'split', 'remove-pages', 'extract-pages', 'watermark', 'page-numbers', 'jpg-to-pdf',
             'compress', 'rotate', 'protect', 'unlock', 'crop', 'organize', 'edit', 'batch',
             'word-to-pdf', 'ppt-to-pdf', 'excel-to-pdf', 'pdf-to-word', 'pdf-to-ppt', 'pdf-to-excel', 'ocr',
+            'compress-image', 'resize-image', 'rotate-image', 'convert-to-jpg',
         ])
         ->middleware('apikey');
 

@@ -9,6 +9,11 @@ import { DeveloperLogin } from '@/pages/developers/Login'
 import { DeveloperDashboard } from '@/pages/developers/Dashboard'
 import { DeveloperDocs } from '@/pages/developers/Docs'
 import { Home } from '@/pages/Home'
+import { Images } from '@/pages/Images'
+import { CompressImage } from '@/pages/images/CompressImage'
+import { ResizeImage } from '@/pages/images/ResizeImage'
+import { RotateImage } from '@/pages/images/RotateImage'
+import { ConvertToJpg } from '@/pages/images/ConvertToJpg'
 import { MergePdf } from '@/pages/tools/MergePdf'
 import { SplitPdf } from '@/pages/tools/SplitPdf'
 import { RemovePages } from '@/pages/tools/RemovePages'
@@ -67,6 +72,11 @@ function App() {
         <Route path="/pdf-to-ppt" element={<PdfToPpt />} />
         <Route path="/pdf-to-excel" element={<PdfToExcel />} />
         <Route path="/batch" element={<BatchProcessing />} />
+        <Route path="/images" element={<Images />} />
+        <Route path="/images/compress" element={<CompressImage />} />
+        <Route path="/images/resize" element={<ResizeImage />} />
+        <Route path="/images/rotate" element={<RotateImage />} />
+        <Route path="/images/convert-to-jpg" element={<ConvertToJpg />} />
         <Route
           path="/organize"
           element={

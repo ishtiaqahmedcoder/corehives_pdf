@@ -341,6 +341,45 @@ export const API_TOOL_SCHEMAS: ApiToolSchema[] = [
     ],
     notes: ['Requires at least 2 files.', 'Files that fail are skipped and reported; the job only fails if every file fails.'],
   },
+  {
+    slug: 'compress-image',
+    label: 'Compress Image',
+    summary: 'Shrink a JPG or PNG image while keeping it readable.',
+    path: '/v1/tools/compress-image',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [],
+  },
+  {
+    slug: 'resize-image',
+    label: 'Resize Image',
+    summary: 'Change the width and/or height of a JPG or PNG image.',
+    path: '/v1/tools/resize-image',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [
+      { name: 'width', label: 'width', type: 'int', required: false, placeholder: '800', description: 'Target width in pixels. Omit to scale proportionally from height.' },
+      { name: 'height', label: 'height', type: 'int', required: false, placeholder: '600', description: 'Target height in pixels. Omit to scale proportionally from width.' },
+    ],
+    notes: ['At least one of width or height is required.'],
+  },
+  {
+    slug: 'rotate-image',
+    label: 'Rotate Image',
+    summary: 'Rotate a JPG or PNG image by a fixed angle.',
+    path: '/v1/tools/rotate-image',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.jpg,.jpeg,.png', multiple: false, min: 1, max: 1, hint: 'One JPG or PNG image' }],
+    optionFields: [
+      { name: 'degrees', label: 'degrees', type: 'int', required: false, default: '90', placeholder: '90', description: 'Rotation angle in degrees, typically 90, 180, or 270.' },
+    ],
+  },
+  {
+    slug: 'convert-to-jpg',
+    label: 'Convert to JPG',
+    summary: 'Convert a PNG or GIF image to JPG.',
+    path: '/v1/tools/convert-to-jpg',
+    fileFields: [{ name: 'files[]', label: 'files[]', accept: '.png,.gif', multiple: false, min: 1, max: 1, hint: 'One PNG or GIF image' }],
+    optionFields: [],
+    notes: ['Transparent areas are flattened onto a white background, since JPG has no transparency.'],
+  },
 ]
 
 export const API_TOOL_SCHEMA_BY_SLUG: Record<string, ApiToolSchema> = Object.fromEntries(

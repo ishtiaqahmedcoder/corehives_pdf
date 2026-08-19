@@ -1,9 +1,26 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { Image, Code2 } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { CATEGORIES, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
+
+const DISCOVERY_CARDS = [
+  {
+    to: '/images',
+    icon: Image,
+    title: 'Image tools',
+    description: 'Compress, resize, rotate, and convert images, free and unlimited.',
+  },
+  {
+    to: '/developers',
+    icon: Code2,
+    title: 'Developer API',
+    description: 'Every tool on this site as a REST API, with a dashboard, keys, and webhooks.',
+  },
+]
 
 const FILTER_KEYS: ('all' | (typeof CATEGORIES)[number])[] = ['all', ...CATEGORIES]
 
@@ -52,6 +69,36 @@ export function Home() {
         {tools.map((tool, i) => (
           <ToolCard key={tool.slug} tool={tool} index={i} />
         ))}
+      </div>
+
+      <div className="mt-12">
+        <h2 className="mb-4 text-center text-sm font-semibold uppercase tracking-wide opacity-50">More from CoreHives</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {DISCOVERY_CARDS.map((card) => {
+            const Icon = card.icon
+            return (
+              <Link
+                key={card.to}
+                to={card.to}
+                className="flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg"
+                style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+              >
+                <div
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                  style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+                >
+                  <Icon className="h-5 w-5" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <h3 className="font-medium" style={{ color: 'var(--text-h)' }}>
+                    {card.title}
+                  </h3>
+                  <p className="mt-1 text-sm opacity-70">{card.description}</p>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
       </div>
 
       <AdSlot variant="banner" className="mt-10" />

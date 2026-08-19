@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { ArrowLeft } from 'lucide-react'
 import { AllToolsMenu } from '@/components/AllToolsMenu'
 import { Footer } from '@/components/Footer'
 
@@ -14,6 +15,33 @@ function useTheme() {
   return { dark, toggle: () => setDark((d) => !d) }
 }
 
+function BackButton() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  if (location.pathname === '/') return null
+
+  function handleBack() {
+    if (location.key === 'default') {
+      navigate('/')
+    } else {
+      navigate(-1)
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleBack}
+      aria-label="Go back"
+      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
+      style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
+    >
+      <ArrowLeft className="h-4 w-4" />
+    </button>
+  )
+}
+
 export function Layout({ children }: { children: ReactNode }) {
   const { dark, toggle } = useTheme()
   const { t } = useTranslation()
@@ -23,16 +51,19 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-svh flex-col">
       <header className="sticky top-0 z-40 border-b backdrop-blur" style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--bg) 85%, transparent)' }}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
-          <Link to="/" className="flex items-center gap-2 font-semibold" style={{ color: 'var(--text-h)' }}>
-            <span
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-white"
-              style={{ background: 'var(--accent)' }}
-            >
-              C
-            </span>
-            CoreHives PDF
-          </Link>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3.5">
+          <div className="flex items-center gap-3">
+            <BackButton />
+            <Link to="/" className="flex items-center gap-2 font-semibold" style={{ color: 'var(--text-h)' }}>
+              <span
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-white"
+                style={{ background: 'var(--accent)' }}
+              >
+                C
+              </span>
+              CoreHives PDF
+            </Link>
+          </div>
 
           <nav className="flex items-center gap-1">
             <Link
