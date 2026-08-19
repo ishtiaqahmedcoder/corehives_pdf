@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { FileText } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ImageToolCard } from '@/components/ImageToolCard'
+import { PromoBanner } from '@/components/PromoBanner'
 import { IMAGE_CATEGORIES, IMAGE_CATEGORY_LABELS, imageToolsByCategory } from '@/lib/imageTools'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
@@ -58,6 +60,17 @@ export function Images() {
           <ImageToolCard key={tool.slug} tool={tool} index={i} />
         ))}
       </div>
+
+      <PromoBanner
+        eyebrow="Also on PDFHives"
+        title="Need PDF tools too?"
+        body="Merge, split, compress, convert, and sign PDFs with the same free, no-signup experience as the image tools above."
+        ctaLabel="Browse PDF tools"
+        ctaTo="/"
+        icon={FileText}
+        gradient="linear-gradient(135deg, #0284c7, #0f766e)"
+        className="mt-10"
+      />
 
       <AdSlot variant="banner" className="mt-10" />
     </div>

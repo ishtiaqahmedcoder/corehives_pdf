@@ -123,8 +123,8 @@ export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: s
       <div className="mt-3 space-y-3">
         {schema.fileFields.map((field) => (
           <div key={field.name}>
-            <label className="mb-1 block text-sm font-medium opacity-80">
-              {field.label} <span className="opacity-50">({field.hint})</span>
+            <label className="mb-1 block text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
+              {field.label} <span className="font-normal opacity-60">({field.hint})</span>
             </label>
             <input
               type="file"
@@ -139,8 +139,8 @@ export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: s
 
         {schema.optionFields.map((field) => (
           <div key={field.name}>
-            <label className="mb-1 block text-sm font-medium opacity-80">
-              {field.label} {field.required ? <span style={{ color: 'var(--accent)' }}>*</span> : <span className="opacity-50">(optional)</span>}
+            <label className="mb-1 block text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
+              {field.label} {field.required ? <span style={{ color: 'var(--accent)' }}>*</span> : <span className="font-normal opacity-60">(optional)</span>}
             </label>
             {field.type === 'select' ? (
               <select
@@ -175,17 +175,23 @@ export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: s
                 style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
               />
             )}
-            <p className="mt-1 text-xs opacity-60">{field.description}</p>
+            <p className="mt-1 text-[13px]" style={{ color: 'var(--text)' }}>
+              {field.description}
+            </p>
           </div>
         ))}
 
         {schema.fileFields.length === 0 && schema.optionFields.length === 0 && (
-          <p className="text-sm opacity-60">This endpoint takes no other fields beyond the file itself.</p>
+          <p className="text-sm" style={{ color: 'var(--text)' }}>
+            This endpoint takes no other fields beyond the file itself.
+          </p>
         )}
       </div>
 
       <details className="mt-3">
-        <summary className="cursor-pointer text-xs font-medium opacity-60">Equivalent curl request</summary>
+        <summary className="cursor-pointer text-sm font-medium" style={{ color: 'var(--text-h)', opacity: 0.75 }}>
+          Equivalent curl request
+        </summary>
         <pre
           className="mt-2 overflow-x-auto rounded-lg border p-3 font-mono text-[13px] leading-relaxed"
           style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
@@ -207,7 +213,7 @@ export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: s
       </button>
 
       {jobId && (status === 'polling' || status === 'sending') && (
-        <p className="mt-2 text-xs opacity-60">
+        <p className="mt-2 text-xs" style={{ color: 'var(--text)' }}>
           job_id: <code className="font-mono">{jobId}</code>
         </p>
       )}
@@ -230,7 +236,7 @@ export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: s
             <XCircle className="h-4 w-4" />
             {requestError.status ? `Request failed (${requestError.status})` : 'Job failed'}
           </p>
-          <pre className="mt-2 overflow-x-auto font-mono text-xs opacity-80">
+          <pre className="mt-2 overflow-x-auto font-mono text-xs" style={{ color: 'var(--text)' }}>
             <code>{JSON.stringify(requestError.body, null, 2)}</code>
           </pre>
         </div>

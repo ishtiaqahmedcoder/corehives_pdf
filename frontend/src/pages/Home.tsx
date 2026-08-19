@@ -7,6 +7,7 @@ import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { ToolIcon, type ToolIconColor } from '@/components/ToolIcon'
 import { Faq, type FaqItem } from '@/components/Faq'
+import { PromoBanner } from '@/components/PromoBanner'
 import { CATEGORIES, CATEGORY_LABELS, toolsByCategory } from '@/lib/tools'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { APP_NAME } from '@/lib/brand'
@@ -151,6 +152,17 @@ export function Home() {
           ))}
         </div>
       </section>
+
+      <PromoBanner
+        eyebrow="Build with PDFHives"
+        title="Every tool on this page, as a REST API"
+        body="Automate merges, conversions, compression, and more in your own product with a free API key. No credit card required to get started."
+        ctaLabel="Get your API key"
+        ctaTo="/developers"
+        icon={Code2}
+        gradient="linear-gradient(135deg, #7c3aed, #4338ca)"
+        className="mt-12"
+      />
 
       <AdSlot variant="banner" className="mt-12" />
 

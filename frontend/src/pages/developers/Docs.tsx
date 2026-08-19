@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { KeyRound } from 'lucide-react'
 import { API_TOOL_SCHEMAS, type ApiToolSchema } from '@/lib/apiToolSchemas'
 import { ApiTester } from '@/components/developers/ApiTester'
+import { PromoBanner } from '@/components/PromoBanner'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
 const TESTER_KEY_STORAGE = 'corehives-api-tester-key'
@@ -115,9 +117,11 @@ function ToolReference({ schema, apiKey }: { schema: ApiToolSchema; apiKey: stri
         <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--text-h)' }}>
           {schema.label}
         </h3>
-        <code className="font-mono text-xs opacity-60">POST {schema.path}</code>
+        <code className="font-mono text-xs" style={{ color: 'var(--text)' }}>POST {schema.path}</code>
       </div>
-      <p className="mt-1 text-[15px] opacity-75">{schema.summary}</p>
+      <p className="mt-1 text-[15px]" style={{ color: 'var(--text)' }}>
+        {schema.summary}
+      </p>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-2 lg:items-start">
         <div>
@@ -126,29 +130,29 @@ function ToolReference({ schema, apiKey }: { schema: ApiToolSchema; apiKey: stri
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b" style={{ borderColor: 'var(--border)' }}>
-                    <th className="px-3 py-2 font-medium opacity-60">Field</th>
-                    <th className="px-3 py-2 font-medium opacity-60">Type</th>
-                    <th className="px-3 py-2 font-medium opacity-60">Required</th>
-                    <th className="px-3 py-2 font-medium opacity-60">Description</th>
+                    <th className="px-3 py-2 font-semibold" style={{ color: 'var(--text-h)' }}>Field</th>
+                    <th className="px-3 py-2 font-semibold" style={{ color: 'var(--text-h)' }}>Type</th>
+                    <th className="px-3 py-2 font-semibold" style={{ color: 'var(--text-h)' }}>Required</th>
+                    <th className="px-3 py-2 font-semibold" style={{ color: 'var(--text-h)' }}>Description</th>
                   </tr>
                 </thead>
                 <tbody>
                   {schema.fileFields.map((field) => (
-                    <tr key={field.name} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
-                      <td className="px-3 py-2 font-mono">{field.name}</td>
-                      <td className="px-3 py-2 opacity-70">file</td>
-                      <td className="px-3 py-2 opacity-70">Yes</td>
-                      <td className="px-3 py-2 opacity-70">{field.hint}</td>
+                    <tr key={field.name} className="border-b last:border-0" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
+                      <td className="px-3 py-2 font-mono" style={{ color: 'var(--text-h)' }}>{field.name}</td>
+                      <td className="px-3 py-2">file</td>
+                      <td className="px-3 py-2">Yes</td>
+                      <td className="px-3 py-2">{field.hint}</td>
                     </tr>
                   ))}
                   {schema.optionFields.map((field) => (
-                    <tr key={field.name} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
-                      <td className="px-3 py-2 font-mono">{field.topLevel ? field.name : `options[${field.name}]`}</td>
-                      <td className="px-3 py-2 opacity-70">{field.type}</td>
-                      <td className="px-3 py-2 opacity-70">
+                    <tr key={field.name} className="border-b last:border-0" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
+                      <td className="px-3 py-2 font-mono" style={{ color: 'var(--text-h)' }}>{field.topLevel ? field.name : `options[${field.name}]`}</td>
+                      <td className="px-3 py-2">{field.type}</td>
+                      <td className="px-3 py-2">
                         {field.required ? 'Yes' : field.default !== undefined ? `No, default ${field.default}` : 'No'}
                       </td>
-                      <td className="px-3 py-2 opacity-70">{field.description}</td>
+                      <td className="px-3 py-2">{field.description}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -157,7 +161,7 @@ function ToolReference({ schema, apiKey }: { schema: ApiToolSchema; apiKey: stri
           )}
 
           {schema.notes && (
-            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm opacity-60">
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm" style={{ color: 'var(--text)' }}>
               {schema.notes.map((note) => (
                 <li key={note}>{note}</li>
               ))}
@@ -165,7 +169,7 @@ function ToolReference({ schema, apiKey }: { schema: ApiToolSchema; apiKey: stri
           )}
 
           <details className="mt-4">
-            <summary className="cursor-pointer text-xs font-medium opacity-60">Example request</summary>
+            <summary className="cursor-pointer text-sm font-medium" style={{ color: 'var(--text-h)', opacity: 0.75 }}>Example request</summary>
             <div className="mt-2">
               <CodeBlock>{buildExampleCurl(schema)}</CodeBlock>
             </div>
@@ -209,15 +213,26 @@ export function DeveloperDocs() {
           <h1 className="text-4xl font-bold tracking-tight" style={{ color: 'var(--text-h)' }}>
             API reference
           </h1>
-          <p className="mt-3 text-[17px] leading-relaxed opacity-75">
+          <p className="mt-3 text-[17px] leading-relaxed" style={{ color: 'var(--text)' }}>
             Every PDF and image tool on PDFHives, available as a REST API. This page documents every endpoint's exact request
             fields and response shape, and includes a live tester on each one so you can send a real request before
             you write any code.
           </p>
-          <p className="mt-3 text-[15px] opacity-75">
+          <p className="mt-3 text-[15px]" style={{ color: 'var(--text)' }}>
             Base URL: <code className="rounded bg-[var(--bg-soft)] px-1.5 py-0.5 font-mono">https://corehives.com/api</code>
           </p>
         </motion.div>
+
+        <PromoBanner
+          eyebrow="No key yet?"
+          title="Get a free API key in under a minute"
+          body="100 files a month on the free tier, no credit card required. Create an account and start testing the live requests below right away."
+          ctaLabel="Create free account"
+          ctaTo="/developers/register"
+          icon={KeyRound}
+          gradient="linear-gradient(135deg, #7c3aed, #c026d3)"
+          className="mt-8 max-w-2xl"
+        />
 
         <Section id="authentication" title="Authentication">
           <p>Every request needs your API key as a bearer token.</p>
@@ -305,13 +320,13 @@ export function DeveloperDocs() {
           <h2 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--text-h)' }}>
             Endpoints
           </h2>
-          <p className="mt-2 max-w-2xl text-[15px] leading-relaxed opacity-75">
+          <p className="mt-2 max-w-2xl text-[15px] leading-relaxed" style={{ color: 'var(--text)' }}>
             Every field each endpoint accepts, with an example request and a live tester. Enter your key once below,
             it applies to every endpoint on this page.
           </p>
 
           <div className="sticky top-16 z-10 mt-5 max-w-md rounded-xl border p-3" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-            <label className="mb-1 block text-xs font-medium opacity-70">Your API key</label>
+            <label className="mb-1 block text-xs font-semibold" style={{ color: 'var(--text-h)' }}>Your API key</label>
             <input
               type="password"
               value={apiKey}
@@ -320,7 +335,7 @@ export function DeveloperDocs() {
               className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
             />
-            <p className="mt-1 text-xs opacity-50">Stored only in your browser. Get one from your dashboard.</p>
+            <p className="mt-1 text-xs" style={{ color: 'var(--text)' }}>Stored only in your browser. Get one from your dashboard.</p>
           </div>
 
           <div className="mt-6 space-y-6">
