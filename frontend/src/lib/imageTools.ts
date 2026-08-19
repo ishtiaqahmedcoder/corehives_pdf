@@ -57,7 +57,7 @@ export const IMAGE_TOOLS: ImageTool[] = [
   { slug: 'upscale-image', label: 'Upscale Image', description: 'Enlarge a photo without losing quality', icon: Expand, to: '/images/upscale', category: 'optimize', ready: false },
   { slug: 'remove-background', label: 'Remove Background', description: 'Cut a subject out automatically', icon: Eraser, to: '/images/remove-background', category: 'edit', ready: false },
   { slug: 'blur-face', label: 'Blur Face', description: 'Hide faces or plates for privacy', icon: ScanFace, to: '/images/blur-face', category: 'security', ready: false },
-  { slug: 'html-to-image', label: 'HTML to Image', description: 'Turn a web page into a JPG or PNG', icon: Globe, to: '/images/html-to-image', category: 'convert', ready: false },
+  { slug: 'html-to-image', label: 'HTML to Image', description: 'Turn a web page into a JPG or PNG', icon: Globe, to: '/images/html-to-image', category: 'convert', ready: true },
 ]
 
 export function imageToolsByCategory(category: ImageToolCategory | 'all'): ImageTool[] {

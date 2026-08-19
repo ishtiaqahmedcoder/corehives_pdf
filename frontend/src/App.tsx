@@ -19,6 +19,7 @@ import { ConvertFromJpg } from '@/pages/images/ConvertFromJpg'
 import { WatermarkImage } from '@/pages/images/WatermarkImage'
 import { MemeGenerator } from '@/pages/images/MemeGenerator'
 import { PhotoEditor } from '@/pages/images/PhotoEditor'
+import { HtmlToImage } from '@/pages/images/HtmlToImage'
 import { MergePdf } from '@/pages/tools/MergePdf'
 import { SplitPdf } from '@/pages/tools/SplitPdf'
 import { RemovePages } from '@/pages/tools/RemovePages'
@@ -87,6 +88,7 @@ function App() {
         <Route path="/images/watermark" element={<WatermarkImage />} />
         <Route path="/images/meme" element={<MemeGenerator />} />
         <Route path="/images/editor" element={<PhotoEditor />} />
+        <Route path="/images/html-to-image" element={<HtmlToImage />} />
         <Route
           path="/organize"
           element={

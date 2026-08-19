@@ -445,6 +445,18 @@ export const API_TOOL_SCHEMAS: ApiToolSchema[] = [
       },
     ],
   },
+  {
+    slug: 'html-to-image',
+    label: 'HTML to Image',
+    summary: 'Render a web page and return it as a JPG or PNG screenshot.',
+    path: '/v1/tools/html-to-image',
+    fileFields: [],
+    optionFields: [
+      { name: 'url', label: 'url', type: 'string', required: true, placeholder: 'https://example.com', description: 'The page to render. Must be a public http:// or https:// URL.', topLevel: true },
+      { name: 'format', label: 'format', type: 'select', required: false, default: 'jpg', description: 'Output image format.', choices: ['jpg', 'png'], topLevel: true },
+    ],
+    notes: ['This endpoint takes no file — `url` and `format` are sent as regular fields, not `files[]`.'],
+  },
 ]
 
 export const API_TOOL_SCHEMA_BY_SLUG: Record<string, ApiToolSchema> = Object.fromEntries(

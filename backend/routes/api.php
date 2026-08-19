@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Developer\ApiKeyController;
 use App\Http\Controllers\Api\Developer\AuthController;
+use App\Http\Controllers\Api\HtmlToImageController;
 use App\Http\Controllers\Api\JobDownloadController;
 use App\Http\Controllers\Api\JobStatusController;
 use App\Http\Controllers\Api\MergeController;
@@ -14,6 +15,9 @@ Route::post('/tools/merge', [MergeController::class, 'store'])
     ->middleware('throttle:20,60');
 
 Route::post('/tools/sign', [SignController::class, 'store'])
+    ->middleware('throttle:20,60');
+
+Route::post('/tools/html-to-image', [HtmlToImageController::class, 'store'])
     ->middleware('throttle:20,60');
 
 Route::post('/tools/{tool}', [ToolController::class, 'store'])
@@ -52,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::post('/tools/merge', [MergeController::class, 'store'])->middleware('apikey');
     Route::post('/tools/sign', [SignController::class, 'store'])->middleware('apikey');
+    Route::post('/tools/html-to-image', [HtmlToImageController::class, 'store'])->middleware('apikey');
     Route::post('/tools/{tool}', [ToolController::class, 'store'])
         ->whereIn('tool', [
             'split', 'remove-pages', 'extract-pages', 'watermark', 'page-numbers', 'jpg-to-pdf',

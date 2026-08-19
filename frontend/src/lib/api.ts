@@ -45,6 +45,11 @@ export async function uploadSignFiles(pdf: File, signature: Blob, page = 0) {
   return data.job_id
 }
 
+export async function submitHtmlToImage(url: string, format: 'jpg' | 'png') {
+  const { data } = await api.post<{ job_id: string }>('/tools/html-to-image', { url, format })
+  return data.job_id
+}
+
 export async function getJobStatus(jobId: string) {
   const { data } = await api.get<PdfJob>(`/jobs/${jobId}`)
   return data
