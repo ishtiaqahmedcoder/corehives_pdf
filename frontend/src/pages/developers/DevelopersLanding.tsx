@@ -122,22 +122,30 @@ export function DevelopersLanding() {
   return (
     <div className="w-full">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl" style={{ color: 'var(--text-h)' }}>
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl" style={{ color: 'var(--text-h)' }}>
           Every tool, in a REST API for developers
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
+        <p className="mx-auto mt-4 max-w-xl text-xl leading-relaxed" style={{ color: 'var(--text)' }}>
           Whether you're a solo project or a growing product, the {APP_NAME} API automates your PDF
           and image processing. Merge, split, compress, convert, sign, and more, all in one place.
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link
             to="/developers/register"
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-xl px-6 py-3 font-semibold text-white"
             style={{ background: 'var(--accent)' }}
           >
             Get your API key
           </Link>
-          <Link to="/developers/docs" className="rounded-xl border px-6 py-3 font-semibold" style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}>
+          <Link
+            to="/developers/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl border px-6 py-3 font-semibold"
+            style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
+          >
             Read the docs
           </Link>
         </div>
@@ -169,6 +177,8 @@ export function DevelopersLanding() {
             <Link
               key={card.title}
               to="/developers/docs"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-2xl p-5 text-white transition-transform hover:-translate-y-0.5"
               style={{ background: card.color }}
             >
@@ -190,7 +200,13 @@ export function DevelopersLanding() {
             shapes to memorize between tools.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link to="/developers/docs" className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white" style={{ background: 'var(--accent)' }}>
+            <Link
+              to="/developers/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white"
+              style={{ background: 'var(--accent)' }}
+            >
               Read the full API reference
             </Link>
           </div>
@@ -244,6 +260,9 @@ export function DevelopersLanding() {
         <h2 className="text-center text-3xl font-semibold" style={{ color: 'var(--text-h)' }}>
           Simple, predictable pricing
         </h2>
+        <p className="mx-auto mt-2 max-w-xl text-center text-base" style={{ color: 'var(--text)' }}>
+          Every account starts on Free. Upgrade only when you need more capacity.
+        </p>
         <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
           {PLANS.map((plan, i) => (
             <motion.div

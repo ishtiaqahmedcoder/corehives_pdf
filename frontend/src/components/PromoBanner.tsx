@@ -8,13 +8,14 @@ interface PromoBannerProps {
   body: string
   ctaLabel: string
   ctaTo: string
+  ctaNewTab?: boolean
   icon: LucideIcon
   gradient: string
   languages?: string[]
   className?: string
 }
 
-export function PromoBanner({ eyebrow, title, body, ctaLabel, ctaTo, icon: Icon, gradient, languages, className = '' }: PromoBannerProps) {
+export function PromoBanner({ eyebrow, title, body, ctaLabel, ctaTo, ctaNewTab, icon: Icon, gradient, languages, className = '' }: PromoBannerProps) {
   return (
     <div
       className={`relative flex flex-col items-center gap-8 overflow-hidden rounded-3xl p-8 text-white shadow-xl sm:flex-row sm:p-10 ${className}`}
@@ -59,6 +60,7 @@ export function PromoBanner({ eyebrow, title, body, ctaLabel, ctaTo, icon: Icon,
 
         <Link
           to={ctaTo}
+          {...(ctaNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           className="group mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#16141f] transition-transform hover:-translate-y-0.5"
         >
           {ctaLabel}

@@ -33,7 +33,7 @@ export function Footer() {
     { label: t('footer.about'), to: '/about' },
     { label: t('footer.contact'), to: '/contact' },
     { label: t('footer.blog'), to: '/blog' },
-    { label: 'Developer API', to: '/developers' },
+    { label: 'Developer API', to: '/developers', newTab: true },
   ]
 
   return (
@@ -93,7 +93,12 @@ export function Footer() {
           <FooterColumn title={t('footer.company')}>
             {companyLinks.map((link) => (
               <li key={link.to}>
-                <Link to={link.to} className="text-[15px] hover:opacity-70" style={{ color: 'var(--text-h)' }}>
+                <Link
+                  to={link.to}
+                  {...(link.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="text-[15px] hover:opacity-70"
+                  style={{ color: 'var(--text-h)' }}
+                >
                   {link.label}
                 </Link>
               </li>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles } from 'lucide-react'
+import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles, type LucideIcon } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { ToolIcon, type ToolIconColor } from '@/components/ToolIcon'
@@ -19,6 +19,7 @@ const DISCOVERY_CARDS = [
     color: 'fuchsia' as ToolIconColor,
     title: 'Image Tools',
     description: 'Compress, resize, rotate, convert, watermark, and edit images, free and unlimited.',
+    newTab: false,
   },
   {
     to: '/developers',
@@ -26,6 +27,7 @@ const DISCOVERY_CARDS = [
     color: 'violet' as ToolIconColor,
     title: 'Developer API',
     description: 'Every tool on this site as a REST API, with a dashboard, keys, and webhooks.',
+    newTab: true,
   },
 ]
 
@@ -35,10 +37,10 @@ const STEPS = [
   { icon: Download, color: 'emerald' as ToolIconColor, title: 'Download the result', body: 'Your file is ready in seconds. Download it once, and the original is auto-deleted an hour later.' },
 ]
 
-const STATS = [
-  { icon: Sparkles, color: 'fuchsia' as ToolIconColor, label: '35+ tools', body: 'PDF and image tools in one place' },
-  { icon: InfinityIcon, color: 'violet' as ToolIconColor, label: 'No limits', body: 'No signup, no watermark, no page caps' },
-  { icon: ShieldCheck, color: 'rose' as ToolIconColor, label: '1-hour auto-delete', body: 'Every file is permanently wiped after processing' },
+const STATS: { icon: LucideIcon; label: string; body: string }[] = [
+  { icon: Sparkles, label: '35+ tools', body: 'PDF and image tools in one place' },
+  { icon: InfinityIcon, label: 'No limits', body: 'No signup, no watermark, no page caps' },
+  { icon: ShieldCheck, label: '1-hour auto-delete', body: 'Every file is permanently wiped after processing' },
 ]
 
 const FAQ_ITEMS: FaqItem[] = [
@@ -90,10 +92,10 @@ export function Home() {
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl" style={{ color: 'var(--text-h)' }}>
           {t('home.title')}
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
+        <p className="mx-auto mt-4 max-w-2xl text-xl leading-relaxed" style={{ color: 'var(--text)' }}>
           {t('home.subtitle')}
         </p>
-        <p className="mx-auto mt-2 max-w-2xl text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
+        <p className="mx-auto mt-2 max-w-2xl text-xl leading-relaxed" style={{ color: 'var(--text)' }}>
           {t(
             'home.subtitleExtra',
             'Merge, split, compress, convert, and sign PDFs, all in your browser, with no software to install and no account required.',
@@ -142,10 +144,11 @@ export function Home() {
             <Link
               key={card.to}
               to={card.to}
-              className="flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg"
+              {...(card.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              className="group flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg"
               style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
             >
-              <ToolIcon icon={card.icon} color={card.color} />
+              <ToolIcon icon={card.icon} color={card.color} className="group-hover:-translate-y-1 group-hover:scale-110" />
               <div className="min-w-0 flex-1">
                 <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
                   {card.title}
@@ -165,6 +168,7 @@ export function Home() {
         body="Automate merges, conversions, compression, and more in your own product with a free API key. No credit card required to get started."
         ctaLabel="Get your API key"
         ctaTo="/developers"
+        ctaNewTab
         icon={Code2}
         gradient="linear-gradient(135deg, #7c3aed, #4338ca)"
         languages={['PHP', 'Node.js', '.NET', 'Ruby']}
@@ -203,17 +207,28 @@ export function Home() {
         </div>
       </section>
 
-      <section className="mt-16 rounded-3xl border p-8 sm:p-10" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+      <section
+        className="relative mt-16 overflow-hidden rounded-3xl p-8 shadow-xl sm:p-10"
+        style={{ background: 'linear-gradient(135deg, #16141f, #3730a3)', boxShadow: '0 20px 45px -20px rgba(0,0,0,0.35)' }}
+      >
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-20" style={{ background: 'rgba(255,255,255,0.6)' }} />
+
+        <div className="relative grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {STATS.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center text-center">
-              <ToolIcon icon={stat.icon} color={stat.color} />
-              <p className="mt-3 text-2xl font-semibold" style={{ color: 'var(--text-h)' }}>
-                {stat.label}
-              </p>
-              <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
-                {stat.body}
-              </p>
+            <div key={stat.label} className="flex flex-col items-center px-4 py-6 text-center first:pt-0 sm:py-0">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                <stat.icon className="h-6 w-6 text-white" strokeWidth={1.75} />
+              </div>
+              <p className="mt-3 text-2xl font-bold text-white">{stat.label}</p>
+              <p className="mt-1 text-sm text-white/80">{stat.body}</p>
             </div>
           ))}
         </div>

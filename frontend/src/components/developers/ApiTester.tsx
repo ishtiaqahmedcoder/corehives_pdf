@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
-import { Play, Loader2, CheckCircle2, XCircle, Download } from 'lucide-react'
+import { Play, Loader2, CheckCircle2, XCircle, Download, UploadCloud, FileCheck2 } from 'lucide-react'
 import type { ApiOptionField, ApiToolSchema } from '@/lib/apiToolSchemas'
 
 const testerApi = axios.create({ baseURL: '/api' })
@@ -116,26 +116,53 @@ export function ApiTester({ schema, apiKey }: { schema: ApiToolSchema; apiKey: s
 
   return (
     <div className="rounded-xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
-      <h4 className="text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
-        Try it
-      </h4>
+      <div className="flex items-center gap-2">
+        <span className="flex h-2 w-2 rounded-full" style={{ background: '#22c55e' }} />
+        <h4 className="text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
+          Try it
+        </h4>
+      </div>
 
       <div className="mt-3 space-y-3">
-        {schema.fileFields.map((field) => (
-          <div key={field.name}>
-            <label className="mb-1 block text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
-              {field.label} <span className="font-normal opacity-60">({field.hint})</span>
-            </label>
-            <input
-              type="file"
-              accept={field.accept}
-              multiple={field.multiple}
-              onChange={(e) => setFiles((prev) => ({ ...prev, [field.name]: e.target.files }))}
-              className="w-full rounded-lg border px-2.5 py-1.5 text-sm outline-none"
-              style={{ borderColor: 'var(--border)', background: 'var(--surface)', color: 'var(--text-h)' }}
-            />
-          </div>
-        ))}
+        {schema.fileFields.map((field) => {
+          const selected = files[field.name] ? Array.from(files[field.name]!) : []
+          const inputId = `${schema.slug}-${field.name}`
+          return (
+            <div key={field.name}>
+              <label className="mb-1 block text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
+                {field.label} <span className="font-normal opacity-60">({field.hint})</span>
+              </label>
+              <label
+                htmlFor={inputId}
+                className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-dashed px-3 py-2.5 text-sm transition-colors hover:bg-[var(--surface)]"
+                style={{ borderColor: selected.length ? 'var(--accent)' : 'var(--border)', background: 'var(--bg-soft)' }}
+              >
+                {selected.length ? (
+                  <FileCheck2 className="h-4 w-4 shrink-0" style={{ color: 'var(--accent)' }} />
+                ) : (
+                  <UploadCloud className="h-4 w-4 shrink-0" style={{ color: 'var(--text)', opacity: 0.6 }} />
+                )}
+                <span className="min-w-0 flex-1 truncate" style={{ color: selected.length ? 'var(--text-h)' : 'var(--text)' }}>
+                  {selected.length ? selected.map((f) => f.name).join(', ') : `Choose ${field.multiple ? 'one or more files' : 'a file'}…`}
+                </span>
+                <span
+                  className="shrink-0 rounded-md px-2 py-1 text-xs font-semibold"
+                  style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+                >
+                  Browse
+                </span>
+              </label>
+              <input
+                id={inputId}
+                type="file"
+                accept={field.accept}
+                multiple={field.multiple}
+                onChange={(e) => setFiles((prev) => ({ ...prev, [field.name]: e.target.files }))}
+                className="hidden"
+              />
+            </div>
+          )
+        })}
 
         {schema.optionFields.map((field) => (
           <div key={field.name}>

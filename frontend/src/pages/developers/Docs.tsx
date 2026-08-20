@@ -229,6 +229,7 @@ export function DeveloperDocs() {
           body="100 files a month on the free tier, no credit card required. Create an account and start testing the live requests below right away."
           ctaLabel="Create free account"
           ctaTo="/developers/register"
+          ctaNewTab
           icon={KeyRound}
           gradient="linear-gradient(135deg, #7c3aed, #c026d3)"
           className="mt-8 max-w-2xl"
@@ -238,7 +239,7 @@ export function DeveloperDocs() {
           <p>Every request needs your API key as a bearer token.</p>
           <CodeBlock>{`Authorization: Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx`}</CodeBlock>
           <p>
-            Get a key from your <a href="/developers/dashboard" className="underline" style={{ color: 'var(--accent)' }}>dashboard</a>. Free
+            Get a key from your <a href="/developers/dashboard" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>dashboard</a>. Free
             accounts get 100 files per month.
           </p>
         </Section>

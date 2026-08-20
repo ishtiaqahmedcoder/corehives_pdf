@@ -70,6 +70,8 @@ export function Layout({ children }: { children: ReactNode }) {
             <ImageToolsMenu />
             <Link
               to="/developers"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-full px-3 py-1.5 text-sm font-medium"
               style={{ color: 'var(--text-h)' }}
             >
