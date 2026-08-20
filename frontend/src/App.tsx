@@ -6,7 +6,12 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { DevelopersLanding } from '@/pages/developers/DevelopersLanding'
 import { DeveloperRegister } from '@/pages/developers/Register'
 import { DeveloperLogin } from '@/pages/developers/Login'
-import { DeveloperDashboard } from '@/pages/developers/Dashboard'
+import { DashboardConsole } from '@/pages/developers/dashboard/Console'
+import { DashboardKeys } from '@/pages/developers/dashboard/Keys'
+import { DashboardWebhooks } from '@/pages/developers/dashboard/Webhooks'
+import { DashboardAccount } from '@/pages/developers/dashboard/Account'
+import { DashboardSecurity } from '@/pages/developers/dashboard/Security'
+import { DashboardPlans } from '@/pages/developers/dashboard/Plans'
 import { DeveloperDocs } from '@/pages/developers/Docs'
 import { Home } from '@/pages/Home'
 import { Images } from '@/pages/Images'
@@ -127,7 +132,47 @@ function App() {
           path="/developers/dashboard"
           element={
             <ProtectedRoute>
-              <DeveloperDashboard />
+              <DashboardConsole />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/developers/dashboard/keys"
+          element={
+            <ProtectedRoute>
+              <DashboardKeys />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/developers/dashboard/webhooks"
+          element={
+            <ProtectedRoute>
+              <DashboardWebhooks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/developers/dashboard/account"
+          element={
+            <ProtectedRoute>
+              <DashboardAccount />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/developers/dashboard/security"
+          element={
+            <ProtectedRoute>
+              <DashboardSecurity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/developers/dashboard/plans"
+          element={
+            <ProtectedRoute>
+              <DashboardPlans />
             </ProtectedRoute>
           }
         />

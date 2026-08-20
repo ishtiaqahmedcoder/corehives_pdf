@@ -18,16 +18,16 @@ function useTheme() {
   return { dark, toggle: () => setDark((d) => !d) }
 }
 
-// Hub pages reachable straight from the main nav, plus the self-contained auth
-// cards, already offer their own way around, so a "Back" pill would be redundant
-// (or, on the auth cards, visually disconnected from the card layout).
+// Hub pages reachable straight from the main nav, the self-contained auth cards,
+// and the dashboard (which has its own sidebar nav) already offer their own way
+// around, so a "Back" pill would be redundant there (or visually disconnected).
 const NO_BACK_PATHS = new Set(['/', '/images', '/developers', '/developers/login', '/developers/register'])
 
 function BackButton() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  if (NO_BACK_PATHS.has(location.pathname)) return null
+  if (NO_BACK_PATHS.has(location.pathname) || location.pathname.startsWith('/developers/dashboard')) return null
 
   function handleBack() {
     if (location.key === 'default') {
