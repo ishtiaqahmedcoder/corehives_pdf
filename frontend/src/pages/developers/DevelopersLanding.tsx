@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Check,
+  ChevronDown,
   Zap,
   Layers,
   Code2,
@@ -43,7 +45,8 @@ const FEATURE_CARDS = [
   { icon: PackageOpen, color: '#059669', title: 'Batch Processing', body: 'Run one tool across up to 20 files at once, in a single request.' },
 ]
 
-const CODE_EXAMPLE = `curl -X POST https://corehives.com/api/v1/tools/compress \\
+const CODE_EXAMPLES: Record<string, string> = {
+  cURL: `curl -X POST https://corehives.com/api/v1/tools/compress \\
   -H "Authorization: Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx" \\
   -F "files[]=@document.pdf"
 
@@ -52,10 +55,69 @@ const CODE_EXAMPLE = `curl -X POST https://corehives.com/api/v1/tools/compress \
 curl https://corehives.com/api/v1/jobs/0199f1a2-... \\
   -H "Authorization: Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx"
 
-# => { "status": "completed", "download_url": "https://..." }`
+# => { "status": "completed", "download_url": "https://..." }`,
+
+  PHP: `// Submit the file.
+$ch = curl_init('https://corehives.com/api/v1/tools/compress');
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx',
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, [
+    'files[]' => new CURLFile('document.pdf'),
+]);
+
+$job = json_decode(curl_exec($ch), true);
+echo $job['job_id'];`,
+
+  'Node.js': `// Submit the file.
+import fetch from 'node-fetch'
+import FormData from 'form-data'
+import fs from 'fs'
+
+const form = new FormData()
+form.append('files[]', fs.createReadStream('document.pdf'))
+
+const res = await fetch('https://corehives.com/api/v1/tools/compress', {
+  method: 'POST',
+  headers: { Authorization: 'Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx' },
+  body: form,
+})
+
+const { job_id } = await res.json()`,
+
+  '.NET': `// Submit the file.
+using var client = new HttpClient();
+client.DefaultRequestHeaders.Authorization =
+    new AuthenticationHeaderValue("Bearer", "pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx");
+
+using var form = new MultipartFormDataContent();
+form.Add(new StreamContent(File.OpenRead("document.pdf")), "files[]", "document.pdf");
+
+var response = await client.PostAsync(
+    "https://corehives.com/api/v1/tools/compress", form);
+var json = await response.Content.ReadAsStringAsync();`,
+
+  Ruby: `# Submit the file.
+require 'net/http'
+require 'net/http/post/multipart'
+
+uri = URI('https://corehives.com/api/v1/tools/compress')
+req = Net::HTTP::Post::Multipart.new uri.path,
+  'files[]' => UploadIO.new(File.open('document.pdf'), 'application/pdf', 'document.pdf')
+req['Authorization'] = 'Bearer pdfh_live_xxxxxxxxxxxxxxxxxxxxxxxx'
+
+res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+job_id = JSON.parse(res.body)['job_id']`,
+}
+
+const CODE_LANGUAGES = Object.keys(CODE_EXAMPLES)
 
 export function DevelopersLanding() {
   usePageMeta('Developer API', 'Every PDF and image tool on PDFHives, available as a REST API with keys, quotas, and webhooks.')
+  const [language, setLanguage] = useState<string>('PHP')
+  const [langMenuOpen, setLangMenuOpen] = useState(false)
 
   return (
     <div className="w-full">
@@ -133,13 +195,47 @@ export function DevelopersLanding() {
             </Link>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border shadow-lg" style={{ borderColor: 'var(--border)' }}>
+        <div className="relative overflow-hidden rounded-2xl border shadow-lg" style={{ borderColor: 'var(--border)' }}>
           <div className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-white" style={{ background: '#16141f' }}>
             <span>Compress example</span>
-            <span className="opacity-60">curl</span>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setLangMenuOpen((o) => !o)}
+                className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 font-semibold"
+                style={{ background: 'rgba(255,255,255,0.12)' }}
+              >
+                {language}
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${langMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {langMenuOpen && (
+                <div
+                  className="absolute right-0 top-full z-10 mt-1.5 w-32 overflow-hidden rounded-lg border shadow-xl"
+                  style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+                >
+                  {CODE_LANGUAGES.map((lang) => (
+                    <button
+                      key={lang}
+                      type="button"
+                      onClick={() => {
+                        setLanguage(lang)
+                        setLangMenuOpen(false)
+                      }}
+                      className="block w-full px-3 py-2 text-left text-sm font-medium"
+                      style={{
+                        color: lang === language ? 'var(--accent)' : 'var(--text-h)',
+                        background: lang === language ? 'var(--accent-soft)' : 'transparent',
+                      }}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-[#e5e2f0]" style={{ background: '#0f0e17' }}>
-            <code>{CODE_EXAMPLE}</code>
+            <code>{CODE_EXAMPLES[language]}</code>
           </pre>
         </div>
       </section>

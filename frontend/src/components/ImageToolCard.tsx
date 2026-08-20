@@ -6,7 +6,7 @@ import { ToolIcon } from '@/components/ToolIcon'
 export function ImageToolCard({ tool, index = 0 }: { tool: ImageTool; index?: number }) {
   const content = (
     <>
-      <ToolIcon icon={tool.icon} color={IMAGE_CATEGORY_ICON_COLOR[tool.category]} />
+      <ToolIcon icon={tool.icon} color={IMAGE_CATEGORY_ICON_COLOR[tool.category]} className="group-hover:-translate-y-1 group-hover:scale-110" />
       <div className="mt-4 flex items-center gap-2">
         <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
           {tool.label}
@@ -23,7 +23,7 @@ export function ImageToolCard({ tool, index = 0 }: { tool: ImageTool; index?: nu
     </>
   )
 
-  const className = `block rounded-2xl border p-5 transition-shadow ${tool.ready ? 'hover:shadow-lg' : 'cursor-not-allowed opacity-60'}`
+  const className = `group block rounded-2xl border p-5 transition-shadow ${tool.ready ? 'hover:shadow-lg' : 'cursor-not-allowed opacity-60'}`
   const style = { borderColor: 'var(--border)', background: 'var(--surface)' }
 
   return (

@@ -87,15 +87,21 @@ export function Home() {
         transition={{ duration: 0.4 }}
         className="mb-10 text-center"
       >
-        <h1 className="text-4xl font-semibold" style={{ color: 'var(--text-h)' }}>
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl" style={{ color: 'var(--text-h)' }}>
           {t('home.title')}
         </h1>
-        <p className="mt-3 text-lg" style={{ color: 'var(--text)' }}>
+        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
           {t('home.subtitle')}
+        </p>
+        <p className="mx-auto mt-2 max-w-2xl text-lg leading-relaxed" style={{ color: 'var(--text)' }}>
+          {t(
+            'home.subtitleExtra',
+            'Merge, split, compress, convert, and sign PDFs, all in your browser, with no software to install and no account required.',
+          )}
         </p>
       </motion.div>
 
-      <div className="mb-8 flex flex-wrap justify-center gap-2">
+      <div className="mb-8 flex flex-wrap justify-center gap-2.5">
         {FILTER_KEYS.map((key) => {
           const isActive = active === key
           const label = key === 'all' ? t('categories.all') : t(`categories.${key}`, CATEGORY_LABELS[key])
@@ -104,11 +110,11 @@ export function Home() {
               key={key}
               type="button"
               onClick={() => setActive(key)}
-              className="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
+              className="rounded-full border px-5 py-2 text-[15px] font-medium transition-all hover:-translate-y-0.5 hover:shadow-md"
               style={
                 isActive
                   ? { background: 'var(--accent)', borderColor: 'var(--accent)', color: '#fff' }
-                  : { borderColor: 'var(--border)', color: 'var(--text-h)' }
+                  : { borderColor: 'var(--border)', color: 'var(--text-h)', background: 'var(--surface)' }
               }
             >
               {label}
@@ -161,6 +167,7 @@ export function Home() {
         ctaTo="/developers"
         icon={Code2}
         gradient="linear-gradient(135deg, #7c3aed, #4338ca)"
+        languages={['PHP', 'Node.js', '.NET', 'Ruby']}
         className="mt-12"
       />
 

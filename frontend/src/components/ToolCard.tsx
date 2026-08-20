@@ -14,7 +14,7 @@ export function ToolCard({ tool, index = 0 }: ToolCardProps) {
 
   const content = (
     <>
-      <ToolIcon icon={tool.icon} color={CATEGORY_ICON_COLOR[tool.category]} />
+      <ToolIcon icon={tool.icon} color={CATEGORY_ICON_COLOR[tool.category]} className="group-hover:-translate-y-1 group-hover:scale-110" />
       <div className="mt-4 flex items-center gap-2">
         <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
           {t(`tools.${tool.slug}.label`, tool.label)}
@@ -39,7 +39,7 @@ export function ToolCard({ tool, index = 0 }: ToolCardProps) {
     </>
   )
 
-  const className = `block rounded-2xl border p-5 transition-shadow ${tool.ready ? 'hover:shadow-lg' : 'cursor-not-allowed opacity-60'}`
+  const className = `group block rounded-2xl border p-5 transition-shadow ${tool.ready ? 'hover:shadow-lg' : 'cursor-not-allowed opacity-60'}`
   const style = { borderColor: 'var(--border)', background: 'var(--surface)' }
 
   return (

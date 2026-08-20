@@ -15,7 +15,8 @@
   },
   "home": {
     "title": "Every PDF tool you need. Free. Forever.",
-    "subtitle": "No signup, no watermark, no page limits. Just pick a tool and go."
+    "subtitle": "No signup, no watermark, no page limits. Just pick a tool and go.",
+    "subtitleExtra": "Merge, split, compress, convert, and sign PDFs, all in your browser, with no software to install and no account required."
   },
   "tools": {
     "merge": { "label": "Merge PDF", "description": "Combine multiple PDF files into a single document, in the exact order you choose, in seconds." },

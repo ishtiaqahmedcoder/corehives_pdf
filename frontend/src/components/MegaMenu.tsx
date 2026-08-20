@@ -80,18 +80,18 @@ export function MegaMenu<C extends string>({
             className="fixed inset-x-0 top-[61px] z-50 w-full border-b shadow-2xl"
             style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
           >
-            <div className="grid max-h-[70vh] grid-cols-2 gap-x-6 gap-y-5 overflow-y-auto px-6 py-6 sm:grid-cols-3 lg:px-10 xl:grid-cols-5">
+            <div className="grid max-h-[70vh] grid-cols-2 gap-x-6 gap-y-4 overflow-y-auto px-6 py-5 sm:grid-cols-3 lg:px-10 xl:grid-cols-5">
               {categories.map((category) => (
                 <div key={category}>
-                  <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-h)', opacity: 0.6 }}>
+                  <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-h)', opacity: 0.6 }}>
                     {categoryLabels[category]}
                   </h3>
-                  <ul className="space-y-1">
+                  <ul className="space-y-0.5">
                     {toolsByCategory(category).map((tool) => {
                       const rowClass = tool.ready ? 'hover:bg-[var(--bg-soft)]' : 'cursor-not-allowed opacity-50'
                       const row = (
-                        <span className={`flex items-center gap-2 rounded-lg px-1.5 py-1.5 text-sm ${rowClass}`}>
-                          <ToolIcon icon={tool.icon} color={categoryIconColor[category]} size="sm" />
+                        <span className={`flex items-center gap-2 rounded-lg px-1.5 py-1 text-sm ${rowClass}`}>
+                          <ToolIcon icon={tool.icon} color={categoryIconColor[category]} size="xs" />
                           <span style={{ color: 'var(--text-h)' }}>{tool.label}</span>
                           {!tool.ready && <span className="ml-auto shrink-0 text-[10px] opacity-60">Soon</span>}
                         </span>
