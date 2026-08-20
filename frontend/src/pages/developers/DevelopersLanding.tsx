@@ -17,15 +17,9 @@ import {
   Globe,
   PackageOpen,
 } from 'lucide-react'
-import { ApiKey } from '@/lib/apiKeyPlans'
+import { DEVELOPER_PLANS } from '@/lib/apiKeyPlans'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { APP_NAME } from '@/lib/brand'
-
-const PLANS = [
-  { name: 'Free', price: '$0', quota: ApiKey.free, features: ['All PDF and image tools', 'Webhooks', 'Community support'] },
-  { name: 'Starter', price: '$19/mo', quota: ApiKey.starter, features: ['Everything in Free', 'Priority queue', 'Email support'], highlight: true },
-  { name: 'Pro', price: '$79/mo', quota: ApiKey.pro, features: ['Everything in Starter', 'Highest priority queue', 'Priority support'] },
-]
 
 const TRUST_POINTS = [
   { icon: Zap, title: 'Fast, queued processing', body: 'Every job runs on a dedicated queue and returns a signed download link the moment it finishes.' },
@@ -264,9 +258,9 @@ export function DevelopersLanding() {
           Every account starts on Free. Upgrade only when you need more capacity.
         </p>
         <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
-          {PLANS.map((plan, i) => (
+          {DEVELOPER_PLANS.map((plan, i) => (
             <motion.div
-              key={plan.name}
+              key={plan.key}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}

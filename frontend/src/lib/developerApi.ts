@@ -58,6 +58,19 @@ export async function fetchMe() {
   return data.user
 }
 
+export async function updateProfile(name: string, email: string) {
+  const { data } = await developerApi.patch<{ user: DeveloperUser }>('/auth/me', { name, email })
+  return data.user
+}
+
+export async function updatePassword(currentPassword: string, password: string, passwordConfirmation: string) {
+  await developerApi.put('/auth/password', {
+    current_password: currentPassword,
+    password,
+    password_confirmation: passwordConfirmation,
+  })
+}
+
 export async function listApiKeys() {
   const { data } = await developerApi.get<{ keys: ApiKeySummary[] }>('/developer/keys')
   return data.keys
