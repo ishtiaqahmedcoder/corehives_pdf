@@ -1,27 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Copy,
-  Check,
-  Trash2,
-  KeyRound,
-  AlertCircle,
-  BookOpen,
-  LogOut,
-  Plus,
-  Loader2,
-  Webhook,
-  Clock,
-} from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
+import { Copy, Check, Trash2, KeyRound, AlertCircle, Plus, Loader2, Clock } from 'lucide-react'
 import {
   createApiKey,
   listApiKeys,
   revokeApiKey,
-  updateApiKeyWebhook,
   type ApiKeySummary,
 } from '@/lib/developerApi'
+import { DashboardLayout } from '@/components/developers/DashboardLayout'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
 function apiErrorMessage(err: unknown, fallback: string): string {
@@ -48,47 +34,9 @@ function relativeTime(iso: string | null): string {
   return new Date(iso).toLocaleDateString()
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-      <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text)', opacity: 0.6 }}>
-        {label}
-      </p>
-      <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--text-h)' }}>
-        {value}
-      </p>
-    </div>
-  )
-}
-
-function KeyRow({
-  apiKey,
-  onRevoke,
-}: {
-  apiKey: ApiKeySummary
-  onRevoke: (id: number) => Promise<void>
-}) {
-  const [webhook, setWebhook] = useState(apiKey.webhook_url ?? '')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [webhookError, setWebhookError] = useState<string | null>(null)
+function KeyRow({ apiKey, onRevoke }: { apiKey: ApiKeySummary; onRevoke: (id: number) => Promise<void> }) {
   const [revoking, setRevoking] = useState(false)
   const usagePct = Math.min(100, Math.round((apiKey.files_used_this_period / apiKey.monthly_quota) * 100))
-
-  async function saveWebhook() {
-    setSaving(true)
-    setWebhookError(null)
-    setSaved(false)
-    try {
-      await updateApiKeyWebhook(apiKey.id, webhook)
-      setSaved(true)
-      setTimeout(() => setSaved(false), 2000)
-    } catch (err) {
-      setWebhookError(apiErrorMessage(err, 'Could not save that webhook URL.'))
-    } finally {
-      setSaving(false)
-    }
-  }
 
   async function handleRevokeClick() {
     setRevoking(true)
@@ -165,47 +113,12 @@ function KeyRow({
         <Clock className="h-3.5 w-3.5" />
         Last used: {relativeTime(apiKey.last_used_at)}
       </div>
-
-      {!apiKey.revoked && (
-        <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--border)' }}>
-          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold" style={{ color: 'var(--text-h)' }}>
-            <Webhook className="h-3.5 w-3.5" />
-            Webhook URL
-          </label>
-          <div className="flex gap-2">
-            <input
-              type="url"
-              placeholder="https://yourapp.com/webhooks/pdfhives"
-              value={webhook}
-              onChange={(e) => setWebhook(e.target.value)}
-              className="flex-1 rounded-lg border px-2.5 py-1.5 text-xs outline-none transition-colors focus:border-[var(--accent)]"
-              style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
-            />
-            <button
-              type="button"
-              onClick={saveWebhook}
-              disabled={saving}
-              className="flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50"
-              style={{ borderColor: saved ? '#16a34a' : 'var(--border)', color: saved ? '#16a34a' : 'var(--text-h)' }}
-            >
-              {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : saved ? <Check className="h-3.5 w-3.5" /> : null}
-              {saving ? 'Saving…' : saved ? 'Saved' : 'Save'}
-            </button>
-          </div>
-          {webhookError && (
-            <p className="mt-1.5 text-xs" style={{ color: '#ef4444' }}>
-              {webhookError}
-            </p>
-          )}
-        </div>
-      )}
     </div>
   )
 }
 
-export function DeveloperDashboard() {
-  usePageMeta('Developer dashboard', 'Manage your PDFHives API keys, monitor quota usage, and configure webhooks.')
-  const { user, logout } = useAuth()
+export function DashboardKeys() {
+  usePageMeta('API Keys', 'Create and manage your PDFHives API keys.')
   const [keys, setKeys] = useState<ApiKeySummary[]>([])
   const [loading, setLoading] = useState(true)
   const [newKeyName, setNewKeyName] = useState('')
@@ -227,7 +140,6 @@ export function DeveloperDashboard() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleCreate() {
@@ -264,57 +176,14 @@ export function DeveloperDashboard() {
     setTimeout(() => setCopied(false), 1500)
   }
 
-  const activeKeys = keys.filter((k) => !k.revoked)
-  const totalUsed = activeKeys.reduce((sum, k) => sum + k.files_used_this_period, 0)
-  const totalQuota = activeKeys.reduce((sum, k) => sum + k.monthly_quota, 0)
-
   return (
-    <div className="mx-auto max-w-2xl">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-semibold text-white"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #4338ca)' }}
-          >
-            {(user?.name?.[0] ?? user?.email?.[0] ?? '?').toUpperCase()}
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-h)' }}>
-              Developer dashboard
-            </h1>
-            <p className="text-sm" style={{ color: 'var(--text)' }}>
-              {user?.name} · {user?.email}
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            to="/developers/docs"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium"
-            style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            API Docs
-          </Link>
-          <button
-            type="button"
-            onClick={() => logout()}
-            className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium"
-            style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            Log out
-          </button>
-        </div>
-      </div>
-
-      <div className="mb-6 grid grid-cols-3 gap-3">
-        <StatCard label="Active keys" value={String(activeKeys.length)} />
-        <StatCard label="Files this period" value={totalUsed.toLocaleString()} />
-        <StatCard label="Combined quota" value={totalQuota.toLocaleString()} />
-      </div>
+    <DashboardLayout>
+      <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-h)' }}>
+        API Keys
+      </h1>
+      <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
+        Create keys to authenticate requests to the PDFHives API.
+      </p>
 
       <AnimatePresence>
         {error && (
@@ -322,7 +191,7 @@ export function DeveloperDashboard() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mb-4 flex items-start gap-2 overflow-hidden rounded-xl p-3 text-sm"
+            className="mt-4 flex items-start gap-2 overflow-hidden rounded-xl p-3 text-sm"
             style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444' }}
           >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -340,7 +209,7 @@ export function DeveloperDashboard() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mb-4 overflow-hidden rounded-2xl border p-4"
+            className="mt-4 overflow-hidden rounded-2xl border p-4"
             style={{ borderColor: 'var(--accent)', background: 'var(--accent-soft)' }}
           >
             <p className="text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
@@ -367,7 +236,7 @@ export function DeveloperDashboard() {
         )}
       </AnimatePresence>
 
-      <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+      <div className="mt-6 rounded-2xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
           Create a new key
         </label>
@@ -394,31 +263,33 @@ export function DeveloperDashboard() {
         </div>
       </div>
 
-      {loading ? (
-        <div className="space-y-3">
-          {[0, 1].map((i) => (
-            <div key={i} className="h-28 animate-pulse rounded-2xl border" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }} />
-          ))}
-        </div>
-      ) : keys.length === 0 ? (
-        <div className="flex flex-col items-center rounded-2xl border border-dashed p-10 text-center" style={{ borderColor: 'var(--border)' }}>
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: 'var(--accent-soft)' }}>
-            <KeyRound className="h-5 w-5" style={{ color: 'var(--accent)' }} />
+      <div className="mt-6">
+        {loading ? (
+          <div className="space-y-3">
+            {[0, 1].map((i) => (
+              <div key={i} className="h-28 animate-pulse rounded-2xl border" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }} />
+            ))}
           </div>
-          <p className="mt-3 text-sm font-medium" style={{ color: 'var(--text-h)' }}>
-            No API keys yet
-          </p>
-          <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
-            Create one above to start calling the API.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {keys.map((k) => (
-            <KeyRow key={k.id} apiKey={k} onRevoke={handleRevoke} />
-          ))}
-        </div>
-      )}
-    </div>
+        ) : keys.length === 0 ? (
+          <div className="flex flex-col items-center rounded-2xl border border-dashed p-10 text-center" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: 'var(--accent-soft)' }}>
+              <KeyRound className="h-5 w-5" style={{ color: 'var(--accent)' }} />
+            </div>
+            <p className="mt-3 text-sm font-medium" style={{ color: 'var(--text-h)' }}>
+              No API keys yet
+            </p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
+              Create one above to start calling the API.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {keys.map((k) => (
+              <KeyRow key={k.id} apiKey={k} onRevoke={handleRevoke} />
+            ))}
+          </div>
+        )}
+      </div>
+    </DashboardLayout>
   )
 }
