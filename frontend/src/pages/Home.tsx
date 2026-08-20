@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles, type LucideIcon } from 'lucide-react'
+import { Image, Code2, Upload, Settings2, Download, ShieldCheck, Infinity as InfinityIcon, Sparkles, ArrowUpRight, type LucideIcon } from 'lucide-react'
 import { AdSlot } from '@/components/AdSlot'
 import { ToolCard } from '@/components/ToolCard'
 import { ToolIcon, type ToolIconColor } from '@/components/ToolIcon'
@@ -19,7 +19,7 @@ const DISCOVERY_CARDS = [
     color: 'fuchsia' as ToolIconColor,
     title: 'Image Tools',
     description: 'Compress, resize, rotate, convert, watermark, and edit images, free and unlimited.',
-    newTab: false,
+    newTab: true,
   },
   {
     to: '/developers',
@@ -157,15 +157,20 @@ export function Home() {
               key={card.to}
               to={card.to}
               {...(card.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              className="group flex items-start gap-4 rounded-2xl border p-5 transition-shadow hover:shadow-lg"
+              className="group relative flex items-start gap-4 rounded-2xl border p-6 transition-all hover:-translate-y-0.5 hover:shadow-lg"
               style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
             >
-              <ToolIcon icon={card.icon} color={card.color} className="group-hover:-translate-y-1 group-hover:scale-110" />
+              <ToolIcon icon={card.icon} color={card.color} size="lg" className="group-hover:-translate-y-1 group-hover:scale-110" />
               <div className="min-w-0 flex-1">
-                <h3 className="text-base font-semibold" style={{ color: 'var(--text-h)' }}>
-                  {card.title}
-                </h3>
-                <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
+                <div className="flex items-center gap-1.5">
+                  <h3 className="text-lg font-semibold" style={{ color: 'var(--text-h)' }}>
+                    {card.title}
+                  </h3>
+                  {card.newTab && (
+                    <ArrowUpRight className="h-4 w-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" style={{ color: 'var(--text)' }} />
+                  )}
+                </div>
+                <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
                   {card.description}
                 </p>
               </div>

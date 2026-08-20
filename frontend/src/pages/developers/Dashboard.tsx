@@ -1,7 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Copy, Check, Trash2 } from 'lucide-react'
+import {
+  Copy,
+  Check,
+  Trash2,
+  KeyRound,
+  AlertCircle,
+  BookOpen,
+  LogOut,
+  Plus,
+  Loader2,
+  Webhook,
+  Clock,
+} from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   createApiKey,
@@ -10,80 +22,181 @@ import {
   updateApiKeyWebhook,
   type ApiKeySummary,
 } from '@/lib/developerApi'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
-function KeyRow({ apiKey, onRevoke }: { apiKey: ApiKeySummary; onRevoke: (id: number) => void }) {
+function apiErrorMessage(err: unknown, fallback: string): string {
+  const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+  return message ?? fallback
+}
+
+function usageColor(pct: number) {
+  if (pct >= 90) return '#ef4444'
+  if (pct >= 65) return '#d97706'
+  return 'var(--accent)'
+}
+
+function relativeTime(iso: string | null): string {
+  if (!iso) return 'Never used'
+  const diffMs = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diffMs / 60000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  if (days < 30) return `${days}d ago`
+  return new Date(iso).toLocaleDateString()
+}
+
+function StatCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+      <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text)', opacity: 0.6 }}>
+        {label}
+      </p>
+      <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--text-h)' }}>
+        {value}
+      </p>
+    </div>
+  )
+}
+
+function KeyRow({
+  apiKey,
+  onRevoke,
+}: {
+  apiKey: ApiKeySummary
+  onRevoke: (id: number) => Promise<void>
+}) {
   const [webhook, setWebhook] = useState(apiKey.webhook_url ?? '')
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [webhookError, setWebhookError] = useState<string | null>(null)
+  const [revoking, setRevoking] = useState(false)
   const usagePct = Math.min(100, Math.round((apiKey.files_used_this_period / apiKey.monthly_quota) * 100))
 
   async function saveWebhook() {
     setSaving(true)
+    setWebhookError(null)
+    setSaved(false)
     try {
       await updateApiKeyWebhook(apiKey.id, webhook)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    } catch (err) {
+      setWebhookError(apiErrorMessage(err, 'Could not save that webhook URL.'))
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleRevokeClick() {
+    setRevoking(true)
+    try {
+      await onRevoke(apiKey.id)
+    } finally {
+      setRevoking(false)
     }
   }
 
   return (
     <div className="rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="font-medium" style={{ color: 'var(--text-h)' }}>
-            {apiKey.name}
-          </h3>
-          <code className="text-xs opacity-60">{apiKey.key_prefix}</code>
-          <span
-            className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase"
-            style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+            style={{ background: apiKey.revoked ? 'var(--bg-soft)' : 'var(--accent-soft)' }}
           >
-            {apiKey.plan}
-          </span>
+            <KeyRound className="h-[18px] w-[18px]" style={{ color: apiKey.revoked ? 'var(--text)' : 'var(--accent)', opacity: apiKey.revoked ? 0.5 : 1 }} />
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-semibold" style={{ color: 'var(--text-h)' }}>
+                {apiKey.name}
+              </h3>
+              <span
+                className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                style={{
+                  background: apiKey.revoked ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.12)',
+                  color: apiKey.revoked ? '#ef4444' : '#16a34a',
+                }}
+              >
+                {apiKey.revoked ? 'Revoked' : 'Active'}
+              </span>
+              <span
+                className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+              >
+                {apiKey.plan}
+              </span>
+            </div>
+            <code className="mt-0.5 block text-xs" style={{ color: 'var(--text)', opacity: 0.6 }}>
+              {apiKey.key_prefix}
+            </code>
+          </div>
         </div>
         {!apiKey.revoked && (
           <button
             type="button"
-            onClick={() => onRevoke(apiKey.id)}
-            className="flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs text-red-500"
+            onClick={handleRevokeClick}
+            disabled={revoking}
+            className="flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/5 disabled:opacity-50"
             style={{ borderColor: 'var(--border)' }}
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            {revoking ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
             Revoke
           </button>
         )}
       </div>
 
-      <div className="mt-3">
-        <div className="flex justify-between text-xs opacity-60">
+      <div className="mt-4">
+        <div className="flex justify-between text-xs" style={{ color: 'var(--text)', opacity: 0.7 }}>
           <span>
-            {apiKey.files_used_this_period} / {apiKey.monthly_quota} files this period
+            {apiKey.files_used_this_period.toLocaleString()} / {apiKey.monthly_quota.toLocaleString()} files this period
           </span>
           <span>Resets {new Date(apiKey.period_reset_at).toLocaleDateString()}</span>
         </div>
-        <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full" style={{ background: 'var(--bg-soft)' }}>
-          <div className="h-full rounded-full" style={{ width: `${usagePct}%`, background: 'var(--accent)' }} />
+        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full" style={{ background: 'var(--bg-soft)' }}>
+          <div className="h-full rounded-full transition-all" style={{ width: `${usagePct}%`, background: usageColor(usagePct) }} />
         </div>
       </div>
 
+      <div className="mt-3 flex items-center gap-1.5 text-xs" style={{ color: 'var(--text)', opacity: 0.6 }}>
+        <Clock className="h-3.5 w-3.5" />
+        Last used: {relativeTime(apiKey.last_used_at)}
+      </div>
+
       {!apiKey.revoked && (
-        <div className="mt-3 flex gap-2">
-          <input
-            type="url"
-            placeholder="Webhook URL (optional): https://yourapp.com/webhooks/corehives"
-            value={webhook}
-            onChange={(e) => setWebhook(e.target.value)}
-            className="flex-1 rounded-lg border px-2.5 py-1.5 text-xs outline-none"
-            style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
-          />
-          <button
-            type="button"
-            onClick={saveWebhook}
-            disabled={saving}
-            className="rounded-lg border px-3 py-1.5 text-xs"
-            style={{ borderColor: 'var(--border)' }}
-          >
-            {saving ? 'Saving…' : 'Save'}
-          </button>
+        <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold" style={{ color: 'var(--text-h)' }}>
+            <Webhook className="h-3.5 w-3.5" />
+            Webhook URL
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="url"
+              placeholder="https://yourapp.com/webhooks/pdfhives"
+              value={webhook}
+              onChange={(e) => setWebhook(e.target.value)}
+              className="flex-1 rounded-lg border px-2.5 py-1.5 text-xs outline-none transition-colors focus:border-[var(--accent)]"
+              style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
+            />
+            <button
+              type="button"
+              onClick={saveWebhook}
+              disabled={saving}
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50"
+              style={{ borderColor: saved ? '#16a34a' : 'var(--border)', color: saved ? '#16a34a' : 'var(--text-h)' }}
+            >
+              {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : saved ? <Check className="h-3.5 w-3.5" /> : null}
+              {saving ? 'Saving…' : saved ? 'Saved' : 'Save'}
+            </button>
+          </div>
+          {webhookError && (
+            <p className="mt-1.5 text-xs" style={{ color: '#ef4444' }}>
+              {webhookError}
+            </p>
+          )}
         </div>
       )}
     </div>
@@ -91,6 +204,7 @@ function KeyRow({ apiKey, onRevoke }: { apiKey: ApiKeySummary; onRevoke: (id: nu
 }
 
 export function DeveloperDashboard() {
+  usePageMeta('Developer dashboard', 'Manage your PDFHives API keys, monitor quota usage, and configure webhooks.')
   const { user, logout } = useAuth()
   const [keys, setKeys] = useState<ApiKeySummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -98,25 +212,35 @@ export function DeveloperDashboard() {
   const [creating, setCreating] = useState(false)
   const [freshKey, setFreshKey] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function load() {
     setLoading(true)
-    setKeys(await listApiKeys())
-    setLoading(false)
+    try {
+      setKeys(await listApiKeys())
+    } catch (err) {
+      setError(apiErrorMessage(err, 'Could not load your API keys.'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleCreate() {
     if (!newKeyName.trim()) return
     setCreating(true)
+    setError(null)
     try {
       const { rawKey } = await createApiKey(newKeyName.trim())
       setFreshKey(rawKey)
       setNewKeyName('')
       await load()
+    } catch (err) {
+      setError(apiErrorMessage(err, 'Could not create that key. Please try again.'))
     } finally {
       setCreating(false)
     }
@@ -124,8 +248,13 @@ export function DeveloperDashboard() {
 
   async function handleRevoke(id: number) {
     if (!window.confirm('Revoke this key? Requests using it will stop working immediately.')) return
-    await revokeApiKey(id)
-    await load()
+    setError(null)
+    try {
+      await revokeApiKey(id)
+      await load()
+    } catch (err) {
+      setError(apiErrorMessage(err, 'Could not revoke that key.'))
+    }
   }
 
   function copyKey() {
@@ -135,29 +264,75 @@ export function DeveloperDashboard() {
     setTimeout(() => setCopied(false), 1500)
   }
 
+  const activeKeys = keys.filter((k) => !k.revoked)
+  const totalUsed = activeKeys.reduce((sum, k) => sum + k.files_used_this_period, 0)
+  const totalQuota = activeKeys.reduce((sum, k) => sum + k.monthly_quota, 0)
+
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold" style={{ color: 'var(--text-h)' }}>
-            Developer dashboard
-          </h1>
-          <p className="text-sm opacity-70">{user?.email}</p>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-semibold text-white"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #4338ca)' }}
+          >
+            {(user?.name?.[0] ?? user?.email?.[0] ?? '?').toUpperCase()}
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-h)' }}>
+              Developer dashboard
+            </h1>
+            <p className="text-sm" style={{ color: 'var(--text)' }}>
+              {user?.name} · {user?.email}
+            </p>
+          </div>
         </div>
         <div className="flex gap-2">
-          <Link to="/developers/docs" className="rounded-full border px-3 py-1.5 text-sm" style={{ borderColor: 'var(--border)' }}>
+          <Link
+            to="/developers/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium"
+            style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
+          >
+            <BookOpen className="h-3.5 w-3.5" />
             API Docs
           </Link>
           <button
             type="button"
             onClick={() => logout()}
-            className="rounded-full border px-3 py-1.5 text-sm"
-            style={{ borderColor: 'var(--border)' }}
+            className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium"
+            style={{ borderColor: 'var(--border)', color: 'var(--text-h)' }}
           >
+            <LogOut className="h-3.5 w-3.5" />
             Log out
           </button>
         </div>
       </div>
+
+      <div className="mb-6 grid grid-cols-3 gap-3">
+        <StatCard label="Active keys" value={String(activeKeys.length)} />
+        <StatCard label="Files this period" value={totalUsed.toLocaleString()} />
+        <StatCard label="Combined quota" value={totalQuota.toLocaleString()} />
+      </div>
+
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-4 flex items-start gap-2 overflow-hidden rounded-xl p-3 text-sm"
+            style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444' }}
+          >
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span className="flex-1">{error}</span>
+            <button type="button" onClick={() => setError(null)} className="shrink-0 font-medium underline">
+              Dismiss
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {freshKey && (
@@ -168,7 +343,7 @@ export function DeveloperDashboard() {
             className="mb-4 overflow-hidden rounded-2xl border p-4"
             style={{ borderColor: 'var(--accent)', background: 'var(--accent-soft)' }}
           >
-            <p className="text-sm font-medium" style={{ color: 'var(--text-h)' }}>
+            <p className="text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
               Copy your key now. You won't be able to see it again.
             </p>
             <div className="mt-2 flex items-center gap-2">
@@ -185,37 +360,58 @@ export function DeveloperDashboard() {
                 {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
-            <button type="button" onClick={() => setFreshKey(null)} className="mt-2 text-xs underline opacity-70">
+            <button type="button" onClick={() => setFreshKey(null)} className="mt-2 text-xs font-medium underline" style={{ color: 'var(--text-h)', opacity: 0.7 }}>
               Done, hide this
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="mb-6 flex gap-2">
-        <input
-          type="text"
-          placeholder="Key name, e.g. Production server"
-          value={newKeyName}
-          onChange={(e) => setNewKeyName(e.target.value)}
-          className="flex-1 rounded-xl border px-3 py-2.5 text-sm outline-none"
-          style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
-        />
-        <button
-          type="button"
-          onClick={handleCreate}
-          disabled={creating || !newKeyName.trim()}
-          className="rounded-xl px-4 py-2.5 text-sm font-medium text-white disabled:opacity-40"
-          style={{ background: 'var(--accent)' }}
-        >
-          {creating ? 'Creating…' : '+ New key'}
-        </button>
+      <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+        <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--text-h)' }}>
+          Create a new key
+        </label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Key name, e.g. Production server"
+            value={newKeyName}
+            onChange={(e) => setNewKeyName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+            className="flex-1 rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors focus:border-[var(--accent)]"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)', color: 'var(--text-h)' }}
+          />
+          <button
+            type="button"
+            onClick={handleCreate}
+            disabled={creating || !newKeyName.trim()}
+            className="flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-40"
+            style={{ background: 'var(--accent)' }}
+          >
+            {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+            {creating ? 'Creating…' : 'New key'}
+          </button>
+        </div>
       </div>
 
       {loading ? (
-        <p className="py-10 text-center text-sm opacity-60">Loading…</p>
+        <div className="space-y-3">
+          {[0, 1].map((i) => (
+            <div key={i} className="h-28 animate-pulse rounded-2xl border" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }} />
+          ))}
+        </div>
       ) : keys.length === 0 ? (
-        <p className="py-10 text-center text-sm opacity-60">No API keys yet. Create one above to get started.</p>
+        <div className="flex flex-col items-center rounded-2xl border border-dashed p-10 text-center" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: 'var(--accent-soft)' }}>
+            <KeyRound className="h-5 w-5" style={{ color: 'var(--accent)' }} />
+          </div>
+          <p className="mt-3 text-sm font-medium" style={{ color: 'var(--text-h)' }}>
+            No API keys yet
+          </p>
+          <p className="mt-1 text-sm" style={{ color: 'var(--text)' }}>
+            Create one above to start calling the API.
+          </p>
+        </div>
       ) : (
         <div className="space-y-3">
           {keys.map((k) => (
