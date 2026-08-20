@@ -37,7 +37,7 @@ export function Footer() {
   ]
 
   return (
-    <footer className="border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}>
+    <footer className="border-t" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
       <div className="w-full px-6 py-12 lg:px-10">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">

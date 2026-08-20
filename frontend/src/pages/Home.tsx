@@ -68,6 +68,18 @@ const FAQ_ITEMS: FaqItem[] = [
     question: 'Can I use PDFHives tools in my own app?',
     answer: 'Yes. The Developer API exposes every tool as a REST endpoint with a free tier, API keys, quotas, and webhooks, so you can integrate PDF and image processing directly into your own product.',
   },
+  {
+    question: 'Is my file secure while it’s being processed?',
+    answer: 'Yes. Uploads are sent over an encrypted connection and processed in an isolated job, never viewed manually, shared with anyone, or used to train anything. The file is permanently deleted an hour after processing.',
+  },
+  {
+    question: 'Can I process multiple files at once?',
+    answer: 'Yes. Tools like Merge and JPG to PDF accept several files in one go, and the Batch Processing tool lets you run the same operation, such as compress, rotate, or watermark, across up to 20 files in a single request.',
+  },
+  {
+    question: 'What languages does PDFHives support?',
+    answer: 'The full interface is available in English, Urdu, Hindi, Arabic, Spanish, and French. Switch languages any time from the selector in the footer.',
+  },
 ]
 
 const FILTER_KEYS: ('all' | (typeof CATEGORIES)[number])[] = ['all', ...CATEGORIES]
